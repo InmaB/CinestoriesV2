@@ -97,7 +97,9 @@ import { useNavigate } from 'react-router-dom';
 import { fetchMovies, fetchMoviesByGenre, getGenres } from '../store';
 import Navbar from '../components/Navbar';
 import styled from 'styled-components';
-import PelisGrid from '../components/PelisGrid';
+import Grid from '../components/CarouselYGrid/Grid';
+import Footer from '../components/Footer';
+
 
 export default function Pelis() {
   const navegacion = useNavigate();
@@ -176,13 +178,14 @@ export default function Pelis() {
           </div>
         )}
 
-        {showMovies && <PelisGrid movies={movies.slice(0, visibleMovies)} />}
+        {showMovies && <Grid movies={movies.slice(0, visibleMovies)} />}
         {movies.length > visibleMovies && (
           <div className="cargar-mas">
             <button className='cargar flex' onClick={handleLoadMore}>Cargar más</button>
           </div>
         )}
       </Contenido>
+      <Footer></Footer>
     </Contenedor>
   );
 }
@@ -191,7 +194,7 @@ const Contenedor = styled.div`
 `;
 
 const Contenido = styled.div`
-  padding: 6rem 3rem 3rem 3rem;
+  padding: 7rem 2rem 3rem 3rem;
 
 
   .boton-genero.seleccionado {

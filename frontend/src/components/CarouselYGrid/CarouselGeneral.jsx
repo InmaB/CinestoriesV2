@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import { Swiper, SwiperSlide } from "swiper/react";
 import 'swiper/swiper-bundle.min.css';
 import SwiperCore, { Pagination, Navigation } from "swiper";
-import PosterPanel from '../PosterPanel';
+
 import PosterTopRated from './PosterTopRated';
+import PosterPanel from './PosterPanel';
 
 
 export default function CarouselGeneral({ movies, moviesByRated, tvByRated, upcoming }) {
@@ -17,7 +18,7 @@ export default function CarouselGeneral({ movies, moviesByRated, tvByRated, upco
         <Contenedor>
             <h1 className='titulo'>Lo más trending</h1>
             <Swiper
-                slidesPerView={6}
+                slidesPerView={5}
                 centeredSlides={false}
                 spaceBetween={15}
                 pagination={{

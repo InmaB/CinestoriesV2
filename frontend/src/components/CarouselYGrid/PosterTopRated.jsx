@@ -76,7 +76,7 @@ const ImagenPoster = styled.img`
   transition: transform 0.3s ease;
 
   &:hover {
-    border: 2px solid lime;
+    border: 3px solid lime;
   }
 
   @media (max-width: 768px) {

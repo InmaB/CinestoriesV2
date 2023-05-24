@@ -6,7 +6,8 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { firebaseAuth } from '../utils/firebase-config';
 import Navbar from '../components/Navbar';
 import styled from 'styled-components';
-import CarouselGeneral from '../components/Carousel/CarouselGeneral'
+import CarouselGeneral from '../components/CarouselYGrid/CarouselGeneral';
+
 
 
 export default function SeriesyTv() {
