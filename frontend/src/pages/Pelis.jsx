@@ -92,13 +92,15 @@
 
 
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { fetchMovies, fetchMoviesByGenre, getGenres } from '../store';
+import { fetchMovies, fetchMoviesByGenre, getGenres, searchMovies, store } from '../store';
 import Navbar from '../components/Navbar';
 import styled from 'styled-components';
 import Grid from '../components/CarouselYGrid/Grid';
 import Footer from '../components/Footer';
+import Buscador from '../components/Buscador';
+
 
 
 export default function Pelis() {
@@ -122,6 +124,7 @@ export default function Pelis() {
       dispatch(fetchMovies({ type: "movie" }));
       setShowMovies(true);
     }
+
   }, [genresLoaded]);
 
   const handleGenreSelection = (genreId) => {
@@ -153,6 +156,12 @@ export default function Pelis() {
       </div>
 
       <Contenido>
+        <div className="buscador">
+
+          <Buscador></Buscador>
+
+        </div>
+
         <div className='flex-flow j-center'>
           <button
             className={`boton-genero ${selectedGenre === null ? 'seleccionado' : ''}`}

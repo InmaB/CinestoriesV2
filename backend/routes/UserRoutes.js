@@ -1,4 +1,4 @@
-const { aniadirFavoritas, aniadirPendientes, getFavoritas, eliminarFavoritas, aniadirComentario, eliminarComentario, eliminarFav } = require("../controllers/UserController")
+const { aniadirFavoritas, aniadirPendientes, getFavoritas, aniadirComentario, eliminarComentario, eliminarFavoritas, removeFromLikedMovies } = require("../controllers/UserController")
 
 const router=require("express").Router()
 
@@ -8,5 +8,6 @@ router.get("/favoritas/:email", getFavoritas)
 router.put("/eliminarFav", eliminarFavoritas)
 router.post("/aniadirComentario", aniadirComentario)
 router.put("/deleteComentarios", eliminarComentario)
+router.delete("/remove", removeFromLikedMovies)
 
 module.exports=router

@@ -125,6 +125,121 @@
 //   }`
 
 
+// import styled from 'styled-components';
+// import { URL_TMBD, KEY_API, IMG_API } from '../../utils/tmbd-config';
+// import { useEffect, useState } from 'react';
+// import PosterNotFound from '../../assets/posterNotFound.jpg'
+// import React from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { fetchMovies, fetchPelis, getGenres } from '../../store/index';
+// import { onAuthStateChanged } from 'firebase/auth';
+// import { firebaseAuth } from '../../utils/firebase-config';
+// import { AiFillDelete } from 'react-icons/ai';
+// import { removeMovieFromLiked } from '../../store/index';
+
+
+
+
+// export default function PosterPanel({ movieData }) {
+//   const navegacion = useNavigate()
+//   const dispatch = useDispatch()
+//   const [isHover, sertHover] = useState(false)
+
+//   const [email, setEmail] = useState(undefined)
+
+//   const handleDelete = async () => {
+//     try {
+//       await dispatch(removeMovieFromLiked({ movieId: movieData.id, email }));
+//       // Realizar cualquier acción adicional después de eliminar la película, como actualizar el estado o mostrar un mensaje de éxito.
+//     } catch (error) {
+//       console.log(error);
+//       // Manejar cualquier error de eliminación aquí.
+//     }
+//   };
+
+//   const handleClick = () => {
+//     navegacion('/infoPeli', { state: movieData });
+//   };
+
+
+//   onAuthStateChanged(firebaseAuth, (Usuario) => {
+
+//     if (Usuario) setEmail(Usuario.email)
+//     else navegacion("/login")
+//   });
+
+//   return (
+//     <CajaPoster>
+//       <ImagenPoster
+//         src={movieData.poster_path ? `https://image.tmdb.org/t/p/w500/${IMG_API}${movieData.poster_path}` : PosterNotFound}
+//         alt="Poster22"
+//         onClick={handleClick}
+//       />
+
+//       <TextOverlay>
+//         <Text>{movieData.name}</Text>
+//         <button onClick={handleDelete}>
+//           <AiFillDelete />
+//         </button>
+//       </TextOverlay>
+//     </CajaPoster>
+//   );
+// }
+
+// const TextOverlay = styled.div`
+//   position: absolute;
+//   top: 50%;
+//   left: 50%;
+//   transform: translate(-50%, -50%);
+//   background-color: rgba(0, 0, 0, 0.7);
+//   color: #fff;
+//   font-size: 0.9rem;
+//   font-weight: bold;
+//   padding: 5px;
+//   opacity: 0;
+//   transition: opacity 0.3s ease;
+
+// `;
+
+// const CajaPoster = styled.div`
+//   align-items: center;
+//   text-align: center;
+//   position: relative;
+
+//   &:hover ${TextOverlay} {
+//     opacity: 1;
+//   }
+
+
+//   @media (max-width: 768px) {
+//     flex-direction: row;
+//     align-items: flex-start;
+//     text-align: left;
+//   }
+// `;
+
+// const ImagenPoster = styled.img`
+//   width: 100%;
+//   height: 90%;
+//   box-shadow: 0 5px 10px black;
+//   border-radius: 5px;
+//   cursor: pointer;
+//   transition: transform 0.3s ease;
+
+//   &:hover {
+//     border: 3px solid lime;
+//   }
+
+
+//   @media (max-width: 768px) {
+//     width: 100%;
+//   }
+// `;
+
+// const Text = styled.div``;
+
+
 import styled from 'styled-components';
 import { URL_TMBD, KEY_API, IMG_API } from '../../utils/tmbd-config';
 import { useEffect, useState } from 'react';
@@ -135,34 +250,54 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchMovies, fetchPelis, getGenres } from '../../store/index';
 import { onAuthStateChanged } from 'firebase/auth';
 import { firebaseAuth } from '../../utils/firebase-config';
-
-
+import { AiFillDelete } from 'react-icons/ai';
+import { removeMovieFromLiked } from '../../store/index';
 
 export default function PosterPanel({ movieData }) {
-  const navegacion = useNavigate()
-  const [isHover, sertHover] = useState(false)
+  const navegacion = useNavigate();
+  const dispatch = useDispatch();
+  const [isHover, setHover] = useState(false);
 
-  const [email, setEmail] = useState(undefined)
+  const [email, setEmail] = useState(undefined);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(firebaseAuth, (Usuario) => {
+      if (Usuario) setEmail(Usuario.email);
+      else navegacion('/login');
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  const handleDelete = async () => {
+    try {
+      await dispatch(removeMovieFromLiked({ movieId: movieData.id, email }));
+      // Realizar cualquier acción adicional después de eliminar la película, como actualizar el estado o mostrar un mensaje de éxito.
+    } catch (error) {
+      console.log(error);
+      // Manejar cualquier error de eliminación aquí.
+    }
+  };
 
   const handleClick = () => {
     navegacion('/infoPeli', { state: movieData });
   };
 
-
-  onAuthStateChanged(firebaseAuth, (Usuario) => {
-
-    if (Usuario) setEmail(Usuario.email)
-    else navegacion("/login")
-  });
-
   return (
     <CajaPoster>
-      {/* `${IMG_API}${movieData.poster_path}` */}
-      <ImagenPoster src={movieData.poster_path ? `https://image.tmdb.org/t/p/w500/${IMG_API}${movieData.poster_path}` : PosterNotFound}
-        alt="Poster22" onClick={handleClick} />
+      <ImagenPoster
+        src={movieData.poster_path ? `https://image.tmdb.org/t/p/w500/${IMG_API}${movieData.poster_path}` : PosterNotFound}
+        alt="Poster22"
+        onClick={handleClick}
+      />
 
       <TextOverlay>
         <Text>{movieData.name}</Text>
+        <button onClick={handleDelete}>
+          <AiFillDelete />
+        </button>
       </TextOverlay>
     </CajaPoster>
   );
@@ -180,7 +315,6 @@ const TextOverlay = styled.div`
   padding: 5px;
   opacity: 0;
   transition: opacity 0.3s ease;
-
 `;
 
 const CajaPoster = styled.div`
@@ -191,7 +325,6 @@ const CajaPoster = styled.div`
   &:hover ${TextOverlay} {
     opacity: 1;
   }
-
 
   @media (max-width: 768px) {
     flex-direction: row;
@@ -212,12 +345,10 @@ const ImagenPoster = styled.img`
     border: 3px solid lime;
   }
 
-
   @media (max-width: 768px) {
     width: 100%;
   }
 `;
 
 const Text = styled.div``;
-
 

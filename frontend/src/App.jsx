@@ -4,12 +4,11 @@ import Login from './pages/Login';
 import Registro from './pages/Registro';
 import Cinestories from './pages/Cinestories';
 import Reproductor from './pages/Reproductor';
-import Prueba from './pages/Prueba'
 import Pelis from './pages/Pelis';
 import SeriesyTv from './pages/SeriesyTv';
 import InfoPeli from './pages/InfoPeli';
 import ListaFavoritas from './pages/ListaFavoritas';
-
+import ResultadosBusqueda from './pages/ResultadosBusqueda';
 
 export default function App() {
 
@@ -20,11 +19,17 @@ export default function App() {
         <Route exact path='/login' element={<Login />}></Route>
         <Route exact path='/registro' element={<Registro />}></Route>
         <Route exact path='/' element={<Cinestories />}></Route>
-        <Route exact path='reproductor' element={<Reproductor />}></Route>
+        <Route
+          exact
+          path="/reproductor/:idPelicula"
+          element={<Reproductor />}
+        ></Route>
         <Route exact path='/peliculas' element={<Pelis />}></Route>
         <Route exact path='/seriestv' element={<SeriesyTv />}></Route>
         <Route exact path='/listaFavoritas' element={<ListaFavoritas />}></Route>
         <Route exact path='/infoPeli' element={<InfoPeli />}></Route>
+        <Route exact path="/resultados" element={<ResultadosBusqueda />} />
+
 
       </Routes>
 

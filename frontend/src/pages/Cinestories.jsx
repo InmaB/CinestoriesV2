@@ -11,6 +11,7 @@ import Footer from '../components/Footer';
 
 
 
+
 export default function Cinestories() {
 
   const navegacion = useNavigate();
@@ -56,6 +57,7 @@ export default function Cinestories() {
       </div>
       <div className="content">
         <div className="contenido">
+
 
           <CarouselGeneral movies={movies} moviesByRated={moviesByRated} tvByRated={tvByRated} upcoming={upcoming} />
         </div>

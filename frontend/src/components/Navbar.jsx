@@ -278,7 +278,7 @@ import { MdFavorite } from "react-icons/md";
 import { SlScreenDesktop } from "react-icons/sl";
 import { useDispatch } from 'react-redux';
 import { searchMovies } from '../store';
-import Buscador from './Buscador';
+
 
 export default function Navbar() {
   const navegacion = useNavigate();
@@ -296,13 +296,7 @@ export default function Navbar() {
   });
 
   const dispatch = useDispatch();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchType, setSearchType] = useState("movie"); // Valor inicial: "movie"
 
-  const handleSearch = () => {
-    // Dispatch de la acción de búsqueda
-    dispatch(searchMovies({ searchQuery, type: searchType }));
-  };
 
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -335,8 +329,6 @@ export default function Navbar() {
         </ul>
         <div className="dcha">
           <div className="buscador">
-            {/* <Buscador></Buscador> */}
-
 
             <button
               className="btn btn-primary"

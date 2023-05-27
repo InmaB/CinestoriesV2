@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ResultadosBusqueda from "./ResultadosBusqueda";
+
+
 import { searchMovies } from "../store";
 
 const Buscador = () => {
@@ -8,15 +9,9 @@ const Buscador = () => {
     const searchResults = useSelector((state) => state.cinestories.movies);
     const [searchQuery, setSearchQuery] = useState("");
     const [type, setType] = useState("movie");
-    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleSearch = () => {
         dispatch(searchMovies({ searchQuery, type }));
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
     };
 
     return (
@@ -33,11 +28,7 @@ const Buscador = () => {
             </select>
             <button onClick={handleSearch}>Buscar</button>
 
-            <ResultadosBusqueda
-                results={searchResults}
-                isOpen={isModalOpen}
-                onClose={closeModal}
-            />
+            {searchResults.length === 0 && <p>No se encontraron resultados</p>}
         </div>
     );
 };
