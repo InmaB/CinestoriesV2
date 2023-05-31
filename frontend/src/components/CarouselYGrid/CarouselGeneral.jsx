@@ -3,9 +3,8 @@ import styled from 'styled-components';
 import { Swiper, SwiperSlide } from "swiper/react";
 import 'swiper/swiper-bundle.min.css';
 import SwiperCore, { Pagination, Navigation } from "swiper";
-
 import PosterTopRated from './PosterTopRated';
-import PosterPanel from './PosterPanel';
+import PosterGeneral from './PosterGeneral';
 
 
 export default function CarouselGeneral({ movies, moviesByRated, tvByRated, upcoming }) {
@@ -29,7 +28,7 @@ export default function CarouselGeneral({ movies, moviesByRated, tvByRated, upco
             >
                 {movies.slice(0, 20).map((movie, index) => (
                     <SwiperSlide key={movie.id}>
-                        <PosterPanel movieData={movie} index={index} />
+                        <PosterGeneral movieData={movie} index={index} />
                     </SwiperSlide>
                 ))}
 
@@ -48,7 +47,7 @@ export default function CarouselGeneral({ movies, moviesByRated, tvByRated, upco
             >
                 {upcoming.slice(0, 20).map((movie, index) => (
                     <SwiperSlide key={movie.id}>
-                        <PosterPanel movieData={movie} index={index} />
+                        <PosterGeneral movieData={movie} index={index} />
                     </SwiperSlide>
                 ))}
 

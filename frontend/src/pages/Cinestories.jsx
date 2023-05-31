@@ -28,7 +28,7 @@ export default function Cinestories() {
 
 
   useEffect(() => {
-    dispatch(getGenres());
+    dispatch(getGenres({ type: "movie" }));
   }, [])
 
   useEffect(() => {

@@ -6,10 +6,13 @@ import axios from "axios";
 const initialState = {
   movies: [],
   genresLoaded: false,
+  moviesLoaded: false,
   genres: [],
   moviesByRated: [],
   tvByRated: [],
   upcoming:[],
+  resultados:[],
+  resultadosLoaded:false,
 };
 
 const createArrayFromRawData = (array, genres) => {
@@ -20,7 +23,8 @@ const createArrayFromRawData = (array, genres) => {
     });
     return {
       id: movie.id,
-      name: movie.title,
+      title: movie.title,
+      name: movie.name,
       poster_path: movie.poster_path,
       genres: movieGenres,
       backdrop_path: movie.backdrop_path,
@@ -28,12 +32,18 @@ const createArrayFromRawData = (array, genres) => {
       release_date: movie.release_date,
       overview: movie.overview,
       original_title:movie.original_title,
+      original_name:movie.original_name,
     };
   });
 };
 
-export const getGenres = createAsyncThunk("cinestories/genres", async (_, thunkApi) => {
-  const { data } = await axios.get(`${URL_TMBD}genre/movie/list?api_key=${KEY_API}&language=es`);
+// export const getGenres = createAsyncThunk("cinestories/genres", async (_, thunkApi) => {
+//   const { data } = await axios.get(`${URL_TMBD}genre/movie/list?api_key=${KEY_API}&language=es`);
+//   return data.genres;
+// });
+
+export const getGenres = createAsyncThunk("cinestories/genres", async ({ type }) => {
+  const { data } = await axios.get(`${URL_TMBD}genre/${type}/list?api_key=${KEY_API}&language=es`);
   return data.genres;
 });
 
@@ -83,7 +93,7 @@ export const fetchMoviesByGenre = createAsyncThunk("cinestories/fetchMoviesByGen
 
   for (let i = 1; i <= totalPag; i++) {
     // https://api.themoviedb.org/3/discover/movie?api_key=dc2d353b9ddadaebcdfa5c1f93065747&language=es-ES&region=ES&with_genres=18&page=2
-    const response = await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=dc2d353b9ddadaebcdfa5c1f93065747&language=es-ES&region=ES&with_genres=${genres_id}&page=${i}`);
+    const response = await axios.get(`https://api.themoviedb.org/3/discover/${type}?api_key=dc2d353b9ddadaebcdfa5c1f93065747&language=es-ES&region=ES&with_genres=${genres_id}&page=${i}`);
     const results = response.data.results;
     const movies = createArrayFromRawData(results, genres);
     moviesArray.push(...movies);
@@ -92,45 +102,52 @@ export const fetchMoviesByGenre = createAsyncThunk("cinestories/fetchMoviesByGen
   return moviesArray;
 });
 
-export const searchMovies = createAsyncThunk("cinestories/search", async ({ searchQuery, type }, thunkApi) => {
+// export const searchMovies = createAsyncThunk("cinestories/search", async ({ searchQuery}, thunkApi) => {
+//   const { cinestories: { genres } } = thunkApi.getState();
+//   // const searchType = type === "tv" ? "tv" : "movie"; // Determinar el tipo de búsqueda
+//   const allMoviesArray = [];
+
+
+//   const fetchMoviesByPage = async (page) => {
+
+//     const response = await axios.get(
+//       `${URL_TMBD}search/multi?api_key=${KEY_API}&${LENG_TMBD}&region=ES&query=${searchQuery}&page=${page}`);
+//       console.log(response);
+
+
+//     const { data: { results, total_pages } } = response;
+
+//     const moviesArray = createArrayFromRawData(results, genres);
+//     // console.log(moviesArray)
+
+//     allMoviesArray.push(...moviesArray);
+
+//     if (page < total_pages) {
+//       // Si hay más páginas, hacer una nueva solicitud para la siguiente página
+//       await fetchMoviesByPage(page + 1);
+//     }
+//   };
+
+//   await fetchMoviesByPage(1); // Comenzar desde la página 1
+
+//   // return allMoviesArray;
+//   return allMoviesArray;
+// });
+
+export const searchMovies = createAsyncThunk("cinestories/search", async ({ searchQuery, type}, thunkApi) => {
   const { cinestories: { genres } } = thunkApi.getState();
-  const searchType = type === "tv" ? "tv" : "movie"; // Determinar el tipo de búsqueda
 
-  const allMoviesArray = [];
-
-  const fetchMoviesByPage = async (page) => {
     const response = await axios.get(
-      `${URL_TMBD}search/${searchType}?api_key=${KEY_API}&${LENG_TMBD}&query=${searchQuery}&page=${page}`
-    );
+      `${URL_TMBD}search/${type}?api_key=${KEY_API}&${LENG_TMBD}&region=ES&query=${searchQuery}`);
+      console.log(response);
 
-    const { data: { results, total_pages } } = response;
-    const moviesArray = createArrayFromRawData(results, genres);
+    const { data: { results } } = response;
 
-    allMoviesArray.push(...moviesArray);
+  return results;
 
-    if (page < total_pages) {
-      // Si hay más páginas, hacer una nueva solicitud para la siguiente página
-      await fetchMoviesByPage(page + 1);
-    }
-  };
-
-  await fetchMoviesByPage(1); // Comenzar desde la página 1
-
-  return allMoviesArray;
 });
 
-// export const removeMovieFromLiked = createAsyncThunk(
-//   "cinestories/deleteLiked",
-//   async ({ movieId, email }) => {
-//     const {
-//       data: { movies },
-//     } = await axios.put("http://localhost:5000/api/user/remove", {
-//       email,
-//       movieId,
-//     });
-//     return movies;
-//   }
-// );
+
 
 export const removeMovieFromLiked = createAsyncThunk(
   'cinestories/deleteLiked',
@@ -173,9 +190,14 @@ const cineStoriesSlice = createSlice({
     builder.addCase(fetchMoviesByGenre.fulfilled, (state, action) => {
       state.movies = action.payload;
     });
+    // builder.addCase(searchMovies.fulfilled, (state, action) => {
+    //   state.movies = action.payload;
+    //   console.log(action.payload);
+    // });
+
     builder.addCase(searchMovies.fulfilled, (state, action) => {
-      state.movies = action.payload;
-      console.log(action.payload);
+      state.resultados = action.payload;
+      state.resultadosLoaded = true;
     });
     builder.addCase(getUserFavoritas.fulfilled, (state, action) => {
       state.movies = action.payload;

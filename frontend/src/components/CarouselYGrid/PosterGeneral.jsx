@@ -1,19 +1,20 @@
 import styled from 'styled-components';
 import { URL_TMBD, KEY_API, IMG_API } from '../../utils/tmbd-config';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import PosterNotFound from '../../assets/posterNotFound.jpg'
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMovies, fetchPelis, getGenres } from '../../store';
+import { getGenres } from '../../store';
 
 
 
-export default function PosterPanel({ movieData }) {
+export default function PosterGeneral({ movieData }) {
   const movies = useSelector((state) => state.cinestories.movies);
   const genres = useSelector((state) => state.cinestories.genres);
   const genresLoaded = useSelector((state) => state.cinestories.genresLoaded);
 
+  console.log(movieData)
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -30,13 +31,11 @@ export default function PosterPanel({ movieData }) {
       {/* `${IMG_API}${movieData.poster_path}` */}
       <ImagenPoster
         src={movieData.poster_path ? `https://image.tmdb.org/t/p/w500/${IMG_API}${movieData.poster_path}` : PosterNotFound}
-        alt="Poster22"
+        alt="Poster"
         onClick={handleClick}
       />
-
-      {/* <ImagenPoster src={`https://image.tmdb.org/t/p/w500/` + movieData.poster_path ? IMG_API + movieData.poster_path : PosterNotFound} alt="Poster22" onClick={handleClick} /> */}
       <TextOverlay>
-        <Text>{movieData.name}</Text>
+        <Text>{movieData.name || movieData.title}</Text>
       </TextOverlay>
     </CajaPoster>
   );
