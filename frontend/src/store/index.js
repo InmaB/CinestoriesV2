@@ -21,6 +21,7 @@ const createArrayFromRawData = (array, genres) => {
       const name = genres.find(({ id }) => id === genre);
       return name ? name.name : null;
     });
+
     return {
       id: movie.id,
       title: movie.title,
@@ -134,6 +135,8 @@ export const fetchMoviesByGenre = createAsyncThunk("cinestories/fetchMoviesByGen
 //   return allMoviesArray;
 // });
 
+
+//LA PRIMERA PAGINA Y FUNCIONA, SOLO LA PRIMERA
 // export const searchMovies = createAsyncThunk("cinestories/search", async ({ searchQuery, type}, thunkApi) => {
 //   const { cinestories: { genres } } = thunkApi.getState();
 

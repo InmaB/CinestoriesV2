@@ -120,6 +120,8 @@ export default function Pelis() {
 }
 
 const Contenedor = styled.div`
+  position: relative;
+  height: 100%;
 `;
 
 const Contenido = styled.div`

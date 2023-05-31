@@ -78,7 +78,7 @@ const Nav = styled.nav`
   z-index: 2;
   padding: 0.3rem;
   justify-content: space-between;
-  position: fixed;
+  /* position: fixed; */
   align-items: center;
 
     .logo {
