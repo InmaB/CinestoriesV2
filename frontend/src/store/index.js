@@ -134,30 +134,38 @@ export const fetchMoviesByGenre = createAsyncThunk("cinestories/fetchMoviesByGen
 //   return allMoviesArray;
 // });
 
-export const searchMovies = createAsyncThunk("cinestories/search", async ({ searchQuery, type}, thunkApi) => {
+// export const searchMovies = createAsyncThunk("cinestories/search", async ({ searchQuery, type}, thunkApi) => {
+//   const { cinestories: { genres } } = thunkApi.getState();
+
+//     const response = await axios.get(
+//       `${URL_TMBD}search/${type}?api_key=${KEY_API}&${LENG_TMBD}&region=ES&query=${searchQuery}`);
+//       console.log(response);
+
+//     const { data: { results } } = response;
+
+//   return results;
+
+// });
+
+export const searchMovies = createAsyncThunk("cinestories/search", async ({ searchQuery, type }, thunkApi) => {
   const { cinestories: { genres } } = thunkApi.getState();
 
-    const response = await axios.get(
-      `${URL_TMBD}search/${type}?api_key=${KEY_API}&${LENG_TMBD}&region=ES&query=${searchQuery}`);
-      console.log(response);
+  const totalPages = 10;
+  const results = [];
 
-    const { data: { results } } = response;
+  for (let page = 1; page <= totalPages; page++) {
+    const response = await axios.get(
+      `${URL_TMBD}search/${type}?api_key=${KEY_API}&${LENG_TMBD}&region=ES&query=${searchQuery}&page=${page}`
+    );
+    console.log(response);
+
+    const { data: { results: pageResults } } = response;
+
+    results.push(...pageResults);
+  }
 
   return results;
-
 });
-
-
-
-export const removeMovieFromLiked = createAsyncThunk(
-  'cinestories/deleteLiked',
-  async ({ movieId, email }) => {
-    const response = await axios.delete('http://localhost:5000/api/user/remove', { data: { email, movieId } });
-    return response.data.movies;
-  }
-);
-
-
 
 
 /////////// USUARIO
@@ -171,9 +179,15 @@ export const eliminarFavorita = createAsyncThunk("cinestories/eliminarFav", asyn
   return movies;
 });
 
+export const removeMovieFromLiked = createAsyncThunk(
+  'cinestories/deleteLiked',
+  async ({ movieId, email }) => {
+    const response = await axios.delete('http://localhost:5000/api/user/remove', { data: { email, movieId } });
+    return response.data.movies;
+  }
+);
 
-
-
+/////////// SLICE
 const cineStoriesSlice = createSlice({
   name: "cinestories",
   initialState,
