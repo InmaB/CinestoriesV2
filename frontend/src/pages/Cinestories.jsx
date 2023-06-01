@@ -2,14 +2,11 @@ import React, { useEffect, useState } from 'react'
 import styled from "styled-components"
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchByRated, fetchMovieByRated, fetchMovies, fetchTvByRated, fetchUpcoming, getGenres } from '../store';
+import { fetchMovieByRated, fetchMovies, fetchTvByRated, fetchUpcoming, getGenres } from '../store';
 import CarouselHome from '../components/CarouselYGrid/CarouselHome';
 import CarouselGeneral from '../components/CarouselYGrid/CarouselGeneral';
-
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-
-
 
 
 export default function Cinestories() {

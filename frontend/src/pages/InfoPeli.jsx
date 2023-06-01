@@ -427,7 +427,6 @@
 
 
 
-
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -441,7 +440,7 @@ import PosterNotFound from '../assets/posterNotFound.jpg';
 import { URL_TMBD, KEY_API, IMG_API } from '../utils/tmbd-config';
 import Footer from '../components/Footer';
 import { BiHappyHeartEyes } from 'react-icons/bi';
-import { BsCardChecklist } from 'react-icons/bs'
+import { BsCardChecklist } from 'react-icons/bs';
 
 export default function InfoPeli() {
   const { idPelicula } = useParams();
@@ -516,50 +515,58 @@ export default function InfoPeli() {
       <Navbar />
       <Contenido>
         {movieData && (
-          <div className="card">
-            <div className="photo">
-              <img
-                src={
-                  movieData.poster_path
-                    ? `https://image.tmdb.org/t/p/w500/${IMG_API}${movieData.poster_path}`
-                    : PosterNotFound
-                }
-                alt="Poster"
-              />
-            </div>
-            <div className="description">
-              <h1>{movieData.name || movieData.title}</h1>
-              <h4>Título Original - {movieData.original_title || movieData.original_name}</h4>
-              <h2>Valoración:</h2>
-              <p>{movieData.vote_average}</p>
-              <h2>Año:</h2>
-              <p>{movieData.release_date && movieData.release_date.split('-')[0]}</p>
-              <h2>Sinopsis</h2>
-              <p>{movieData.overview}</p>
+          <CardContainer>
+            <div className="card">
+              <div className="photo">
+                <img
+                  src={
+                    movieData.poster_path
+                      ? `https://image.tmdb.org/t/p/w500/${IMG_API}${movieData.poster_path}`
+                      : PosterNotFound
+                  }
+                  alt="Poster"
+                />
+              </div>
+              <div className="description">
+                <h1>{movieData.name || movieData.title}</h1>
+                <h4>Título Original - {movieData.original_title || movieData.original_name}</h4>
+                <h2>Valoración:</h2>
+                <p>{movieData.vote_average}</p>
+                <h2>Año:</h2>
+                <p>{movieData.release_date && movieData.release_date.split('-')[0]}</p>
+                <h2>Sinopsis</h2>
+                <p>{movieData.overview}</p>
 
-              <h2>Género:</h2>
-              {movieData && movieData.genres && movieData.genres.length > 0 ? (
-                <ul>
-                  {movieData.genres.map((genre, index) => (
-                    <li key={index}>{genre}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No se encontraron géneros</p>
-              )}
+                <h2>Género:</h2>
+                <div className="genre-container">
+                  {movieData && movieData.genres && movieData.genres.length > 0 ? (
+                    <ul className="genre-list">
+                      {movieData.genres.map((genre, index) => (
+                        <li key={index}>{genre}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No se encontraron géneros</p>
+                  )}
+                </div>
 
-              <button className="my-button" onClick={() => {
-                aniadirListaFav();
-                setShowMessage(true);
-              }} title="Añadir a favoritos">
-                <BiHappyHeartEyes className="icon-pull-right" />Añadir a favoritas
-              </button>
-              <button className="my-button" onClick={() => {
-                aniadirListaFav();
-                setShowMessage(true);
-              }} title="Añadir a pendientes"><BsCardChecklist></BsCardChecklist>  Añadir a pendientes</button>
+                <div className="button-container">
+                  <button className="my-button" onClick={() => {
+                    aniadirListaFav();
+                    setShowMessage(true);
+                  }} title="Añadir a favoritos">
+                    <BiHappyHeartEyes className="icon-pull-right" />Añadir a favoritas
+                  </button>
+                  <button className="my-button" onClick={() => {
+                    aniadirListaPendientes();
+                    setShowMessage(true);
+                  }} title="Añadir a pendientes">
+                    <BsCardChecklist />Añadir a pendientes
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
+          </CardContainer>
         )}
       </Contenido>
       <Footer></Footer>
@@ -567,24 +574,25 @@ export default function InfoPeli() {
   );
 }
 
-const Contenedor = styled.div`
-`;
+const Contenedor = styled.div``;
 
 const Contenido = styled.div`
-  margin-top: 25rem;
+  margin-top: 3rem;
+`;
+
+const CardContainer = styled.div`
+  display: flex;
+  justify-content: center;
 
   .card {
     width: 80%;
-    position: absolute;
     background: white;
-    margin: 0 auto;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+    border-radius:1rem;
+    box-shadow: 0 2px 5px 0 rgba(55, 136, 30, 0.846), 0 2px 10px 0 rgba(170, 22, 22, 0.737);
     transition: all 0.3s;
 
     &:hover {
-      box-shadow: 0 8px 17px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+      box-shadow: 0 8px 17px 0 rgb(103, 104, 103), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
 
     .photo {
@@ -595,31 +603,20 @@ const Contenido = styled.div`
 
       img {
         max-width: 90%;
+        border-radius: 5px;
       }
     }
 
     .description {
-      padding: 30px;
-      float: left;
-      width: 55%;
       border-left: 2px solid #efefef;
+      padding: 30px;
+      overflow: auto;
 
       h1 {
-        color: #515151;
+        color: rgb(48, 50, 62);
         font-size: 3rem;
         padding-top: 15px;
         margin: 0;
-      }
-
-      ul {
-        list-style-type: none;
-      }
-
-      li {
-        float: left;
-        background-color: #aedaa6;
-        padding: 10px;
-        margin: 5px;
       }
 
       h2 {
@@ -647,20 +644,55 @@ const Contenido = styled.div`
         text-align: justify;
       }
 
+      .genre-container {
+        margin-bottom: 1rem;
+
+        .genre-list {
+          display: flex;
+          flex-wrap: wrap;
+          margin: 0;
+          padding: 0;
+          list-style-type: none;
+        }
+
+        ul {
+          list-style-type: none;
+        }
+
+        li {
+          float: left;
+          border-radius:1rem;
+          color: #aedaa6;
+          background-color: white;
+          border: 1px solid #aedaa6;
+          padding: 10px;
+          margin: 5px;
+          margin-right: 1rem;
+        }
+      }
+
+      .button-container {
+
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+      }
+
       button {
         outline: 0;
         border: 0;
         background: none;
-        border: 1px solid #d9d9d9;
+        border: 1px solid lime;
         padding: 8px 0px;
-        margin-bottom: 30px;
-        color: #515151;
+        color: #02a002;
         text-transform: uppercase;
         width: 125px;
         font-family: inherit;
         margin-right: 5px;
         transition: all 0.3s ease;
         font-weight: 500;
+        margin-bottom: 2rem;
+        margin-right: 1rem;
 
         &:hover {
           border: 1px solid #aedaa6;

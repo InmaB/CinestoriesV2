@@ -171,6 +171,7 @@ export const searchMovies = createAsyncThunk("cinestories/search", async ({ sear
 });
 
 
+
 /////////// USUARIO
 export const getUserFavoritas = createAsyncThunk("cinestories/favs", async (email) => {
   const { data: { movies } } = await axios.get(`http://localhost:5000/api/user/favoritas/${email}`);

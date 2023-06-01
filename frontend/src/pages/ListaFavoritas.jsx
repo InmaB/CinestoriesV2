@@ -36,31 +36,17 @@ export default function ListaFavoritas() {
         }
     }, [email]);
 
-    // const deleteListaFavoritas = async (movieId, movieData) => {
-    //     try {
-    //         await axios.delete('http://localhost:5000/api/user/remove', {
-    //             email,
-    //             movieId
-    //         });
-    //         setShowMessage(true);
-    //         eliminarFavorita(movieId, movieData);
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // };
-
     return (
         <Contenedor>
-            <Navbar></Navbar>
+            <Navbar />
             <Contenido>
                 <div className="content flex column">
-                    <h1 className='titulo'>Mi lista de favoritas</h1>
+                    <h1 className="titulo">Mi lista de favoritas</h1>
                     {movies.length > 0 ? (
                         <div className="grid flex">
-                            {movies.map((fav, index) => (
-                                <div key={fav.movieId}>
-                                    {/* <button onClick={() => eliminarFavorita({ movieId: movie.movieId, email })}><AiFillDelete /></button> */}
-                                    <PosterListas movieData={fav} index={index} />
+                            {movies.map((fav) => (
+                                <div key={fav.movieId} className="item">
+                                    <PosterListas movieData={fav} />
                                 </div>
                             ))}
                         </div>
@@ -71,6 +57,7 @@ export default function ListaFavoritas() {
             </Contenido>
         </Contenedor>
     );
+
 }
 
 const Contenedor = styled.div``
