@@ -6,8 +6,8 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { firebaseAuth } from '../utils/firebase-config';
 import Navbar from '../components/Navbar';
 import styled from 'styled-components';
-import PosterListaPendiente from '../components/CarouselYGrid/PosterListasPendiente';
 import PosterListas from '../components/CarouselYGrid/PosterListas';
+import Footer from '../components/Footer';
 
 export default function ListaPendientes() {
     const navegacion = useNavigate();
@@ -54,6 +54,7 @@ export default function ListaPendientes() {
                     )}
                 </div>
             </Contenido>
+            <Footer></Footer>
         </Contenedor>
     );
 

@@ -31,7 +31,7 @@ export default function PosterListas({ movieData }) {
   const handleDelete = async () => {
     try {
       await dispatch(removeMovieFromToWatch({ email: email, movieId: movieData.id }));
-      await dispatch(removeMovieFromLiked({ email: email, movieId: movieData.id })); // Eliminar película de la lista "liked"
+      await dispatch(removeMovieFromLiked({ email: email, movieId: movieData.id }));
 
       console.log("Película eliminada exitosamente");
     } catch (error) {
@@ -56,9 +56,6 @@ export default function PosterListas({ movieData }) {
       <TextOverlay>
         <Text>{movieData.name || movieData.title}</Text>
       </TextOverlay>
-      {/* <button onClick={handleDelete}>
-        <AiFillDelete />
-      </button> */}
       <button className="btn-eliminar" title='Eliminar' onClick={handleDelete}>
         <AiFillDelete />
       </button>

@@ -434,7 +434,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { firebaseAuth } from '../utils/firebase-config';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { getUserFavoritas, getUserPendientes } from '../store';
+import { getGenres, getUserFavoritas, getUserPendientes } from '../store';
 import PosterNotFound from '../assets/posterNotFound.jpg';
 import { URL_TMBD, KEY_API, IMG_API } from '../utils/tmbd-config';
 import Footer from '../components/Footer';
@@ -443,6 +443,7 @@ import { BsCardChecklist } from 'react-icons/bs';
 import { BsFillArrowLeftSquareFill } from 'react-icons/bs'
 
 export default function InfoPeli() {
+
   const { idPelicula } = useParams();
   const location = useLocation();
   const movieData = location.state;
@@ -473,32 +474,54 @@ export default function InfoPeli() {
   }, []);
 
   useEffect(() => {
-    if (email && movieData) {
-      dispatch(getUserFavoritas(email)).then((favoritas) => {
-        const found = Array.isArray(favoritas) && favoritas.some((pelicula) => pelicula.id === movieData.id);
-        setIsInFavorites(found);
-      });
-    }
-  }, [email, dispatch, movieData]);
+    dispatch(getGenres({ type: "movie" }));
+  }, [])
 
   useEffect(() => {
-    if (email && movieData) {
-      dispatch(getUserPendientes(email)).then((pendientes) => {
-        const found = Array.isArray(pendientes) && pendientes.some((pelicula) => pelicula.id === movieData.id);
-        setIsInFavorites(found);
-      });
-    }
-  }, [email, dispatch, movieData]);
+    dispatch(getGenres({ type: "tv" }));
+  }, [])
+
+  // useEffect(() => {
+  //   if (email && movieData) {
+  //     dispatch(getUserFavoritas(email)).then((favoritas) => {
+  //       const found = Array.isArray(favoritas) && favoritas.some((pelicula) => pelicula.id === movieData.id);
+  //       setIsInFavorites(found);
+  //     });
+  //   }
+  // }, [email, dispatch, movieData]);
+
+  // useEffect(() => {
+  //   if (email && movieData) {
+  //     dispatch(getUserPendientes(email)).then((pendientes) => {
+  //       const found = Array.isArray(pendientes) && pendientes.some((pelicula) => pelicula.id === movieData.id);
+  //       setIsInFavorites(found);
+  //     });
+  //   }
+  // }, [email, dispatch, movieData]);
+
 
   const aniadirListaFav = async () => {
     try {
-      await axios.post('http://localhost:5000/api/user/aniadirFav', {
-        email,
-        data: movieData,
-      });
-      setIsInFavorites(true);
-      setShowMessage(true);
-      setMessage('Añadida a favoritas correctamente');
+      const { data: { movies: pendientes } } = await axios.get(`http://localhost:5000/api/user/pendientes/${email}`);
+      const { data: { movies: favoritas } } = await axios.get(`http://localhost:5000/api/user/favoritas/${email}`);
+      const isInPendientes = pendientes.some((movie) => movie.id === movieData.id);
+      const isInFavoritas = favoritas.some((movie) => movie.id === movieData.id);
+
+      if (isInPendientes) {
+        setShowMessage(true);
+        setMessage('La película ya está en la lista de pendientes');
+      } else if (isInFavoritas) {
+        setShowMessage(true);
+        setMessage('La película ya está en la lista de favoritas');
+      } else {
+        await axios.post('http://localhost:5000/api/user/aniadirFav', {
+          email,
+          data: movieData,
+        });
+        setIsInFavorites(true);
+        setShowMessage(true);
+        setMessage('Añadida a favoritas correctamente');
+      }
     } catch (err) {
       console.log(err);
     }
@@ -506,17 +529,31 @@ export default function InfoPeli() {
 
   const aniadirListaPendientes = async () => {
     try {
-      await axios.post('http://localhost:5000/api/user/aniadirPendientes', {
-        email,
-        data: movieData,
-      });
-      setIsInFavorites(true);
-      setShowMessage(true);
-      setMessage('Añadida a pendientes correctamente');
+      const { data: { movies: pendientes } } = await axios.get(`http://localhost:5000/api/user/pendientes/${email}`);
+      const { data: { movies: favoritas } } = await axios.get(`http://localhost:5000/api/user/favoritas/${email}`);
+      const isInPendientes = pendientes.some((movie) => movie.id === movieData.id);
+      const isInFavoritas = favoritas.some((movie) => movie.id === movieData.id);
+
+      if (isInFavoritas) {
+        setShowMessage(true);
+        setMessage('La película ya está en la lista de favoritas');
+      } else if (isInPendientes) {
+        setShowMessage(true);
+        setMessage('La película ya está en la lista de pendientes');
+      } else {
+        await axios.post('http://localhost:5000/api/user/aniadirPendientes', {
+          email,
+          data: movieData,
+        });
+        setShowMessage(true);
+        setMessage('Añadida a pendientes correctamente');
+      }
     } catch (err) {
       console.log(err);
     }
   };
+
+
 
   const navigateBack = () => {
     navegacion(-1);

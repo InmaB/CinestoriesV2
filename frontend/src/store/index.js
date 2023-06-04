@@ -1,4 +1,3 @@
-//ARREGLO CODI
 import { createAsyncThunk, createSlice, configureStore } from "@reduxjs/toolkit";
 import { ADULT_API, KEY_API, LENG_TMBD, URL_TMBD } from "../utils/tmbd-config";
 import axios from "axios";
@@ -37,6 +36,8 @@ const createArrayFromRawData = (array, genres) => {
     };
   });
 };
+
+
 
 // export const getGenres = createAsyncThunk("cinestories/genres", async (_, thunkApi) => {
 //   const { data } = await axios.get(`${URL_TMBD}genre/movie/list?api_key=${KEY_API}&language=es`);
@@ -103,52 +104,6 @@ export const fetchMoviesByGenre = createAsyncThunk("cinestories/fetchMoviesByGen
   return moviesArray;
 });
 
-// export const searchMovies = createAsyncThunk("cinestories/search", async ({ searchQuery}, thunkApi) => {
-//   const { cinestories: { genres } } = thunkApi.getState();
-//   // const searchType = type === "tv" ? "tv" : "movie"; // Determinar el tipo de búsqueda
-//   const allMoviesArray = [];
-
-
-//   const fetchMoviesByPage = async (page) => {
-
-//     const response = await axios.get(
-//       `${URL_TMBD}search/multi?api_key=${KEY_API}&${LENG_TMBD}&region=ES&query=${searchQuery}&page=${page}`);
-//       console.log(response);
-
-
-//     const { data: { results, total_pages } } = response;
-
-//     const moviesArray = createArrayFromRawData(results, genres);
-//     // console.log(moviesArray)
-
-//     allMoviesArray.push(...moviesArray);
-
-//     if (page < total_pages) {
-//       // Si hay más páginas, hacer una nueva solicitud para la siguiente página
-//       await fetchMoviesByPage(page + 1);
-//     }
-//   };
-
-//   await fetchMoviesByPage(1); // Comenzar desde la página 1
-
-//   // return allMoviesArray;
-//   return allMoviesArray;
-// });
-
-
-//LA PRIMERA PAGINA Y FUNCIONA, SOLO LA PRIMERA
-// export const searchMovies = createAsyncThunk("cinestories/search", async ({ searchQuery, type}, thunkApi) => {
-//   const { cinestories: { genres } } = thunkApi.getState();
-
-//     const response = await axios.get(
-//       `${URL_TMBD}search/${type}?api_key=${KEY_API}&${LENG_TMBD}&region=ES&query=${searchQuery}`);
-//       console.log(response);
-
-//     const { data: { results } } = response;
-
-//   return results;
-
-// });
 
 export const searchMovies = createAsyncThunk("cinestories/search", async ({ searchQuery, type }, thunkApi) => {
   const { cinestories: { genres } } = thunkApi.getState();

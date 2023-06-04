@@ -7,7 +7,7 @@ import { firebaseAuth } from '../utils/firebase-config';
 import Navbar from '../components/Navbar';
 import styled from 'styled-components';
 import PosterListas from '../components/CarouselYGrid/PosterListaFav';
-import PosterListaFav from '../components/CarouselYGrid/PosterListaFav';
+import Footer from '../components/Footer';
 
 export default function ListaFavoritas() {
     const navegacion = useNavigate();
@@ -53,6 +53,7 @@ export default function ListaFavoritas() {
                     )}
                 </div>
             </Contenido>
+            <Footer></Footer>
         </Contenedor>
     );
 

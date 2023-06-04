@@ -199,7 +199,11 @@ export default function Pelis() {
 
   useEffect(() => {
     dispatch(getGenres({ type: "movie" }));
-  }, []);
+  }, [])
+
+  useEffect(() => {
+    dispatch(getGenres({ type: "tv" }));
+  }, [])
 
   useEffect(() => {
     if (genresLoaded) {
