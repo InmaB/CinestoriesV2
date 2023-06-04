@@ -8,7 +8,6 @@ import Pelis from './pages/Pelis';
 import SeriesyTv from './pages/SeriesyTv';
 import InfoPeli from './pages/InfoPeli';
 import ListaFavoritas from './pages/ListaFavoritas';
-import ResultadosBusqueda from './pages/ResultadosBusqueda';
 import ListaPendientes from './pages/ListaPendientes';
 
 export default function App() {
@@ -30,7 +29,6 @@ export default function App() {
         <Route exact path='/listaFavoritas' element={<ListaFavoritas />}></Route>
         <Route exact path='/listaPendientes' element={<ListaPendientes />}></Route>
         <Route exact path='/infoPeli' element={<InfoPeli />}></Route>
-        <Route exact path="/resultados" element={<ResultadosBusqueda />} />
 
 
       </Routes>

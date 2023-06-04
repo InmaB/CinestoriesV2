@@ -14,12 +14,37 @@ const initialState = {
   resultadosLoaded:false,
 };
 
+// const createArrayFromRawData = (array, genres) => {
+//   return array.map((movie) => {
+//     const movieGenres = movie.genre_ids.map((genre) => {
+//       const name = genres.find(({ id }) => id === genre);
+//       return name ? name.name : null;
+//     });
+
+//     return {
+//       id: movie.id,
+//       title: movie.title,
+//       name: movie.name,
+//       poster_path: movie.poster_path,
+//       genres: movieGenres,
+//       backdrop_path: movie.backdrop_path,
+//       vote_average: movie.vote_average,
+//       release_date: movie.release_date,
+//       overview: movie.overview,
+//       original_title:movie.original_title,
+//       original_name:movie.original_name,
+//     };
+//   });
+// };
 const createArrayFromRawData = (array, genres) => {
   return array.map((movie) => {
-    const movieGenres = movie.genre_ids.map((genre) => {
-      const name = genres.find(({ id }) => id === genre);
-      return name ? name.name : null;
-    });
+    const movieGenres = movie.genre_ids
+      .map((genreId) => {
+        const genre = genres.find(({ id }) => id === genreId);
+        console.log(genre)
+        return genre ? genre.name : null;
+      })
+      .filter((genre) => genre !== null); // Filtrar los géneros nulos o indefinidos
 
     return {
       id: movie.id,
@@ -31,11 +56,12 @@ const createArrayFromRawData = (array, genres) => {
       vote_average: movie.vote_average,
       release_date: movie.release_date,
       overview: movie.overview,
-      original_title:movie.original_title,
-      original_name:movie.original_name,
+      original_title: movie.original_title,
+      original_name: movie.original_name,
     };
   });
 };
+
 
 
 
@@ -210,11 +236,6 @@ const cineStoriesSlice = createSlice({
     builder.addCase(fetchMoviesByGenre.fulfilled, (state, action) => {
       state.movies = action.payload;
     });
-    // builder.addCase(searchMovies.fulfilled, (state, action) => {
-    //   state.movies = action.payload;
-    //   console.log(action.payload);
-    // });
-
     builder.addCase(searchMovies.fulfilled, (state, action) => {
       state.resultados = action.payload;
       state.resultadosLoaded = true;
@@ -240,11 +261,6 @@ const cineStoriesSlice = createSlice({
     builder.addCase(removeMovieFromToWatch.fulfilled, (state, action) => {
       state.movies = action.payload;
     });
-
-    // builder.addCase(verificarFavorita.fulfilled, (state, action) => {
-    //   state.movies = action.payload;
-    // });
-
   },
 
 });
