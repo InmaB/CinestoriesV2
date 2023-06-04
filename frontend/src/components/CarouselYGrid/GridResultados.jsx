@@ -27,9 +27,6 @@ export default function GridResultados({ searchResults }) {
         {moviesToDisplay.map((movie, index) => (
           <div key={movie.id}>
             <PosterResultados movieData={movie} index={index} />
-
-
-
           </div>
         ))}
       </div>

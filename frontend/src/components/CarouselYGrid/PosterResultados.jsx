@@ -9,6 +9,7 @@ import { getGenres } from '../../store';
 
 export default function PosterResultados({ movieData }) {
   const movies = useSelector((state) => state.cinestories.movies);
+  const genres = useSelector((state) => state.cinestories.genres);
   const genresLoaded = useSelector((state) => state.cinestories.genresLoaded);
 
   console.log(movieData)
