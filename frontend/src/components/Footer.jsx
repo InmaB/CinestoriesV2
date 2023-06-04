@@ -13,16 +13,7 @@ function Footer() {
                     <a href="./">
                         <Logo src={logo} alt="Filmlane logo" />
                     </a>
-                </div>
-                <div className="flex">
-                    <ul className="footer-list">
-                        <li>
-                            <a href="./index.html" className="footer-link">Quiénes somos</a>
-                        </li>
-                        <li>
-                            <a href="#" className="footer-link">bla bla</a>
-                        </li>
-                    </ul>
+                    <p>Tu página web de películas, series y programas de TV </p>
                 </div>
 
                 <div className="divisor"></div>
@@ -48,13 +39,14 @@ function Footer() {
 
             </div>
             <div className="footer-bottom">
-                <p className='credits'> &copy; 2023. Creado por Inma Balbuena</p>
+                <p className='credits'> &copy; 2023. Creado por Inma Balbuena. Contacto: email@email.com</p>
             </div>
         </footer>
     );
 }
 
 const Logo = styled.img`
-width: 30%;
+width: 20%;
 `
+
 export default Footer;

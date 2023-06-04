@@ -426,7 +426,6 @@
 // // `
 
 
-
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -435,12 +434,13 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { firebaseAuth } from '../utils/firebase-config';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { getUserFavoritas } from '../store';
+import { getUserFavoritas, getUserPendientes } from '../store';
 import PosterNotFound from '../assets/posterNotFound.jpg';
 import { URL_TMBD, KEY_API, IMG_API } from '../utils/tmbd-config';
 import Footer from '../components/Footer';
 import { BiHappyHeartEyes } from 'react-icons/bi';
 import { BsCardChecklist } from 'react-icons/bs';
+import { BsFillArrowLeftSquareFill } from 'react-icons/bs'
 
 export default function InfoPeli() {
   const { idPelicula } = useParams();
@@ -453,6 +453,7 @@ export default function InfoPeli() {
   const [email, setEmail] = useState('');
   const [isInFavorites, setIsInFavorites] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     isMounted.current = true;
@@ -480,6 +481,15 @@ export default function InfoPeli() {
     }
   }, [email, dispatch, movieData]);
 
+  useEffect(() => {
+    if (email && movieData) {
+      dispatch(getUserPendientes(email)).then((pendientes) => {
+        const found = Array.isArray(pendientes) && pendientes.some((pelicula) => pelicula.id === movieData.id);
+        setIsInFavorites(found);
+      });
+    }
+  }, [email, dispatch, movieData]);
+
   const aniadirListaFav = async () => {
     try {
       await axios.post('http://localhost:5000/api/user/aniadirFav', {
@@ -488,6 +498,7 @@ export default function InfoPeli() {
       });
       setIsInFavorites(true);
       setShowMessage(true);
+      setMessage('Añadida a favoritas correctamente');
     } catch (err) {
       console.log(err);
     }
@@ -501,19 +512,21 @@ export default function InfoPeli() {
       });
       setIsInFavorites(true);
       setShowMessage(true);
+      setMessage('Añadida a pendientes correctamente');
     } catch (err) {
       console.log(err);
     }
   };
 
-  const handleComentario = (comment) => {
-    console.log('Comentario enviado:', comment);
+  const navigateBack = () => {
+    navegacion(-1);
   };
 
   return (
     <Contenedor>
       <Navbar />
       <Contenido>
+
         {movieData && (
           <CardContainer>
             <div className="card">
@@ -553,28 +566,33 @@ export default function InfoPeli() {
                 <div className="button-container">
                   <button className="my-button" onClick={() => {
                     aniadirListaFav();
-                    setShowMessage(true);
-                  }} title="Añadir a favoritos">
+                  }} title="Añadir a favoritas">
                     <BiHappyHeartEyes className="icon-pull-right" />Añadir a favoritas
                   </button>
                   <button className="my-button" onClick={() => {
                     aniadirListaPendientes();
-                    setShowMessage(true);
                   }} title="Añadir a pendientes">
                     <BsCardChecklist />Añadir a pendientes
                   </button>
                 </div>
+
+                {showMessage && <p>{message}</p>}
               </div>
             </div>
           </CardContainer>
         )}
+
       </Contenido>
+      <BackButton onClick={navigateBack}>
+        <BsFillArrowLeftSquareFill title='atras' />
+      </BackButton>
       <Footer></Footer>
     </Contenedor>
   );
 }
 
 const Contenedor = styled.div``;
+
 
 const Contenido = styled.div`
   margin-top: 3rem;
@@ -702,4 +720,18 @@ const CardContainer = styled.div`
       }
     }
   }
+`;
+
+const BackButton = styled.button`
+  position: relative;
+  bottom: 100px;
+  left: 220px;
+  background-color: transparent;
+  border: none;
+  font-size: 5rem;
+  cursor: pointer;
+  color: lime;
+:hover {
+  color: #01b801;
+}
 `;

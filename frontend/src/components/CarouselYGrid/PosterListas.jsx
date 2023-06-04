@@ -8,9 +8,9 @@ import { useDispatch } from 'react-redux';
 import { onAuthStateChanged } from 'firebase/auth';
 import { firebaseAuth } from '../../utils/firebase-config';
 import { AiFillDelete } from 'react-icons/ai';
-import { removeMovieFromLiked } from '../../store/index';
+import { removeMovieFromLiked, removeMovieFromToWatch } from '../../store/index';
 
-export default function PosterPanel({ movieData }) {
+export default function PosterListas({ movieData }) {
   const navegacion = useNavigate();
   const dispatch = useDispatch();
   const [isHover, setHover] = useState(false);
@@ -30,13 +30,15 @@ export default function PosterPanel({ movieData }) {
 
   const handleDelete = async () => {
     try {
-      await dispatch(removeMovieFromLiked({ movieId: movieData.id, email }));
-      // Realizar cualquier acción adicional después de eliminar la película, como actualizar el estado o mostrar un mensaje de éxito.
+      await dispatch(removeMovieFromToWatch({ email: email, movieId: movieData.id }));
+      await dispatch(removeMovieFromLiked({ email: email, movieId: movieData.id })); // Eliminar película de la lista "liked"
+
+      console.log("Película eliminada exitosamente");
     } catch (error) {
       console.log(error);
-      // Manejar cualquier error de eliminación aquí.
     }
   };
+
 
   const handleClick = () => {
     navegacion('/infoPeli', { state: movieData });
@@ -44,6 +46,7 @@ export default function PosterPanel({ movieData }) {
 
   return (
     <CajaPoster>
+
       <ImagenPoster
         src={movieData.poster_path ? `https://image.tmdb.org/t/p/w500/${IMG_API}${movieData.poster_path}` : PosterNotFound}
         alt="Poster22"

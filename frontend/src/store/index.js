@@ -178,18 +178,65 @@ export const getUserFavoritas = createAsyncThunk("cinestories/favs", async (emai
   return movies;
 });
 
-export const eliminarFavorita = createAsyncThunk("cinestories/eliminarFav", async ({ email, movieId }) => {
-  const { data: { movies } } = await axios.put(`http://localhost:5000/api/user/eliminarFav`, { email, movieId });
+export const getUserPendientes = createAsyncThunk("cinestories/pendientes", async (email) => {
+  const { data: { movies } } = await axios.get(`http://localhost:5000/api/user/pendientes/${email}`);
   return movies;
 });
 
 export const removeMovieFromLiked = createAsyncThunk(
   'cinestories/deleteLiked',
   async ({ movieId, email }) => {
-    const response = await axios.delete('http://localhost:5000/api/user/remove', { data: { email, movieId } });
+    const response = await axios.delete('http://localhost:5000/api/user/eliminarFav', { data: { email, movieId } });
     return response.data.movies;
   }
 );
+
+export const removeMovieFromToWatch = createAsyncThunk(
+  'cinestories/deleteToWatch',
+  async ({ movieId, email }) => {
+    // Dentro de removeMovieFromToWatch
+const response = await axios.delete('http://localhost:5000/api/user/eliminarPendiente', { data: { email, movieId } });
+console.log(response)
+    return response.data.movies;
+
+  }
+);
+
+
+
+export const getUserByEmail = async (email) => {
+  try {
+    const encodedEmail = encodeURIComponent(email);
+    const response = await axios.get(`http://localhost:5000/api/user/getUserByEmail/${encodedEmail}`);
+
+    if (response.data && response.data.username) {
+      return response.data.username;
+    } else {
+      throw new Error('Respuesta inválida del servidor');
+    }
+  } catch (error) {
+    console.error('Error al obtener el nombre de usuario por correo electrónico:', error);
+    throw error;
+  }
+};
+
+
+
+export const cambiarUsername = createAsyncThunk(
+  'cinestories/cambiarUsername',
+  async ({ email, newUserName }) => {
+    try {
+      const response = await axios.put(`http://localhost:5000/api/user/changeUserName/${email}`, { newUserName });
+      return response.data.user;
+    } catch (error) {
+      throw new Error('Error al cambiar el nombre de usuario.');
+    }
+  }
+);
+
+
+
+
 
 /////////// SLICE
 const cineStoriesSlice = createSlice({
@@ -220,7 +267,7 @@ const cineStoriesSlice = createSlice({
     builder.addCase(getUserFavoritas.fulfilled, (state, action) => {
       state.movies = action.payload;
     });
-    builder.addCase(eliminarFavorita.fulfilled, (state, action) => {
+    builder.addCase(getUserPendientes.fulfilled, (state, action) => {
       state.movies = action.payload;
     });
     builder.addCase(fetchMovieByRated.fulfilled, (state, action) => {
@@ -235,6 +282,13 @@ const cineStoriesSlice = createSlice({
     builder.addCase(removeMovieFromLiked.fulfilled, (state, action) => {
       state.movies = action.payload;
     });
+    builder.addCase(removeMovieFromToWatch.fulfilled, (state, action) => {
+      state.movies = action.payload;
+    });
+
+    // builder.addCase(verificarFavorita.fulfilled, (state, action) => {
+    //   state.movies = action.payload;
+    // });
 
   },
 

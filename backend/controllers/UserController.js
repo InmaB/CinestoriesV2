@@ -1,31 +1,7 @@
-// const User =require ("../models/UserModel")
-
-// module.exports.aniadirFavoritas=async (req, res) =>{
-//     try {
-// const {email,data}=req.body;
-// const user=await User.findOne({email})
-// if(user) {
-//     const {favoritas} =user;
-//     const esFavorita=favoritas.find(({id})=> (id ===data.id))
-//     if(!esFavorita) {
-//         await User.findByIdAndUpdate(user._id, {
-//             favoritas: [...favoritas, data],
-//           },
-//           { new: true })
-
-
-//     }else return res.json({err:"Ya se añadió"})
-// } else await User.create ({email, favoritas:[data]});
-// return res.json ({err:"Añadido satisfactoriamente"})
-
-//     }catch(error) {
-// return res.json({err:"Ha habido un error para añadir"})
-//     }
-// }
-
 const { json } = require("express");
 const User = require("../models/UserModel");
 
+// AÑADIR FAVORITAS Y PENDIENTES
 module.exports.aniadirFavoritas = async (req, res) => {
   try {
     const { email, data } = req.body;
@@ -76,167 +52,39 @@ module.exports.aniadirPendientes = async (req, res) => {
     }
   };
 
-
-// module.exports.aniadirPendientes=async (req, res) =>{
-//     try {
-// const {email,data}=req.body;
-// const user=await User.findOne({email})
-// if(user) {
-//     const {pendientes} =user;
-//     const esPendiente=pendientes.find(({id})=> (id ===data.id))
-//     if(!esPendiente) {
-//         await User.findByIdAndUpdate (user._id, {
-//             pendientes: [...pendientes, data],
-//         },
-//         {new:true})
-//     }else return res.json({err:"Ya se añadió"})
-// } else await User.create ({email, pendientes:[data]});
-// return res.json ({err:"Añadido satisfactoriamente"})
-
-//     }catch(error) {
-// return res.json({err:"Ha habido un error para añadir"})
-//     }
-// }
-
+//GET FAVORITAS Y PENDIENTES
 module.exports.getFavoritas=async(req, res) => {
     try {
         const {email} =req.params
         const user =await User.findOne({email})
         if(user) {
-            res.json ({msg:"success", movies: user.favoritas})
+            res.json ({msg:"Ok, bien!", movies: user.favoritas})
         } else {
-            return res.json({msg: "User with given email not found"})
+            return res.json({msg: "Usuario no encontrado"})
         }
 
     } catch (err) {
-        return res.json({msg: "Eror fetching movie"})
+        return res.json({msg: "Error"})
     }
 }
 
-module.exports.eliminarFavoritas=async(req,res) => {
-    try {
-        const { email, movieId } = req.body;
-        const user = await User.findOne({ email });
+module.exports.getPendientes=async(req, res) => {
+  try {
+      const {email} =req.params
+      const user =await User.findOne({email})
+      if(user) {
+          res.json ({msg:"Ok, bien!", movies: user.pendientes})
+      } else {
+          return res.json({msg: "Usuario no encontrado"})
+      }
 
-
-        if (user) {
-            const {favoritas}=user
-            const movieIndex=favoritas.findIndex(({ id }) => id === movieId)
-
-        }
-
-        if(!movieIndex) res.status(400).send({msg:"movie not found"})
-        favoritas.splice(movieIndex,1)
-
-        await User.findByIdAndUpdate(
-            user._id,
-            {
-                favoritas
-            },
-            {new:true}
-        )
-        return res.json({msg:"pelicula borrada", movies:favoritas})
-
-    } catch (err) {
-return res.json({msg:"error eliminando pelicula"})
-    }
+  } catch (err) {
+      return res.json({msg: "Error"})
+  }
 }
 
-// module.exports.eliminarFavoritas = async (req, res) => {
-//   const { email, movieId } = req.body;
-
-//   try {
-//     // Find the user by email
-//     const user = await User.findOne({ email });
-
-//     if (!user) {
-//       return res.status(404).json({ error: 'User not found' });
-//     }
-
-//     // Remove the movie from the user's favorite list
-//     user.favoriteMovies = user.favoriteMovies.filter((id) => id !== movieId);
-
-//     // Save the updated user data
-//     await user.save();
-
-//     res.status(200).json({ message: 'Movie removed from favorites successfully' });
-//   } catch (error) {
-//     console.error('Error removing movie from favorites:', error);
-//     res.status(500).json({ error: 'Internal server error' });
-//   }
-// };
-
-///COMENTARIOS
-module.exports.aniadirComentario = async (req, res) => {
-  try {
-    const { email, comentario } = req.body;
-    let user = await User.findOne({ email });
-
-    if (!user) {
-      return res.json({ err: "Usuario no encontrado" });
-    }
-
-    user.comentarios.push(comentario);
-    await user.save();
-
-    return res.json({ message: "Comentario añadido satisfactoriamente" });
-  } catch (error) {
-    return res.json({ err: "Ha habido un error al añadir el comentario" });
-  }
-};
-
-module.exports.eliminarComentario = async (req, res) => {
-  try {
-    const { email, comentarioId } = req.body;
-    let user = await User.findOne({ email });
-
-    if (!user) {
-      return res.json({ err: "Usuario no encontrado" });
-    }
-
-    const { comentarios } = user;
-    const comentarioIndex = comentarios.findIndex(({ id }) => id === comentarioId);
-
-    if (comentarioIndex === -1) {
-      return res.status(400).send({ err: "Comentario no encontrado" });
-    }
-
-    comentarios.splice(comentarioIndex, 1);
-    await user.save();
-
-    return res.json({ message: "Comentario eliminado satisfactoriamente" });
-  } catch (error) {
-    return res.json({ err: "Ha habido un error al eliminar el comentario" });
-  }
-};
-
-// module.exports.removeFromLikedMovies = async (req, res) => {
-//   try {
-//     const { email, movieId } = req.body;
-//     const user = await User.findOne({ email });
-//     if (user) {
-//       const movies = user.favoritas;
-//       const movieIndex = movies.findIndex(({ id }) => id === movieId);
-//       if (!movieIndex) {
-//         res.status(400).send({ msg: "Movie not found." });
-//       }
-//       movies.splice(movieIndex, 1);
-//       await User.findByIdAndUpdate(
-//         user._id,
-//         {
-//           favoritas: movies,
-//         },
-//         { new: true }
-//       );
-//       return res.json({ msg: "Movie successfully removed.", movies });
-//     } else return res.json({ msg: "User with given email not found." });
-//   } catch (error) {
-//     return res.json({ msg: "Error removing movie to the liked list" });
-//   }
-// };
-
-
-async function removeFromLikedMovies(req, res) {
+// ELIMINAR FAVORITA Y PENDIENTE
+async function eliminarFavorita (req, res) {
   try {
     const { email, movieId } = req.body;
     const user = await User.findOne({ email });
@@ -244,18 +92,113 @@ async function removeFromLikedMovies(req, res) {
       const movies = user.favoritas;
       const movieIndex = movies.findIndex((movie) => movie.id === movieId);
       if (movieIndex === -1) {
-        return res.status(400).json({ msg: 'Movie not found.' });
+        return res.status(400).json({ msg: 'Peli no encontrada' });
       }
       movies.splice(movieIndex, 1);
       await User.findByIdAndUpdate(user._id, { favoritas: movies }, { new: true });
-      return res.json({ msg: 'Movie successfully removed.', movies });
+      return res.json({ msg: 'Eliminada con exito', movies });
     } else {
-      return res.json({ msg: 'User with given email not found.' });
+      return res.json({ msg: 'Usuario no encontrado' });
     }
   } catch (error) {
     console.log(error);
-    return res.json({ msg: 'Error removing movie from the liked list.' });
+    return res.json({ msg: 'Error al eliminar de la lista' });
   }
 }
 
-module.exports.removeFromLikedMovies = removeFromLikedMovies;
+module.exports.eliminarFavorita = eliminarFavorita;
+
+
+
+async function eliminarPendiente(req, res) {
+  try {
+    const { email, movieId } = req.body;
+    const user = await User.findOne({ email });
+    console.log(user)
+    if (user) {
+      const movies = user.pendientes;
+      const movieIndex = movies.findIndex((movie) => movie.id === movieId);
+      if (movieIndex === -1) {
+        return res.status(400).json({ msg: 'Peli no encontrada' });
+      }
+      movies.splice(movieIndex, 1);
+      user.pendientes = movies;
+      await user.save();
+      return res.json({ msg: 'Eliminada con éxito', movies });
+    } else {
+      return res.json({ msg: 'Usuario no encontrado' });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.json({ msg: 'Error al eliminar de la lista' });
+  }
+}
+
+module.exports.eliminarPendiente = eliminarPendiente;
+
+
+
+//CAMBIAR NOMBRE Y AVATAR
+// FUNCIONA!!
+module.exports.changeUserName = async (req, res) => {
+  const { email } = req.params;
+  const { newUserName } = req.body; // Cambiar req.params.newUserName por req.body.newUserName
+
+  try {
+    // Verificar si el usuario existe en la base de datos
+    const existingUser = await User.findOne({ email });
+
+    console.log("existingUser:", existingUser);
+
+    if (!existingUser) {
+      return res.status(404).json({ message: "Usuario no encontrado." });
+    } else {
+      console.log("usuario encontrado");
+      // Actualizar el UserName del usuario
+      existingUser.username = newUserName;
+      await existingUser.save();
+
+      res.status(200).json({ message: "El nombre de usuario se ha actualizado correctamente.", user: existingUser });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error al cambiar el nombre de usuario.", error });
+  }
+};
+
+
+
+module.exports.getUserByEmail = async (req, res) => {
+  const { email } = req.params;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado." });
+    }
+
+    res.status(200).json({ username: user.username });
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener el usuario por correo electrónico.", error });
+  }
+};
+
+
+
+
+module.exports.changeProfileImage = async (req, res) => {
+  const { userId, newProfileImage } = req.body;
+
+  try {
+    // Actualizar el profile_img del usuario
+    const user = await User.findByIdAndUpdate(userId, { profile_img: newProfileImage }, { new: true });
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado." });
+    }
+
+    res.status(200).json({ message: "La imagen de perfil se ha actualizado correctamente.", user });
+  } catch (error) {
+    res.status(500).json({ message: "Error al cambiar la imagen de perfil.", error });
+  }
+};
+

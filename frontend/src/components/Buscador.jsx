@@ -1,29 +1,53 @@
-
-//ESTE SI FUNCIONAAAAAAAAAAAAAAA
-// import React, { useState } from "react";
+// import React, { useEffect, useState } from "react";
 // import { useDispatch, useSelector } from "react-redux";
-// import { searchMovies } from "../store";
-// import { Modal } from "bootstrap";
+// import { getGenres, searchMovies } from "../store";
+// import Modal from "./Modal";
+// import styled from "styled-components";
+// import { useNavigate } from "react-router-dom";
+// import GridResultados from '../components/CarouselYGrid/GridResultados';
+// import RiseLoader from 'react-spinners/RiseLoader';
 
 // const Buscador = () => {
 //     const dispatch = useDispatch();
 //     const [searchQuery, setSearchQuery] = useState("");
-//     const searchResults = useSelector(state => state.cinestories.resultados);
+//     const searchResults = useSelector((state) => state.cinestories.resultados);
 //     const [type, setType] = useState("movie");
+//     const [modalOpen, setModalOpen] = useState(false);
+//     const [loading, setLoading] = useState(true);
+//     const [isLoading, setIsLoading] = useState(false);
 
+//     const navigate = useNavigate();
+
+//     useEffect(() => {
+//         dispatch(getGenres());
+//     }, []);
+
+//     const handleClick = (movie) => {
+//         navigate('/infoPeli', { state: movie });
+//     };
+
+//     useEffect(() => {
+//         setTimeout(() => {
+//             setLoading(false);
+//         }, 2000);
+//     }, []);
 
 //     const handleSearch = () => {
 //         if (searchQuery) {
 //             dispatch(searchMovies({ searchQuery, type }));
-//         };
-
-
+//             setModalOpen(true);
+//         }
 //     };
+
+//     const closeModal = () => {
+//         setModalOpen(false);
+//     };
+
 //     return (
-//         <div>
-//             <h1>Buscador</h1>
+//         <Contenedor>
 //             <input
 //                 type="text"
+//                 placeholder="Buscador"
 //                 value={searchQuery}
 //                 onChange={(e) => setSearchQuery(e.target.value)}
 //             />
@@ -33,17 +57,70 @@
 //             </select>
 //             <button onClick={handleSearch}>Buscar</button>
 
-//             {searchResults.length === 0 && <p>No se encontraron resultados</p>}
-//             <ul>
-//                 {searchResults.map((movie, index) => (
-//                     <li key={movie.id}>{movie.name || movie.title}</li>
-//                 ))}
-//             </ul>
-//         </div>
+//             <Modal open={modalOpen} onClose={closeModal} loading={isLoading}>
+//                 <div className="modal-contenido">
+//                     {loading ? ( // Mostrar el spinner mientras se realiza la búsqueda
+//                         <SpinnerContainer>
+//                             <RiseLoader color='lime' />
+//                         </SpinnerContainer>
+//                     ) : searchResults.length === 0 ? (
+//                         <p>No se encontraron resultados</p>
+//                     ) : (
+//                         <>
+//                             <GridResultados searchResults={searchResults} />
+//                         </>
+//                     )}
+//                 </div>
+//             </Modal>
+//         </Contenedor>
 //     );
 // };
 
 // export default Buscador;
+
+// const Contenedor = styled.div`
+//   display: flex;
+//   /* flex-direction: column; */
+//   align-items: center;
+//   justify-content: center;
+// margin-bottom: 2rem;
+
+// h1 {
+// margin-right: 5px;
+// }
+//   input {
+//     padding: 4px;
+//     margin-right: 5px;
+//     background-color: #1a1d29;
+//     color: whitesmoke;
+//     /* border-radius: 10px; */
+//     border: 2px solid whitesmoke;
+//     ::placeholder { color: rgb(128, 134, 167)}
+//   }
+//   select {
+//     padding: 5px;
+//     margin-right: 5px;
+//     background-color: #1a1d29;
+//     /* border-radius: 10px; */
+//     border: 2px solid whitesmoke;
+//     color: whitesmoke;
+
+//   }
+//   button {
+//     padding: 5px;
+//     background-color: #1a1d29;
+//     /* border-radius: 10px; */
+//     border: 2px solid whitesmoke;
+//     color: whitesmoke;
+//   }
+// `;
+
+// const SpinnerContainer = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// `;
+
 
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -51,6 +128,8 @@ import { getGenres, searchMovies } from "../store";
 import Modal from "./Modal";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import GridResultados from "../components/CarouselYGrid/GridResultados";
+import RiseLoader from "react-spinners/RiseLoader";
 
 const Buscador = () => {
     const dispatch = useDispatch();
@@ -58,6 +137,7 @@ const Buscador = () => {
     const searchResults = useSelector((state) => state.cinestories.resultados);
     const [type, setType] = useState("movie");
     const [modalOpen, setModalOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
 
@@ -66,15 +146,32 @@ const Buscador = () => {
     }, []);
 
     const handleClick = (movie) => {
-        navigate('/infoPeli', { state: movie });
+        navigate("/infoPeli", { state: movie });
     };
+
+    useEffect(() => {
+        setTimeout(() => {
+            setLoading(false);
+        }, 2000);
+    }, []);
 
     const handleSearch = () => {
         if (searchQuery) {
-            dispatch(searchMovies({ searchQuery, type }));
             setModalOpen(true);
+            setLoading(true); // Establecer isLoading a true cuando se inicia la búsqueda
+            dispatch(searchMovies({ searchQuery, type }))
+                .then((response) => {
+                    // La búsqueda se completó, actualiza el estado de loading
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    // Manejar el error en caso de que ocurra
+                    setLoading(false); // Si se produce un error, asegúrate de establecer loading en false
+                    console.error(error);
+                });
         }
     };
+
 
     const closeModal = () => {
         setModalOpen(false);
@@ -82,9 +179,9 @@ const Buscador = () => {
 
     return (
         <Contenedor>
-            <h1>Buscador</h1>
             <input
                 type="text"
+                placeholder="Buscador"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -94,23 +191,17 @@ const Buscador = () => {
             </select>
             <button onClick={handleSearch}>Buscar</button>
 
-            <Modal open={modalOpen} onClose={closeModal}>
+            <Modal open={modalOpen} onClose={closeModal} loading={loading}>
                 <div className="modal-contenido">
-                    {searchResults.length === 0 ? (
+                    {loading ? (
+                        <SpinnerContainer>
+                            <RiseLoader color="lime" />
+                        </SpinnerContainer>
+                    ) : searchResults.length === 0 ? (
                         <p>No se encontraron resultados</p>
                     ) : (
                         <>
-                            {searchResults.map((movie, index) => (
-                                <div key={movie.id}>
-                                    <img
-                                        src={`https://image.tmdb.org/t/p/w92/${movie.poster_path}`}
-                                        alt="poster"
-                                    />
-                                    <button onClick={() => handleClick(movie)}>
-                                        {movie.name || movie.title}
-                                    </button>
-                                </div>
-                            ))}
+                            <GridResultados searchResults={searchResults} />
                         </>
                     )}
                 </div>
@@ -122,12 +213,44 @@ const Buscador = () => {
 export default Buscador;
 
 const Contenedor = styled.div`
-  img {
-    float: left;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+
+  h1 {
+    margin-right: 5px;
   }
 
-  #texto {
-    display: inline-block;
-    vertical-align: top;
+  input {
+    padding: 4px;
+    margin-right: 5px;
+    background-color: #1a1d29;
+    color: whitesmoke;
+    border: 2px solid whitesmoke;
+    ::placeholder {
+      color: rgb(128, 134, 167);
+    }
   }
+
+  select {
+    padding: 5px;
+    margin-right: 5px;
+    background-color: #1a1d29;
+    border: 2px solid whitesmoke;
+    color: whitesmoke;
+  }
+
+  button {
+    padding: 5px;
+    background-color: #1a1d29;
+    border: 2px solid whitesmoke;
+    color: whitesmoke;
+  }
+`;
+
+const SpinnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

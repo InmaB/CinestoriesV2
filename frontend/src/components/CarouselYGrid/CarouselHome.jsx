@@ -66,7 +66,7 @@ const Contenedor = styled.div`
 // Configurado de la librería Swiper
   .swiper {
     width: 100%;
-    height: 100vh;
+    height: 90vh;
     --swiper-navigation-color: '#fff';
 
   }

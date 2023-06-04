@@ -29,6 +29,10 @@ export default function Cinestories() {
   }, [])
 
   useEffect(() => {
+    dispatch(getGenres({ type: "tv" }));
+  }, [])
+
+  useEffect(() => {
     if (genresLoaded) dispatch(fetchMovies({ type: "all" }))
   }, [genresLoaded])
 
