@@ -124,7 +124,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getGenres, searchMovies } from "../store";
+import { getGenres, searchMovies, createArrayFromRawData } from "../store";
 import Modal from "./Modal";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
@@ -138,6 +138,7 @@ const Buscador = () => {
     const [type, setType] = useState("movie");
     const [modalOpen, setModalOpen] = useState(false);
     const [loading, setLoading] = useState(true);
+    const genres = useSelector((state) => state.cinestories.genres);
 
     const navigate = useNavigate();
 
@@ -202,6 +203,9 @@ const Buscador = () => {
                     ) : (
                         <>
                             <GridResultados searchResults={searchResults} />
+
+
+
                         </>
                     )}
                 </div>

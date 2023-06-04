@@ -474,26 +474,6 @@ export default function InfoPeli() {
   }, []);
 
 
-
-  // useEffect(() => {
-  //   if (email && movieData) {
-  //     dispatch(getUserFavoritas(email)).then((favoritas) => {
-  //       const found = Array.isArray(favoritas) && favoritas.some((pelicula) => pelicula.id === movieData.id);
-  //       setIsInFavorites(found);
-  //     });
-  //   }
-  // }, [email, dispatch, movieData]);
-
-  // useEffect(() => {
-  //   if (email && movieData) {
-  //     dispatch(getUserPendientes(email)).then((pendientes) => {
-  //       const found = Array.isArray(pendientes) && pendientes.some((pelicula) => pelicula.id === movieData.id);
-  //       setIsInFavorites(found);
-  //     });
-  //   }
-  // }, [email, dispatch, movieData]);
-
-
   const aniadirListaFav = async () => {
     try {
       const { data: { movies: pendientes } } = await axios.get(`http://localhost:5000/api/user/pendientes/${email}`);
@@ -572,12 +552,14 @@ export default function InfoPeli() {
                 />
               </div>
               <div className="description">
+
+                <h1>{movieData.media_type}</h1>
                 <h1>{movieData.name || movieData.title}</h1>
                 <h4>Título Original - {movieData.original_title || movieData.original_name}</h4>
                 <h2>Valoración:</h2>
                 <p>{movieData.vote_average}</p>
                 <h2>Año:</h2>
-                <p>{movieData.release_date && movieData.release_date.split('-')[0]}</p>
+                <p>{movieData.release_date && movieData.release_date.split('-')[0] || movieData.first_air_date && movieData.first_air_date.split("-")[0]}</p>
                 <h2>Sinopsis</h2>
                 <p>{movieData.overview}</p>
 

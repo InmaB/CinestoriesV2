@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, configureStore } from "@reduxjs/toolkit";
-import { ADULT_API, KEY_API, LENG_TMBD, URL_TMBD } from "../utils/tmbd-config";
+import { KEY_API, LENG_TMBD, URL_TMBD } from "../utils/tmbd-config";
 import axios from "axios";
 
 const initialState = {
@@ -36,6 +36,7 @@ const initialState = {
 //     };
 //   });
 // };
+
 const createArrayFromRawData = (array, genres) => {
   return array.map((movie) => {
     const movieGenres = movie.genre_ids
@@ -50,6 +51,7 @@ const createArrayFromRawData = (array, genres) => {
       id: movie.id,
       title: movie.title,
       name: movie.name,
+      first_air_date:movie.first_air_date,
       poster_path: movie.poster_path,
       genres: movieGenres,
       backdrop_path: movie.backdrop_path,
@@ -58,17 +60,10 @@ const createArrayFromRawData = (array, genres) => {
       overview: movie.overview,
       original_title: movie.original_title,
       original_name: movie.original_name,
+      media_type: movie.media_type,
     };
   });
 };
-
-
-
-
-// export const getGenres = createAsyncThunk("cinestories/genres", async (_, thunkApi) => {
-//   const { data } = await axios.get(`${URL_TMBD}genre/movie/list?api_key=${KEY_API}&language=es`);
-//   return data.genres;
-// });
 
 export const getGenres = createAsyncThunk("cinestories/genres", async ({ type }) => {
   const { data } = await axios.get(`${URL_TMBD}genre/${type}/list?api_key=${KEY_API}&language=es`);
@@ -92,7 +87,8 @@ export const fetchMovies = createAsyncThunk("cinestories/trending", async ({ typ
 
 export const fetchMovieByRated = createAsyncThunk("cinestories/fetchMovieByRated", async (_, thunkApi) => {
   const { cinestories: { genres } } = thunkApi.getState();
-  const response = await axios.get(`https://api.themoviedb.org/3/movie/top_rated?api_key=dc2d353b9ddadaebcdfa5c1f93065747&language=es-ES&page=1&region=ES&`);
+  // https://api.themoviedb.org/3/movie/top_rated?api_key=dc2d353b9ddadaebcdfa5c1f93065747&language=es-ES&page=1&region=ES&
+  const response = await axios.get(`${URL_TMBD}movie/top_rated?api_key=${KEY_API}&${LENG_TMBD}&page=1&region=ES&`);
   const results = response.data.results;
   const movies = createArrayFromRawData(results, genres);
   return movies;
@@ -100,7 +96,8 @@ export const fetchMovieByRated = createAsyncThunk("cinestories/fetchMovieByRated
 
 export const fetchTvByRated = createAsyncThunk("cinestories/fetchTvByRated", async (_, thunkApi) => {
   const { cinestories: { genres } } = thunkApi.getState();
-  const response = await axios.get(`https://api.themoviedb.org/3/tv/top_rated?api_key=dc2d353b9ddadaebcdfa5c1f93065747&language=es-ES&page=1&region=ES&`);
+  // https://api.themoviedb.org/3/tv/top_rated?api_key=dc2d353b9ddadaebcdfa5c1f93065747&language=es-ES&page=1&region=ES&
+  const response = await axios.get(`${URL_TMBD}/tv/top_rated?api_key=${KEY_API}&${LENG_TMBD}&page=1&region=ES&`);
   const results = response.data.results;
   const movies = createArrayFromRawData(results, genres);
   return movies;
@@ -108,7 +105,8 @@ export const fetchTvByRated = createAsyncThunk("cinestories/fetchTvByRated", asy
 
 export const fetchUpcoming = createAsyncThunk("cinestories/fetchUpcoming", async (_, thunkApi) => {
   const { cinestories: { genres } } = thunkApi.getState();
-  const response = await axios.get(`https://api.themoviedb.org/3/movie/upcoming?api_key=dc2d353b9ddadaebcdfa5c1f93065747&language=es-ES&page=1&region=ES&`);
+  // https://api.themoviedb.org/3/movie/upcoming?api_key=dc2d353b9ddadaebcdfa5c1f93065747&language=es-ES&page=1&region=ES&
+  const response = await axios.get(`${URL_TMBD}movie/upcoming?api_key=${KEY_API}&${LENG_TMBD}&page=1&region=ES&`);
   const results = response.data.results;
   const movies = createArrayFromRawData(results, genres);
   return movies;
@@ -121,7 +119,7 @@ export const fetchMoviesByGenre = createAsyncThunk("cinestories/fetchMoviesByGen
 
   for (let i = 1; i <= totalPag; i++) {
     // https://api.themoviedb.org/3/discover/movie?api_key=dc2d353b9ddadaebcdfa5c1f93065747&language=es-ES&region=ES&with_genres=18&page=2
-    const response = await axios.get(`https://api.themoviedb.org/3/discover/${type}?api_key=dc2d353b9ddadaebcdfa5c1f93065747&language=es-ES&region=ES&with_genres=${genres_id}&page=${i}`);
+    const response = await axios.get(`${URL_TMBD}discover/${type}?api_key=${KEY_API}&${LENG_TMBD}&region=ES&with_genres=${genres_id}&page=${i}`);
     const results = response.data.results;
     const movies = createArrayFromRawData(results, genres);
     moviesArray.push(...movies);
@@ -133,7 +131,6 @@ export const fetchMoviesByGenre = createAsyncThunk("cinestories/fetchMoviesByGen
 
 export const searchMovies = createAsyncThunk("cinestories/search", async ({ searchQuery, type }, thunkApi) => {
   const { cinestories: { genres } } = thunkApi.getState();
-
   const totalPages = 10;
   const results = [];
 
@@ -144,7 +141,6 @@ export const searchMovies = createAsyncThunk("cinestories/search", async ({ sear
     console.log(response);
 
     const { data: { results: pageResults } } = response;
-
     results.push(...pageResults);
   }
 
@@ -183,8 +179,6 @@ console.log(response)
   }
 );
 
-
-
 export const getUserByEmail = async (email) => {
   try {
     const encodedEmail = encodeURIComponent(email);
@@ -201,8 +195,6 @@ export const getUserByEmail = async (email) => {
   }
 };
 
-
-
 export const cambiarUsername = createAsyncThunk(
   'cinestories/cambiarUsername',
   async ({ email, newUserName }) => {
@@ -215,9 +207,17 @@ export const cambiarUsername = createAsyncThunk(
   }
 );
 
-
-
-
+export const cambiarUserImagen= createAsyncThunk(
+  'cinestories/cambiarUserImagen',
+  async ({ email, newProfileImage }) => {
+    try {
+      const response = await axios.put(`http://localhost:5000/api/user/changeProfileImage/${email}`, { newProfileImage });
+      return response.data.user;
+    } catch (error) {
+      throw new Error('Error al cambiar la imagen de usuario.');
+    }
+  }
+);
 
 /////////// SLICE
 const cineStoriesSlice = createSlice({

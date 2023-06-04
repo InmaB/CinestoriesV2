@@ -20,6 +20,6 @@ router.get("/getUserByEmail/:email", getUserByEmail);
 
 
 // Ruta para cambiar el profile_img
-router.put("/changeProfileImage/:_id", changeProfileImage);
+router.put("/changeProfileImage/:email", changeProfileImage);
 
 module.exports=router

@@ -185,20 +185,31 @@ module.exports.getUserByEmail = async (req, res) => {
 
 
 
-
 module.exports.changeProfileImage = async (req, res) => {
-  const { userId, newProfileImage } = req.body;
+  const { email, newProfileImage } = req.body;
 
   try {
     // Actualizar el profile_img del usuario
-    const user = await User.findByIdAndUpdate(userId, { profile_img: newProfileImage }, { new: true });
+    const user = await User.findOneAndUpdate(
+      { email },
+      { profile_img: newProfileImage },
+      { new: true }
+    );
+
     if (!user) {
       return res.status(404).json({ message: "Usuario no encontrado." });
     }
 
-    res.status(200).json({ message: "La imagen de perfil se ha actualizado correctamente.", user });
+    res.status(200).json({
+      message: "La imagen de perfil se ha actualizado correctamente.",
+      user
+    });
   } catch (error) {
-    res.status(500).json({ message: "Error al cambiar la imagen de perfil.", error });
+    res.status(500).json({
+      message: "Error al cambiar la imagen de perfil.",
+      error
+    });
   }
 };
+
 

@@ -398,7 +398,10 @@ import { SlScreenDesktop } from "react-icons/sl";
 import { useDispatch } from 'react-redux';
 import { cambiarUsername, getUserByEmail } from '../store/index';
 
+
+
 import { firebaseAuth } from "../utils/firebase-config";
+import UserProfile from './UserProfile';
 
 
 export default function Navbar() {
@@ -440,15 +443,18 @@ export default function Navbar() {
     setNewUsername(e.target.value);
   };
 
+
   const handleSubmitUsername = () => {
     dispatch(cambiarUsername({ email: userEmail, newUserName: newUsername }))
       .then(() => {
-        setShowUsernameForm(false);
+        setUsername(newUsername); // Actualizar el estado con el nuevo nombre de usuario
+        setShowUsernameForm(false); // Ocultar el formulario de edición
       })
       .catch((error) => {
         console.error("Error al cambiar el nombre de usuario:", error);
       });
   };
+
 
   useEffect(() => {
     const fetchUsername = async () => {
@@ -487,7 +493,6 @@ export default function Navbar() {
     setIsOpen(!isOpen);
   };
 
-
   return (
     <Nav isOpen={isOpen}>
       <div className="flex a-center">
@@ -510,6 +515,8 @@ export default function Navbar() {
           ))}
         </ul>
         <div className="dcha">
+          <UserProfile></UserProfile>
+          {/* BOTON SALIR */}
           <button
             className="btn-salir" title='Salir'
             onClick={() => {
