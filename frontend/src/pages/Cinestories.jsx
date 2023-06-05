@@ -3,11 +3,10 @@ import styled from "styled-components"
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchByRated, fetchMovieByRated, fetchMovies, fetchTvByRated, fetchUpcoming, getGenres } from '../store';
-import CarouselHome from '../components/CarouselYGrid/CarouselHome';
-import CarouselGeneral from '../components/CarouselYGrid/CarouselGeneral';
-
+import CarouselHome from '../components/Carousel/CarouselHome';
+import CarouselGeneral from '../components/Carousel/CarouselGeneral';
+import PelisGrid from '../components/PelisGrid';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 
 
 
@@ -54,30 +53,27 @@ export default function Cinestories() {
       <div className="portada">
         <CarouselHome></CarouselHome>
       </div>
-      <div className="content">
-        <div className="contenido">
+      <div className="contenido">
 
-          <CarouselGeneral movies={movies} moviesByRated={moviesByRated} tvByRated={tvByRated} upcoming={upcoming} />
-        </div>
-
+        <CarouselGeneral movies={movies} moviesByRated={moviesByRated} tvByRated={tvByRated} upcoming={upcoming} />
       </div>
-      <Footer></Footer>
+
+
     </Contenedor>
   );
 }
 
 const Contenedor = styled.div`
   background-color: linear-gradient(rgb(48, 50, 62), rgb(30, 31, 42));;
-.content {
-  padding: 1rem 2rem 2rem 3rem;
-}
+  margin-bottom: 4rem;
   .portada {
     position: relative;
     margin-bottom: 2rem;
-  /* .contenido {
+  .contenido {
+    padding: 6rem 3rem 3rem 3rem;
     position: absolute;
     bottom: 5rem;
-    } */
+    }
   }
 `
 

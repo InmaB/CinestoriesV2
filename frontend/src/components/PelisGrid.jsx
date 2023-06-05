@@ -1,11 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import PosterPanel from './PosterPanel';
+import PosterPanel from '../components/PosterPanel'
 
 
 
-
-export default function Grid({ movies, visibleMovies }) {
+export default function PelisGrid({ movies, visibleMovies }) {
 
   return (
     <Contenedor>
@@ -22,7 +21,7 @@ export default function Grid({ movies, visibleMovies }) {
 
 const Contenedor = styled.div`
 .grid {
-  margin-top:2rem;
+  margin-top:1rem;
   display: grid;
   grid-template-columns: repeat(5, 1fr); /* Mostrar 5 elementos por fila */
   gap: 20px; /* Espacio entre los elementos del grid */

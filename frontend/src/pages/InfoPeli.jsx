@@ -1,5 +1,3 @@
-
-
 // import React, { useEffect, useRef, useState } from 'react';
 // import { useLocation, useNavigate } from 'react-router-dom';
 // import { URL_TMBD, KEY_API, IMG_API } from '../utils/tmbd-config';
@@ -13,8 +11,7 @@
 // import Comentario from '../components/Comentario';
 // import { BiHappyHeartEyes } from 'react-icons/bi'
 // import { BsCardChecklist } from 'react-icons/bs'
-// import { getUserFavoritas } from '../store';
-// import PosterNotFound from '../assets/posterNotFound.jpg'
+// import { fetchByGenre, fetchMovies, getGenres, getUserFavoritas } from '../store';
 
 
 // export default function InfoPeli() {
@@ -23,10 +20,16 @@
 //   const navegacion = useNavigate()
 //   const dispatch = useDispatch()
 
+//   // const [email, setEmail] = useState(undefined)
+
+//   // onAuthStateChanged(firebaseAuth, (Usuario) => {
+
+//   //   if (Usuario) setEmail(Usuario.email);
+//   //   else navegacion("/login")
+//   // });
+
 //   const isMounted = useRef(false);
 //   const [email, setEmail] = useState("");
-//   const [isInFavorites, setIsInFavorites] = useState(false);
-//   const [showMessage, setShowMessage] = useState(false);
 
 //   useEffect(() => {
 //     isMounted.current = true;
@@ -45,6 +48,27 @@
 //     });
 //   }, []);
 
+
+//   const aniadirListaFav = async () => {
+//     try {
+//       await axios.post("http://localhost:5000/api/user/aniadirFav", { email, data: movieData })
+//     } catch (err) {
+//       console.log(err)
+
+//     }
+//   }
+
+//   const aniadirListaPendientes = async () => {
+//     try {
+//       await axios.post("http://localhost:5000/api/user/aniadirPendientes", { email, data: movieData })
+//     } catch (err) {
+//       console.log(err)
+
+//     }
+//   }
+
+//   const [isInFavorites, setIsInFavorites] = useState(false);
+
 //   useEffect(() => {
 //     if (email) {
 //       dispatch(getUserFavoritas(email)).then((favoritas) => {
@@ -54,26 +78,16 @@
 //     }
 //   }, [email, dispatch, movieData.id]);
 
-//   const aniadirListaFav = async () => {
-//     try {
-//       await axios.post("http://localhost:5000/api/user/aniadirFav", { email, data: movieData })
-//       setShowMessage(true); // Mostrar el mensaje después de añadir a favoritos
-//     } catch (err) {
-//       console.log(err)
-//     }
-//   }
 
-//   const aniadirListaPendientes = async () => {
-//     try {
-//       await axios.post("http://localhost:5000/api/user/aniadirPendientes", { email, data: movieData })
-//     } catch (err) {
-//       console.log(err)
-//     }
-//   }
+
+
+
+//   const [isClicked, setIsClicked] = useState(false);
 
 //   const handleClick = () => {
-//     setShowMessage(false); // Ocultar el mensaje cuando se haga clic en el botón de añadir a favoritos nuevamente
+//     setIsClicked(!isClicked);
 //   };
+
 
 //   const handleComentario = (comment) => {
 //     // Lógica para procesar el comentario enviado
@@ -82,7 +96,6 @@
 
 //   return (
 //     <Contenedor>
-
 //       <div className="navbar">
 //         <Navbar></Navbar>
 //       </div>
@@ -90,13 +103,10 @@
 //         dsfdsf
 //       </h1>
 
-
-//       <img src={movieData.poster_path ? `https://image.tmdb.org/t/p/w500/${IMG_API}${movieData.poster_path}` : PosterNotFound}
-//         alt="Poster22" />
+//       <img src={`${IMG_API}${movieData.poster_path}`} alt="poster" />
 
 //       <h1>{movieData.name}</h1>
-//       <h3>Título Original</h3>
-//       <p>{movieData.original_title}</p>
+
 //       <h3>Valoración</h3>
 //       <p>{movieData.vote_average}</p>
 //       <h3>Año</h3>
@@ -109,25 +119,24 @@
 //       </ul>
 //       <h3>Sinopsis</h3>
 //       <p>{movieData.overview}</p>
-
+//       {/* <button onClick={aniadirLista} title='añadir a la lista'><AiOutlinePlus></AiOutlinePlus></button> */}
 //       {isInFavorites ? (
-//         <p>prueba</p>
 
+//         <p>Ya está en favoritas</p>
 //       ) : (
-//         <button onClick={() => {
-//           aniadirListaFav();
-//           handleClick();
-//         }} title='Añadir a favoritos'>
+//         <button onClick={aniadirListaFav} title='Añadir a favoritos'>
 //           <BiHappyHeartEyes className='icono' />
 //         </button>
 //       )}
 
-//       {showMessage && <p>Añadido Correctamente</p>}
-
 //       <button onClick={aniadirListaPendientes} title='Añadir a pendientes'>
 //         <BsCardChecklist className='icono' ></BsCardChecklist> </button>
 
+
 //       <button className='flex j-center a-center' onClick={() => navegacion("/reproductor")}><FaPlay>Play</FaPlay></button>
+//       {/* <button onClick={handleClick}>
+//         {isClicked ? <AiFillHeart /> : <AiOutlineHeart onClick={() => dispatch(eliminarFavorita({ movieId: movieData.id, email }))} />}
+//       </button> */}
 
 //       <Comentario onSubmit={handleComentario}></Comentario>
 //     </Contenedor>
@@ -135,37 +144,43 @@
 // }
 
 // const Contenedor = styled.div`
-//   color:white;
+// color:white;
 
-//   .icono {
+// /* button {
+//   width: 50px;
+//   height: 50px;
+
+// } */
+// .icono {
 //     font-size: 2rem;
 //   }
 // `;
 
+
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { URL_TMBD, KEY_API, IMG_API } from '../utils/tmbd-config';
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
 import { onAuthStateChanged } from 'firebase/auth';
 import { firebaseAuth } from '../utils/firebase-config';
-import axios from 'axios';
+import axios from "axios"
 import { FaPlay } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import Comentario from '../components/Comentario';
-import { BiHappyHeartEyes } from 'react-icons/bi';
-import { BsCardChecklist } from 'react-icons/bs';
+import { BiHappyHeartEyes } from 'react-icons/bi'
+import { BsCardChecklist } from 'react-icons/bs'
 import { getUserFavoritas } from '../store';
-import PosterNotFound from '../assets/posterNotFound.jpg';
-import { URL_TMBD, KEY_API, IMG_API } from '../utils/tmbd-config';
+
 
 export default function InfoPeli() {
   const location = useLocation();
   const movieData = location.state;
-  const navegacion = useNavigate();
-  const dispatch = useDispatch();
+  const navegacion = useNavigate()
+  const dispatch = useDispatch()
 
   const isMounted = useRef(false);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [isInFavorites, setIsInFavorites] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
 
@@ -181,7 +196,7 @@ export default function InfoPeli() {
     onAuthStateChanged(firebaseAuth, (Usuario) => {
       if (isMounted.current) {
         if (Usuario) setEmail(Usuario.email);
-        else navegacion('/login');
+        else navegacion("/login");
       }
     });
   }, []);
@@ -189,9 +204,7 @@ export default function InfoPeli() {
   useEffect(() => {
     if (email) {
       dispatch(getUserFavoritas(email)).then((favoritas) => {
-        const found =
-          Array.isArray(favoritas) &&
-          favoritas.some((pelicula) => pelicula.id === movieData.id);
+        const found = Array.isArray(favoritas) && favoritas.some((pelicula) => pelicula.id === movieData.id);
         setIsInFavorites(found);
       });
     }
@@ -199,37 +212,20 @@ export default function InfoPeli() {
 
   const aniadirListaFav = async () => {
     try {
-      await axios.post('http://localhost:5000/api/user/aniadirFav', {
-        email,
-        data: movieData,
-      });
-      setIsInFavorites(true);
+      await axios.post("http://localhost:5000/api/user/aniadirFav", { email, data: movieData })
       setShowMessage(true); // Mostrar el mensaje después de añadir a favoritos
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
-  };
-
-  const checkIfInFavorites = async (email, movieId) => {
-    try {
-      const favoritas = await dispatch(getUserFavoritas(email));
-      return Array.isArray(favoritas) && favoritas.some((pelicula) => pelicula.id === movieId);
-    } catch (error) {
-      console.log(error);
-      return false;
-    }
-  };
+  }
 
   const aniadirListaPendientes = async () => {
     try {
-      await axios.post('http://localhost:5000/api/user/aniadirPendientes', {
-        email,
-        data: movieData,
-      });
+      await axios.post("http://localhost:5000/api/user/aniadirPendientes", { email, data: movieData })
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
-  };
+  }
 
   const handleClick = () => {
     setShowMessage(false); // Ocultar el mensaje cuando se haga clic en el botón de añadir a favoritos nuevamente
@@ -242,21 +238,16 @@ export default function InfoPeli() {
 
   return (
     <Contenedor>
+
       <div className="navbar">
-        <Navbar />
+        <Navbar></Navbar>
       </div>
-      <h1>
-        PRUEBA <br />
+      <h1>PRUEBA <br></br>
         dsfdsf
       </h1>
-      <img
-        src={
-          movieData.poster_path
-            ? `https://image.tmdb.org/t/p/w500/${IMG_API}${movieData.poster_path}`
-            : PosterNotFound
-        }
-        alt="Poster22"
-      />
+
+      <img src={`${IMG_API}${movieData.poster_path}`} alt="poster" />
+
       <h1>{movieData.name}</h1>
       <h3>Título Original</h3>
       <p>{movieData.original_title}</p>
@@ -272,24 +263,27 @@ export default function InfoPeli() {
       </ul>
       <h3>Sinopsis</h3>
       <p>{movieData.overview}</p>
+
       {isInFavorites ? (
-        <p>Ya está añadido a favoritos.</p>
+        <p>prueba</p>
+
       ) : (
         <button onClick={() => {
           aniadirListaFav();
           handleClick();
-        }} title="Añadir a favoritos">
-          <BiHappyHeartEyes className="icono" />
+        }} title='Añadir a favoritos'>
+          <BiHappyHeartEyes className='icono' />
         </button>
       )}
-      {showMessage && !isInFavorites && <p>Añadido correctamente a favoritos.</p>}
-      <button onClick={aniadirListaPendientes} title="Añadir a pendientes">
-        <BsCardChecklist className="icono" />
-      </button>
-      <button className="flex j-center a-center" onClick={() => navegacion('/reproductor')}>
-        <FaPlay>Play</FaPlay>
-      </button>
-      <Comentario onSubmit={handleComentario} />
+
+      {showMessage && <p>holaaa hosdlkfjlsdjflkjsd</p>}
+
+      <button onClick={aniadirListaPendientes} title='Añadir a pendientes'>
+        <BsCardChecklist className='icono' ></BsCardChecklist> </button>
+
+      <button className='flex j-center a-center' onClick={() => navegacion("/reproductor")}><FaPlay>Play</FaPlay></button>
+
+      <Comentario onSubmit={handleComentario}></Comentario>
     </Contenedor>
   );
 }
@@ -301,3 +295,4 @@ const Contenedor = styled.div`
     font-size: 2rem;
   }
 `;
+

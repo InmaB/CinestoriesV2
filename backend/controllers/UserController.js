@@ -113,59 +113,33 @@ module.exports.getFavoritas=async(req, res) => {
     }
 }
 
-// module.exports.eliminarFavoritas=async(req,res) => {
-//     try {
-//         const { email, movieId } = req.body;
-//         const user = await User.findOne({ email });
+module.exports.eliminarFavoritas=async(req,res) => {
+    try {
+        const { email, movieId } = req.body;
+        const user = await User.findOne({ email });
 
+        if (user) {
+            const {favoritas}=user
+            const movieIndex=favoritas.findIndex(({ id }) => id === movieId)
 
-//         if (user) {
-//             const {favoritas}=user
-//             const movieIndex=favoritas.findIndex(({ id }) => id === movieId)
+        }
 
-//         }
+        if(!movieIndex) res.status(400).send({msg:"movie not found"})
+        favoritas.splice(movieIndex,1)
 
-//         if(!movieIndex) res.status(400).send({msg:"movie not found"})
-//         favoritas.splice(movieIndex,1)
+        await User.findByIdAndUpdate(
+            user._id,
+            {
+                favoritas
+            },
+            {new:true}
+        )
+        return res.json({msg:"pelicula borrada", movies:favoritas})
 
-//         await User.findByIdAndUpdate(
-//             user._id,
-//             {
-//                 favoritas
-//             },
-//             {new:true}
-//         )
-//         return res.json({msg:"pelicula borrada", movies:favoritas})
-
-//     } catch (err) {
-// return res.json({msg:"error eliminando pelicula"})
-//     }
-// }
-
-module.exports.eliminarFavoritas = async (req, res) => {
-  try {
-    const { email, movieId } = req.body;
-    const user = await User.findOne({ email });
-    if (user) {
-      const movies = user.likedMovies;
-      const movieIndex = movies.findIndex(({ id }) => id === movieId);
-      if (!movieIndex) {
-        res.status(400).send({ msg: "Movie not found." });
-      }
-      movies.splice(movieIndex, 1);
-      await User.findByIdAndUpdate(
-        user._id,
-        {
-          likedMovies: movies,
-        },
-        { new: true }
-      );
-      return res.json({ msg: "Movie successfully removed.", movies });
-    } else return res.json({ msg: "User with given email not found." });
-  } catch (error) {
-    return res.json({ msg: "Error removing movie to the liked list" });
-  }
-};
+    } catch (err) {
+return res.json({msg:"error eliminando pelicula"})
+    }
+}
 
 ///COMENTARIOS
 module.exports.aniadirComentario = async (req, res) => {
