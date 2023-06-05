@@ -198,10 +198,6 @@ export default function SeriesyTv() {
   }, []);
 
   useEffect(() => {
-    dispatch(getGenres({ type: "movie" }));
-  }, [])
-
-  useEffect(() => {
     dispatch(getGenres({ type: "tv" }));
   }, [])
 
@@ -241,7 +237,7 @@ export default function SeriesyTv() {
       </div>
 
       <Contenido>
-        <h1 className='titulo'>Películas</h1>
+        <h1 className='titulo'>Series & TV</h1>
         <div className="buscador">
           <Buscador />
         </div>

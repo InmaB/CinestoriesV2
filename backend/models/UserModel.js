@@ -36,9 +36,10 @@ const userScheme = new mongoose.Schema({
   },
 
   profile_img: {
-    type: String,
-    required: false,
-    default: "01.jpg"
+    profile_img: {
+      type: [String],
+      default: [0], // Puedes establecer un valor predeterminado si es necesario
+    },
   },
 
   favoritas: {

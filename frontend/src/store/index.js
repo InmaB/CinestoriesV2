@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, configureStore } from "@reduxjs/toolkit";
-import { ADULT_API, KEY_API, LENG_TMBD, URL_TMBD } from "../utils/tmbd-config";
+import { KEY_API, LENG_TMBD, URL_TMBD } from "../utils/tmbd-config";
 import axios from "axios";
 
 const initialState = {
@@ -14,35 +14,56 @@ const initialState = {
   resultadosLoaded:false,
 };
 
+// const createArrayFromRawData = (array, genres) => {
+//   return array.map((movie) => {
+//     const movieGenres = movie.genre_ids.map((genre) => {
+//       const name = genres.find(({ id }) => id === genre);
+//       return name ? name.name : null;
+//     });
+
+//     return {
+//       id: movie.id,
+//       title: movie.title,
+//       name: movie.name,
+//       poster_path: movie.poster_path,
+//       genres: movieGenres,
+//       backdrop_path: movie.backdrop_path,
+//       vote_average: movie.vote_average,
+//       release_date: movie.release_date,
+//       overview: movie.overview,
+//       original_title:movie.original_title,
+//       original_name:movie.original_name,
+//     };
+//   });
+// };
+
 const createArrayFromRawData = (array, genres) => {
   return array.map((movie) => {
-    const movieGenres = movie.genre_ids.map((genre) => {
-      const name = genres.find(({ id }) => id === genre);
-      return name ? name.name : null;
-    });
+    const movieGenres = movie.genre_ids
+      .map((genreId) => {
+        const genre = genres.find(({ id }) => id === genreId);
+        console.log(genre)
+        return genre ? genre.name : null;
+      })
+      .filter((genre) => genre !== null); // Filtrar los géneros nulos o indefinidos
 
     return {
       id: movie.id,
       title: movie.title,
       name: movie.name,
+      first_air_date:movie.first_air_date,
       poster_path: movie.poster_path,
       genres: movieGenres,
       backdrop_path: movie.backdrop_path,
       vote_average: movie.vote_average,
       release_date: movie.release_date,
       overview: movie.overview,
-      original_title:movie.original_title,
-      original_name:movie.original_name,
+      original_title: movie.original_title,
+      original_name: movie.original_name,
+      media_type: movie.media_type,
     };
   });
 };
-
-
-
-// export const getGenres = createAsyncThunk("cinestories/genres", async (_, thunkApi) => {
-//   const { data } = await axios.get(`${URL_TMBD}genre/movie/list?api_key=${KEY_API}&language=es`);
-//   return data.genres;
-// });
 
 export const getGenres = createAsyncThunk("cinestories/genres", async ({ type }) => {
   const { data } = await axios.get(`${URL_TMBD}genre/${type}/list?api_key=${KEY_API}&language=es`);
@@ -66,7 +87,8 @@ export const fetchMovies = createAsyncThunk("cinestories/trending", async ({ typ
 
 export const fetchMovieByRated = createAsyncThunk("cinestories/fetchMovieByRated", async (_, thunkApi) => {
   const { cinestories: { genres } } = thunkApi.getState();
-  const response = await axios.get(`https://api.themoviedb.org/3/movie/top_rated?api_key=dc2d353b9ddadaebcdfa5c1f93065747&language=es-ES&page=1&region=ES&`);
+  // https://api.themoviedb.org/3/movie/top_rated?api_key=dc2d353b9ddadaebcdfa5c1f93065747&language=es-ES&page=1&region=ES&
+  const response = await axios.get(`${URL_TMBD}movie/top_rated?api_key=${KEY_API}&${LENG_TMBD}&page=1&region=ES&`);
   const results = response.data.results;
   const movies = createArrayFromRawData(results, genres);
   return movies;
@@ -74,7 +96,8 @@ export const fetchMovieByRated = createAsyncThunk("cinestories/fetchMovieByRated
 
 export const fetchTvByRated = createAsyncThunk("cinestories/fetchTvByRated", async (_, thunkApi) => {
   const { cinestories: { genres } } = thunkApi.getState();
-  const response = await axios.get(`https://api.themoviedb.org/3/tv/top_rated?api_key=dc2d353b9ddadaebcdfa5c1f93065747&language=es-ES&page=1&region=ES&`);
+  // https://api.themoviedb.org/3/tv/top_rated?api_key=dc2d353b9ddadaebcdfa5c1f93065747&language=es-ES&page=1&region=ES&
+  const response = await axios.get(`${URL_TMBD}/tv/top_rated?api_key=${KEY_API}&${LENG_TMBD}&page=1&region=ES&`);
   const results = response.data.results;
   const movies = createArrayFromRawData(results, genres);
   return movies;
@@ -82,7 +105,8 @@ export const fetchTvByRated = createAsyncThunk("cinestories/fetchTvByRated", asy
 
 export const fetchUpcoming = createAsyncThunk("cinestories/fetchUpcoming", async (_, thunkApi) => {
   const { cinestories: { genres } } = thunkApi.getState();
-  const response = await axios.get(`https://api.themoviedb.org/3/movie/upcoming?api_key=dc2d353b9ddadaebcdfa5c1f93065747&language=es-ES&page=1&region=ES&`);
+  // https://api.themoviedb.org/3/movie/upcoming?api_key=dc2d353b9ddadaebcdfa5c1f93065747&language=es-ES&page=1&region=ES&
+  const response = await axios.get(`${URL_TMBD}movie/upcoming?api_key=${KEY_API}&${LENG_TMBD}&page=1&region=ES&`);
   const results = response.data.results;
   const movies = createArrayFromRawData(results, genres);
   return movies;
@@ -95,7 +119,7 @@ export const fetchMoviesByGenre = createAsyncThunk("cinestories/fetchMoviesByGen
 
   for (let i = 1; i <= totalPag; i++) {
     // https://api.themoviedb.org/3/discover/movie?api_key=dc2d353b9ddadaebcdfa5c1f93065747&language=es-ES&region=ES&with_genres=18&page=2
-    const response = await axios.get(`https://api.themoviedb.org/3/discover/${type}?api_key=dc2d353b9ddadaebcdfa5c1f93065747&language=es-ES&region=ES&with_genres=${genres_id}&page=${i}`);
+    const response = await axios.get(`${URL_TMBD}discover/${type}?api_key=${KEY_API}&${LENG_TMBD}&region=ES&with_genres=${genres_id}&page=${i}`);
     const results = response.data.results;
     const movies = createArrayFromRawData(results, genres);
     moviesArray.push(...movies);
@@ -107,7 +131,6 @@ export const fetchMoviesByGenre = createAsyncThunk("cinestories/fetchMoviesByGen
 
 export const searchMovies = createAsyncThunk("cinestories/search", async ({ searchQuery, type }, thunkApi) => {
   const { cinestories: { genres } } = thunkApi.getState();
-
   const totalPages = 10;
   const results = [];
 
@@ -118,7 +141,6 @@ export const searchMovies = createAsyncThunk("cinestories/search", async ({ sear
     console.log(response);
 
     const { data: { results: pageResults } } = response;
-
     results.push(...pageResults);
   }
 
@@ -157,8 +179,6 @@ console.log(response)
   }
 );
 
-
-
 export const getUserByEmail = async (email) => {
   try {
     const encodedEmail = encodeURIComponent(email);
@@ -175,6 +195,20 @@ export const getUserByEmail = async (email) => {
   }
 };
 
+// export const getUserById = async (id) => {
+//   try {
+//     const response = await axios.get(`http://localhost:5000/api/user/getUserById/${id}`);
+
+//     if (response.data && response.data.username) {
+//       return response.data.username;
+//     } else {
+//       throw new Error('Invalid response from the server');
+//     }
+//   } catch (error) {
+//     console.error('Error while retrieving the username by ID:', error);
+//     throw error;
+//   }
+// };
 
 
 export const cambiarUsername = createAsyncThunk(
@@ -189,9 +223,17 @@ export const cambiarUsername = createAsyncThunk(
   }
 );
 
-
-
-
+export const cambiarUserImagen= createAsyncThunk(
+  'cinestories/cambiarUserImagen',
+  async ({ email, newProfileImage }) => {
+    try {
+      const response = await axios.put(`http://localhost:5000/api/user/changeProfileImage/${email}`, { newProfileImage });
+      return response.data.user;
+    } catch (error) {
+      throw new Error('Error al cambiar la imagen de usuario.');
+    }
+  }
+);
 
 /////////// SLICE
 const cineStoriesSlice = createSlice({
@@ -210,11 +252,6 @@ const cineStoriesSlice = createSlice({
     builder.addCase(fetchMoviesByGenre.fulfilled, (state, action) => {
       state.movies = action.payload;
     });
-    // builder.addCase(searchMovies.fulfilled, (state, action) => {
-    //   state.movies = action.payload;
-    //   console.log(action.payload);
-    // });
-
     builder.addCase(searchMovies.fulfilled, (state, action) => {
       state.resultados = action.payload;
       state.resultadosLoaded = true;
@@ -240,11 +277,6 @@ const cineStoriesSlice = createSlice({
     builder.addCase(removeMovieFromToWatch.fulfilled, (state, action) => {
       state.movies = action.payload;
     });
-
-    // builder.addCase(verificarFavorita.fulfilled, (state, action) => {
-    //   state.movies = action.payload;
-    // });
-
   },
 
 });
