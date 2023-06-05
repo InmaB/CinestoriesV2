@@ -3,7 +3,6 @@ const User = require("../models/UserModel");
 
 
 //CREAR USUARIO
-
 // Crear un usuario en Firebase y en MongoDB
 module.exports.crearUsuario = async (req, res) => {
   const { email, password} = req.body;
@@ -46,6 +45,7 @@ module.exports.aniadirFavoritas = async (req, res) => {
   }
 };
 
+
 module.exports.aniadirPendientes = async (req, res) => {
     try {
       const { email, data } = req.body;
@@ -86,6 +86,7 @@ module.exports.getFavoritas=async(req, res) => {
         return res.json({msg: "Error"})
     }
 }
+
 
 module.exports.getPendientes=async(req, res) => {
   try {
@@ -128,7 +129,6 @@ async function eliminarFavorita (req, res) {
 module.exports.eliminarFavorita = eliminarFavorita;
 
 
-
 async function eliminarPendiente(req, res) {
   try {
     const { email, movieId } = req.body;
@@ -156,9 +156,7 @@ async function eliminarPendiente(req, res) {
 module.exports.eliminarPendiente = eliminarPendiente;
 
 
-
-//CAMBIAR NOMBRE Y AVATAR
-// FUNCIONA!!
+//CAMBIAR USERNAME
 module.exports.changeUserName = async (req, res) => {
   const { email } = req.params;
   const { newUserName } = req.body; // Cambiar req.params.newUserName por req.body.newUserName
@@ -185,7 +183,7 @@ module.exports.changeUserName = async (req, res) => {
 };
 
 
-
+// GET EL NOMBRE DE USUARIO POR EL EMAIL
 module.exports.getUserByEmail = async (req, res) => {
   const { email } = req.params;
 
@@ -203,14 +201,43 @@ module.exports.getUserByEmail = async (req, res) => {
 };
 
 
+// CAMBIAR EL AVATAR
+// module.exports.changeProfileImage = async (req, res) => {
+//   const { email, newProfileImage } = req.body;
+
+//   try {
+//     // Actualizar el profile_img del usuario
+//     const user = await User.findOneAndUpdate(
+//       { email },
+//       { profile_img: newProfileImage },
+//       { new: true }
+//     );
+
+//     if (!user) {
+//       return res.status(404).json({ message: "Usuario no encontrado." });
+//     }
+
+//     res.status(200).json({
+//       message: "La imagen de perfil se ha actualizado correctamente.",
+//       user
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       message: "Error al cambiar la imagen de perfil.",
+//       error
+//     });
+//   }
+// }
+
 module.exports.changeProfileImage = async (req, res) => {
-  const { email, newProfileImage } = req.body;
+  const { email } = req.params;
+  const { newProfileImage } = req.body;
 
   try {
     // Actualizar el profile_img del usuario
     const user = await User.findOneAndUpdate(
       { email },
-      { $push: { profile_img: newProfileImage } },
+      { profile_img: newProfileImage },
       { new: true }
     );
 
@@ -228,7 +255,9 @@ module.exports.changeProfileImage = async (req, res) => {
       error
     });
   }
-}
+};
+
+
 
 
 

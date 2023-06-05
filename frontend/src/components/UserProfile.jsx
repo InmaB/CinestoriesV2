@@ -182,28 +182,29 @@
 
 // export default UserProfile;
 
+
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { cambiarUserImagen, cambiarUsername, getUserByEmail } from '../store/index';
 import styled from 'styled-components';
 import { getAuth, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import avatar1 from '../assets/avatar1.jpg'
-import avatar2 from '../assets/avatar2.jpg'
-import avatar3 from '../assets/avatar3.jpg'
+import avatar1 from '../assets/avatar1.jpg';
+import avatar2 from '../assets/avatar2.jpg';
+import avatar3 from '../assets/avatar3.jpg';
 
 const UserProfile = () => {
     const [showUsernameForm, setShowUsernameForm] = useState(false);
     const [newUsername, setNewUsername] = useState("");
-
-    const navegacion = useNavigate();
-    const dispatch = useDispatch();
     const [isOpen, setIsOpen] = useState(false);
     const [showSubMenu, setShowSubMenu] = useState(false);
     const [username, setUsername] = useState("");
     const [userEmail, setUserEmail] = useState("");
+    const [selectedAvatar, setSelectedAvatar] = useState(null);
+    const [selectedImage, setSelectedImage] = useState(null);
 
-
+    const navegacion = useNavigate();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const userEmail = getAuth().currentUser?.email;
@@ -223,62 +224,6 @@ const UserProfile = () => {
 
         fetchUsername();
     }, [navegacion]);
-
-    const handleUsernameClick = () => {
-        setShowUsernameForm(true);
-    };
-
-    const handleUsernameChange = (e) => {
-        setNewUsername(e.target.value);
-    };
-
-    const handleSubmitUsername = () => {
-        dispatch(cambiarUsername({ email: userEmail, newUserName: newUsername }))
-            .then(() => {
-                setUsername(newUsername); // Actualizar el estado con el nuevo nombre de usuario
-                setShowUsernameForm(false); // Ocultar el formulario de edición
-            })
-            .catch((error) => {
-                console.error("Error al cambiar el nombre de usuario:", error);
-            });
-    };
-
-    //IMAGEN
-    const [images, setImages] = useState([
-        { src: avatar1, alt: "Homer" },
-        { src: avatar2, alt: "Micky" },
-        { src: avatar3, alt: "Spiderman" },
-        // Agrega los otros objetos de imagen aquí...
-    ]);
-
-    const [selectedImage, setSelectedImage] = useState(avatar1);
-
-    const handleImageClick = () => {
-        setShowSubMenu(!showSubMenu);
-    };
-
-    const handleImageChange = (newProfileImage) => {
-        dispatch(cambiarUserImagen({ email: userEmail, newProfileImage }))
-            .then(() => {
-                setSelectedImage(newProfileImage);
-                setShowSubMenu(false);
-                console.log("cambiado el avatar")
-            })
-            .catch((error) => {
-                console.error("Error al cambiar la imagen de perfil:", error);
-            });
-    };
-
-    const handleSignOut = () => {
-        signOut(getAuth())
-            .then(() => {
-                // Redirigir a la página de inicio de sesión
-                navegacion('/login');
-            })
-            .catch((error) => {
-                console.error("Error al cerrar sesión:", error);
-            });
-    };
 
     useEffect(() => {
         const fetchUsername = async () => {
@@ -301,10 +246,77 @@ const UserProfile = () => {
         fetchUsername();
     }, [navegacion]);
 
+    useEffect(() => {
+        // Recuperar el valor de selectedImage desde el almacenamiento local
+        const storedImage = localStorage.getItem('selectedImage');
+        if (storedImage) {
+            setSelectedImage(storedImage);
+        }
+    }, []);
+
+    const handleUsernameClick = () => {
+        setShowUsernameForm(true);
+    };
+
+    const handleUsernameChange = (e) => {
+        setNewUsername(e.target.value);
+    };
+
+    const handleSubmitUsername = () => {
+        dispatch(cambiarUsername({ email: userEmail, newUserName: newUsername }))
+            .then(() => {
+                setUsername(newUsername); // Actualizar el estado con el nuevo nombre de usuario
+                setShowUsernameForm(false); // Ocultar el formulario de edición
+            })
+            .catch((error) => {
+                console.error("Error al cambiar el nombre de usuario:", error);
+            });
+    };
+
+    const handleImageClick = () => {
+        setShowSubMenu(!showSubMenu);
+    };
+
+    const handleAvatarChange = (avatar) => {
+        setSelectedAvatar(avatar);
+        const newProfileImage = avatar.src;
+        setSelectedImage(newProfileImage);
+
+        // Guardar el valor de selectedImage en el almacenamiento local
+        localStorage.setItem('selectedImage', newProfileImage);
+
+        dispatch(
+            cambiarUserImagen({ email: userEmail, newProfileImage })
+        )
+            .then(() => {
+                console.log("La imagen de perfil se ha actualizado correctamente");
+            })
+            .catch((error) => {
+                console.error("Error al cambiar la imagen de perfil:", error);
+            });
+    };
+
+    const handleSignOut = () => {
+        signOut(getAuth())
+            .then(() => {
+                // Redirigir a la página de inicio de sesión
+                navegacion('/login');
+            })
+            .catch((error) => {
+                console.error("Error al cerrar sesión:", error);
+            });
+    };
+
+    const avatars = [
+        { src: avatar1, alt: "Avatar 1" },
+        { src: avatar2, alt: "Avatar 2" },
+        { src: avatar3, alt: "Avatar 3" },
+    ];
+
     return (
         <UserProfileContainer>
             <ProfileToggle onClick={() => setIsOpen(!isOpen)}>
-                {/* <ProfileImage src={avatar1} alt="User Avatar" /> */}
+                <p>Hola {username}</p>
                 <ProfileImage src={selectedImage} alt="User Avatar" />
             </ProfileToggle>
             {isOpen && (
@@ -317,16 +329,17 @@ const UserProfile = () => {
                     </MenuItem>
                     {showSubMenu && (
                         <SubMenu>
-                            {images.map((image, index) => (
-                                <ImageOption
+                            {avatars.map((avatar, index) => (
+                                <AvatarOption
                                     key={index}
-                                    src={image.src}
-                                    alt={image.alt}
-                                    onClick={() => handleImageChange(image.src)}
+                                    src={avatar.src}
+                                    alt={avatar.alt}
+                                    onClick={() => handleAvatarChange(avatar)}
                                 />
                             ))}
                         </SubMenu>
                     )}
+
                     <MenuItem onClick={handleSignOut}>
                         Salir
                     </MenuItem>
@@ -342,24 +355,40 @@ const UserProfile = () => {
                     )}
                 </ProfileMenu>
             )}
-            <p>Hola {username}</p>
-
         </UserProfileContainer>
     );
 };
 
+
+
+const AvatarOption = styled.img`
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-right: 10px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+`;
 const UserProfileContainer = styled.div`
   position: relative;
+  z-index: 9999;
 `;
 
 const ProfileToggle = styled.div`
+  display: flex;
+  align-items: center;
   cursor: pointer;
 `;
 
 const ProfileImage = styled.img`
-  height: 40px;
-  width: 40px;
+  height: 50px;
+  width: 50px;
   border-radius: 50%;
+  margin-left: 10px;
 `;
 
 const ProfileMenu = styled.div`
@@ -376,7 +405,8 @@ const MenuItem = styled.div`
   cursor: pointer;
 
   &:hover {
-    background-color: #f0f0f0;
+    color: #1a1d29;
+    background-color: lime;
   }
 `;
 
@@ -409,3 +439,4 @@ const ImageOption = styled.img`
 `;
 
 export default UserProfile;
+

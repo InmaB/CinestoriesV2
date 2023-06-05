@@ -195,20 +195,20 @@ export const getUserByEmail = async (email) => {
   }
 };
 
-export const getUserById = async (id) => {
-  try {
-    const response = await axios.get(`http://localhost:5000/api/user/getUserById/${id}`);
+// export const getUserById = async (id) => {
+//   try {
+//     const response = await axios.get(`http://localhost:5000/api/user/getUserById/${id}`);
 
-    if (response.data && response.data.username) {
-      return response.data.username;
-    } else {
-      throw new Error('Invalid response from the server');
-    }
-  } catch (error) {
-    console.error('Error while retrieving the username by ID:', error);
-    throw error;
-  }
-};
+//     if (response.data && response.data.username) {
+//       return response.data.username;
+//     } else {
+//       throw new Error('Invalid response from the server');
+//     }
+//   } catch (error) {
+//     console.error('Error while retrieving the username by ID:', error);
+//     throw error;
+//   }
+// };
 
 
 export const cambiarUsername = createAsyncThunk(
