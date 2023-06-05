@@ -83,6 +83,27 @@ body::-webkit-scrollbar-thumb:hover {
   background: lime;
 }
 
+.titulo2 {
+  position: relative;
+  color: white;
+  /* font-size: 1rem; */
+  font-weight: bold;
+  /* text-transform: uppercase; */
+  letter-spacing: 1px;
+  padding-left: 50px;
+  margin-bottom: 10px;
+}
+
+.titulo2::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background: rgb(128, 134, 167);
+}
+
 .grid-contenedor{
   width: 100px;
   place-content: center;
@@ -111,192 +132,12 @@ body::-webkit-scrollbar-thumb:hover {
 
 .hit-the-floor {
   color: lime;
-  font-size: 5em;
+  font-size: 4em;
   font-weight: bold;
   font-family: Helvetica;
   text-shadow: 0 2px 0 #000, 0 2px 0 #ccc, 0 3px 0 gray, 0 4px 0 #ccc, 0 5px 0 #555, 0 6px 1px rgba(0,0,0,.1), 0 0 5px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.3), 0 3px 5px rgba(0,0,0,.2), 0 5px 10px rgba(0,0,0,.25), 0 10px 10px rgba(0,0,0,.2), 0 20px 20px rgba(0,0,0,.15);
 
   }
-
-/* Mensajes de alerta */
-.br-message {
-  --message-background: var(--gray-80);
-  --message-color-icon: var(--gray-80);
-  --feedback-background: var(--gray-80);
-  --message-text: var(--color);
-  --message-opacity: var(--surface-opacity-xs);
-  --message-font-size: var(--font-size-scale-up-01);
-  --message-padding: var(--spacing-scale-3x) var(--spacing-scale-base)
-  	var(--spacing-scale-3x) var(--spacing-scale-2x);
-  --message-margin: var(--spacing-scale-2x);
-  --message-icon: var(--icon-size-lg);
-  --feedback-padding: var(--spacing-scale-half);
-  --feedback-font-weight: var(--font-weight-medium);
-  background: var(--message-background);
-  display: flex;
-  margin-bottom: var(--message-margin);
-}
-.br-message .content {
-  color: var(--message-text);
-  flex: 1;
-  font-size: var(--message-font-size);
-  padding: var(--message-padding);
-}
-.br-message .content .message-title {
-  font-weight: var(--font-weight-semi-bold);
-}
-.br-message .content .message-body {
-  font-weight: var(--font-weigth-regular);
-}
-.br-message .content a {
-  font-weight: var(--font-weight-bold);
-  text-decoration: underline;
-}
-.br-message .content *:last-child {
-  margin-bottom: 0;
-}
-.br-message .icon {
-  align-items: center;
-  color: var(--message-color-icon);
-  display: flex;
-  justify-content: center;
-  margin: var(--spacing-vertical-center) var(--spacing-scale-2x);
-  padding-left: var(--spacing-scale-2x);
-  padding-right: var(--spacing-scale-2x);
-}
-.br-message .icon + .content {
-  padding-left: 0;
-}
-.br-message .close {
-  margin-right: var(--spacing-scale-base);
-  margin-top: var(--spacing-scale-base);
-}
-.br-message.is-success, .br-message.success, .br-message[success] {
-  --message-background: var(--success-alternative);
-  --feedback-background: var(--success);
-  --message-color-icon: var(--success);
-}
-.br-message.is-success .close .br-button, .br-message.success .close .br-button, .br-message[success] .close .br-button {
-  --interactive: var(--message-color-icon);
-  --interactive-rgb: var(--success-rgb);
-}
-.br-message.is-danger, .br-message.danger, .br-message[danger] {
-  --message-background: var(--danger-alternative);
-  --feedback-background: var(--danger);
-  --message-color-icon: var(--danger);
-}
-.br-message.is-danger .close .br-button, .br-message.danger .close .br-button, .br-message[danger] .close .br-button {
-  --interactive: var(--message-color-icon);
-  --interactive-rgb: var(--danger-rgb);
-}
-.br-message.is-info, .br-message.info, .br-message[info] {
-  --message-background: var(--info-alternative);
-  --feedback-background: var(--info);
-  --message-color-icon: var(--info);
-}
-.br-message.is-info .close .br-button, .br-message.info .close .br-button, .br-message[info] .close .br-button {
-  --interactive: var(--message-color-icon);
-  --interactive-rgb: var(--info-rgb);
-}
-.br-message.is-warning, .br-message.warning, .br-message[warning] {
-  --message-background: var(--warning-alternative);
-  --feedback-background: var(--warning);
-}
-.br-message.is-warning .close .br-button, .br-message.warning .close .br-button, .br-message[warning] .close .br-button {
-  --interactive: var(--color);
-  --interactive-rgb: var(--color-rgb);
-}
-
-.feedback {
-  --message-background: var(--gray-80);
-  --message-color-icon: var(--gray-80);
-  --feedback-background: var(--gray-80);
-  --message-text: var(--color);
-  --message-opacity: var(--surface-opacity-xs);
-  --message-font-size: var(--font-size-scale-up-01);
-  --message-padding: var(--spacing-scale-3x) var(--spacing-scale-base)
-  	var(--spacing-scale-3x) var(--spacing-scale-2x);
-  --message-margin: var(--spacing-scale-2x);
-  --message-icon: var(--icon-size-lg);
-  --feedback-padding: var(--spacing-scale-half);
-  --feedback-font-weight: var(--font-weight-medium);
-  --message-opacity: 1;
-  align-items: center;
-  background: var(--feedback-background);
-  color: var(--message-text);
-  display: inline-flex;
-  font-style: italic;
-  font-weight: var(--feedback-font-weight);
-  margin-bottom: 0;
-  padding: var(--feedback-padding);
-}
-.feedback .svg-inline--fa,
-.feedback .fa,
-.feedback .fab,
-.feedback .fad,
-.feedback .fal,
-.feedback .far,
-.feedback .fas {
-  margin-right: var(--feedback-padding);
-}
-.feedback:not(.is-warning):not(.warning):not([warning]) {
-  --message-text: var(--pure-0);
-}
-.feedback.is-warning, .feedback.warning, .feedback[warning] {
-  --background: var(--pure-0);
-  --background-rgb: var(--pure-0-rgb);
-  --background-alternative: var(--gray-5);
-  --background-alternative-rgb: var(--gray-5-rgb);
-  --border-color: var(--gray-20);
-  --color: var(--color-light);
-  --color-rgb: var(--color-light-rgb);
-  --text-color: var(--color);
-  --interactive: var(--interactive-light);
-  --interactive-rgb: var(--interactive-light-rgb);
-  --visited: var(--blue-warm-vivid-80);
-  --hover: var(--surface-opacity-xs);
-  --pressed: var(--surface-opacity-md);
-  --focus-color: var(--gold-vivid-40);
-  --focus: var(--gold-vivid-40);
-  --active: var(--blue-warm-vivid-80);
-}
-.feedback.is-success, .feedback.success, .feedback[success] {
-  --message-background: var(--success-alternative);
-  --feedback-background: var(--success);
-  --message-color-icon: var(--success);
-}
-.feedback.is-success .close .br-button, .feedback.success .close .br-button, .feedback[success] .close .br-button {
-  --interactive: var(--message-color-icon);
-  --interactive-rgb: var(--success-rgb);
-}
-.feedback.is-danger, .feedback.danger, .feedback[danger] {
-  --message-background: var(--danger-alternative);
-  --feedback-background: var(--danger);
-  --message-color-icon: var(--danger);
-}
-.feedback.is-danger .close .br-button, .feedback.danger .close .br-button, .feedback[danger] .close .br-button {
-  --interactive: var(--message-color-icon);
-  --interactive-rgb: var(--danger-rgb);
-}
-.feedback.is-info, .feedback.info, .feedback[info] {
-  --message-background: var(--info-alternative);
-  --feedback-background: var(--info);
-  --message-color-icon: var(--info);
-}
-.feedback.is-info .close .br-button, .feedback.info .close .br-button, .feedback[info] .close .br-button {
-  --interactive: var(--message-color-icon);
-  --interactive-rgb: var(--info-rgb);
-}
-.feedback.is-warning, .feedback.warning, .feedback[warning] {
-  --message-background: var(--warning-alternative);
-  --feedback-background: var(--warning);
-}
-.feedback.is-warning .close .br-button, .feedback.warning .close .br-button, .feedback[warning] .close .br-button {
-  --interactive: var(--color);
-  --interactive-rgb: var(--color-rgb);
-}
-
-
 
 /*-----------------------------------*\
  * #FOOTER
@@ -307,8 +148,13 @@ body::-webkit-scrollbar-thumb:hover {
   padding-block: 40px 50px;
 }
 
-.footer-list,
+.footer-logo {
+text-align: center;
+}
+
+
 .social-list {
+  list-style: none;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -316,22 +162,11 @@ body::-webkit-scrollbar-thumb:hover {
   gap: 5px;
 }
 
-.footer-link {
-  color: lime;
-  font-size: 1rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  padding: 5px 15px;
-  /* transition: var(--transition-1); */
-}
-
-:is(.footer-link, .social-link):is(:hover, :focus) { color: yellow; }
 
 .divisor{
   height: 4px;
   margin-block: 40px;
-  border-top: 1px solid cadetblue;
-  border-bottom: 1px solid hsla(0, 0%, 100%, 0.1);
+  border-top: 1px dotted white;
 }
 
 .social-list { column-gap: 10px; }
@@ -339,35 +174,103 @@ body::-webkit-scrollbar-thumb:hover {
 .social-link {
   background: gray;
   color: lime;
-  font-size: 14px;
+  font-size: 25px;
   width: 55px;
   height: 55px;
   display: grid;
   place-items: center;
   border-radius: 50%;
   box-shadow: inset 0 4px 8px hsla(0, 0%, 0%, 0.25);
-  transition: var(--transition-1);
+  transition: 0.3s;
+  text-align: center;
+
+
+  :hover {
+color: rgb(255, 255, 93);
+  }
 }
 
 .footer-bottom { padding-block: 5px; }
 
-.copyright {
-  color: var(--gray-x);
-  font-size: var(--fs-10);
-  font-weight: var(--fw-500);
+.credits {
+  color: gray;
+  font-size: 0.8rem;
   line-height: 1.7;
   text-align: center;
   margin-bottom: 5px;
 }
 
-.copyright > a {
-  display: inline-block;
-  color: var(--citrine);
+/* ------------------------ DROPMENU */
+/*
+.dropdown-menu {
+  position: relative;
+  perspective: 200px;
 }
 
+.dropdown-menu button {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  gap: 15px;
+  padding: 0 16px;
+  width: 230px;
+  height: 72px;
+  color: #fefefe;
+  background: transparent;
+  border-radius: 8px;
+  border: 0;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: "Cambria";
+}
 
+.dropdown-menu > button {
+  position: relative;
+  z-index: 2;
+  background: #00000073;
+  transition: 0.3s;
+}
 
+.main-menu {
+  position: absolute;
+  overflow: hidden;
+  z-index: 1;
+  width: 100%;
+  height: 386px;
+  opacity: 0;
+  transform-origin: 100% 0%;
+  scale: 0;
+  visibility: hidden;
+  border-radius: 8px;
+  background: #00000073;
+  transition: 0.4s;
+}
 
+.dropdown-menu.open .main-menu {
+  scale: 1;
+  right: 0;
+  top: 0;
+  opacity: 1;
+  visibility: visible;
+}
 
+.main-menu button {
+  border: 0;
+  width: 100%;
+  height: 55px;
+  border-radius: 0;
+}
 
+.main-menu button:hover {
+  background: #00000042;
+}
 
+.chevron {
+  margin-left: auto;
+  transition: 0.4s;
+}
+
+.dropdown-menu.open .chevron {
+  rotate: 180deg;
+}
+ */

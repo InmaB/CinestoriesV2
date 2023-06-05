@@ -8,24 +8,12 @@ function Footer() {
     return (
         <footer>
             <div className="footer-background">
-                <div className="flex j-center">
-                    <a href="./index.html">
+                <div className="footer-logo">
+
+                    <a href="./">
                         <Logo src={logo} alt="Filmlane logo" />
                     </a>
-                </div>
-                <div className="flex">
-                    <ul className="footer-list">
-                        <li>
-                            <a href="./index.html" className="footer-link">Home</a>
-                        </li>
-                        <li>
-                            <a href="#" className="footer-link">Movie</a>
-                        </li>
-                        <li>
-                            <a href="#" className="footer-link">TV Show</a>
-                        </li>
-
-                    </ul>
+                    <p>Tu página web de películas, series y programas de TV </p>
                 </div>
 
                 <div className="divisor"></div>
@@ -51,15 +39,14 @@ function Footer() {
 
             </div>
             <div className="footer-bottom">
-                <p className="copyright">
-                    &copy; 2022 <a href="#">codewithsadee</a>. All Rights Reserved
-                </p>
+                <p className='credits'> &copy; 2023. Creado por Inma Balbuena. Contacto: email@email.com</p>
             </div>
         </footer>
     );
 }
 
 const Logo = styled.img`
-width: 80%;
+width: 20%;
 `
+
 export default Footer;
