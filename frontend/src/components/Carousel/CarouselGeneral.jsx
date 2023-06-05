@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { Swiper, SwiperSlide } from "swiper/react";
 import 'swiper/swiper-bundle.min.css';
 import SwiperCore, { Pagination, Navigation } from "swiper";
-import PosterPanel from '../PosterPanel';
 import PosterTopRated from './PosterTopRated';
+import PosterGeneral from './PosterGeneral';
 
 
 export default function CarouselGeneral({ movies, moviesByRated, tvByRated, upcoming }) {
@@ -26,9 +26,9 @@ export default function CarouselGeneral({ movies, moviesByRated, tvByRated, upco
                 navigation={true}
                 className="mySwiper"
             >
-                {movies.slice(0, 20).map((movie, index) => (
+                {movies && movies.slice(0, 20).map((movie, index) => (
                     <SwiperSlide key={movie.id}>
-                        <PosterPanel movieData={movie} index={index} />
+                        <PosterGeneral movieData={movie} index={index} />
                     </SwiperSlide>
                 ))}
 
@@ -45,9 +45,9 @@ export default function CarouselGeneral({ movies, moviesByRated, tvByRated, upco
                 navigation={true}
                 className="mySwiper"
             >
-                {upcoming.slice(0, 20).map((movie, index) => (
+                {movies && upcoming.slice(0, 20).map((movie, index) => (
                     <SwiperSlide key={movie.id}>
-                        <PosterPanel movieData={movie} index={index} />
+                        <PosterGeneral movieData={movie} index={index} />
                     </SwiperSlide>
                 ))}
 
@@ -64,7 +64,7 @@ export default function CarouselGeneral({ movies, moviesByRated, tvByRated, upco
                 navigation={true}
                 className="mySwiper"
             >
-                {moviesByRated.slice(0, 10).map((movie, index) => (
+                {movies && moviesByRated.slice(0, 10).map((movie, index) => (
                     <SwiperSlide key={movie.id}>
                         <PosterTopRated movieData={movie} index={index} />
                     </SwiperSlide>
@@ -83,7 +83,7 @@ export default function CarouselGeneral({ movies, moviesByRated, tvByRated, upco
                 navigation={true}
                 className="mySwiper"
             >
-                {tvByRated.slice(0, 10).map((movie, index) => (
+                {movies && tvByRated.slice(0, 10).map((movie, index) => (
                     <SwiperSlide key={movie.id}>
                         <PosterTopRated movieData={movie} index={index} />
                     </SwiperSlide>

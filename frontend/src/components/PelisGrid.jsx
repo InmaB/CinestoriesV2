@@ -1,17 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
-import PosterPanel from '../components/PosterPanel'
+import PosterGeneral from './PosterGeneral';
 
-
-
-export default function PelisGrid({ movies, visibleMovies }) {
+export default function Grid({ movies, visibleMovies }) {
 
   return (
     <Contenedor>
       <div className="grid flex">
         {movies.slice(0, visibleMovies).map((movie, index) => {
 
-          return <PosterPanel movieData={movie} index={index} key={movie.id}> </PosterPanel>
+          return <PosterGeneral movieData={movie} index={index} key={movie.id}> </PosterGeneral>
         })}
       </div>
 

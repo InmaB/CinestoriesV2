@@ -29,10 +29,12 @@ export default function PosterTopRated({ movieData, index }) {
       {/* `${IMG_API}${movieData.poster_path}` */}
       <ImagenPoster src={`https://image.tmdb.org/t/p/w500/` + movieData.poster_path ? IMG_API + movieData.poster_path : PosterNotFound} alt="Poster22" onClick={handleClick} />
       <TextOverlay>
-        <Text>{movieData.name}</Text>
+        <Text>{movieData.name || movieData.title}</Text>
       </TextOverlay>
-      <Posicion><h2>Ranking:</h2></Posicion>
-      <NumberOverlay className='hit-the-floor'>{index + 1}</NumberOverlay>
+      <div className="transparente">
+        <Posicion><h2>Ranking:</h2></Posicion>
+        <NumberOverlay className='hit-the-floor'>{index + 1}</NumberOverlay>
+      </div>
     </CajaPoster>
   );
 }
@@ -58,6 +60,18 @@ const CajaPoster = styled.div`
 
   &:hover ${TextOverlay} {
     opacity: 1;
+  }
+
+  .transparente {
+    width: 100%;
+    height: 90px;
+    position: absolute;
+    bottom: 1rem;
+    right: 0px;
+    background: none;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 1rem;
   }
 
   @media (max-width: 768px) {
@@ -100,6 +114,6 @@ font-weight:bold;
 
 const NumberOverlay = styled.div`
   position: absolute;
-  bottom: 1rem;
+  bottom: 0.5rem;
   right: 1rem;
 `;

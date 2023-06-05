@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react'
 import styled from "styled-components"
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchByRated, fetchMovieByRated, fetchMovies, fetchTvByRated, fetchUpcoming, getGenres } from '../store';
-import CarouselHome from '../components/Carousel/CarouselHome';
-import CarouselGeneral from '../components/Carousel/CarouselGeneral';
-import PelisGrid from '../components/PelisGrid';
+import { fetchMovieByRated, fetchMovies, fetchTvByRated, fetchUpcoming, getGenres } from '../store';
+import CarouselHome from '../components/CarouselYGrid/CarouselHome';
+import CarouselGeneral from '../components/CarouselYGrid/CarouselGeneral';
 import Navbar from '../components/Navbar';
-
 
 
 export default function Cinestories() {
@@ -26,7 +24,11 @@ export default function Cinestories() {
 
 
   useEffect(() => {
-    dispatch(getGenres());
+    dispatch(getGenres({ type: "movie" }));
+  }, [])
+
+  useEffect(() => {
+    dispatch(getGenres({ type: "tv" }));
   }, [])
 
   useEffect(() => {
@@ -53,9 +55,13 @@ export default function Cinestories() {
       <div className="portada">
         <CarouselHome></CarouselHome>
       </div>
-      <div className="contenido">
+      <div className="content">
+        <div className="contenido">
 
-        <CarouselGeneral movies={movies} moviesByRated={moviesByRated} tvByRated={tvByRated} upcoming={upcoming} />
+
+          <CarouselGeneral movies={movies} moviesByRated={moviesByRated} tvByRated={tvByRated} upcoming={upcoming} />
+        </div>
+
       </div>
 
 
