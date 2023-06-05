@@ -8,6 +8,7 @@ import Navbar from '../components/Navbar';
 import styled from 'styled-components';
 import PosterListas from '../components/CarouselYGrid/PosterListas';
 import Footer from '../components/Footer';
+import RiseLoader from 'react-spinners/RiseLoader';
 
 export default function ListaPendientes() {
     const navegacion = useNavigate();
@@ -15,6 +16,7 @@ export default function ListaPendientes() {
     const dispatch = useDispatch();
     const movies = useSelector((state) => state.cinestories.movies);
     const [email, setEmail] = useState(undefined);
+    const [loading, setLoading] = useState(true); // Estado para controlar el estado de carga
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(firebaseAuth, (Usuario) => {
@@ -32,7 +34,9 @@ export default function ListaPendientes() {
 
     useEffect(() => {
         if (email) {
-            dispatch(getUserPendientes(email));
+            dispatch(getUserPendientes(email)).then(() => {
+                setLoading(false); // Marcar la carga como completa cuando los datos se hayan cargado
+            });
         }
     }, [email]);
 
@@ -42,12 +46,15 @@ export default function ListaPendientes() {
             <Contenido>
                 <div className="content flex column">
                     <h1 className="titulo">Mi lista de pendientes</h1>
-                    {movies && movies.length > 0 ? (
+                    {loading ? (
+                        <SpinnerContainer>
+                            <RiseLoader color="lime" loading={loading} />
+                        </SpinnerContainer>
+                    ) : movies && movies.length > 0 ? (
                         <div className="grid flex">
                             {movies.map((pendiente) => (
                                 <PosterListas key={pendiente.movieId} movieData={pendiente} />
                             ))}
-
                         </div>
                     ) : (
                         <h1>No hay pendientes</h1>
@@ -57,16 +64,21 @@ export default function ListaPendientes() {
             <Footer></Footer>
         </Contenedor>
     );
-
 }
 
-const Contenedor = styled.div``
+const Contenedor = styled.div``;
 const Contenido = styled.div`
-padding: 3rem 2rem 3rem 3rem;
-.grid {
-  margin-top:2rem;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr); /* Mostrar 5 elementos por fila */
-  gap: 20px; /* Espacio entre los elementos del grid */
-}
+  padding: 3rem 2rem 3rem 3rem;
+  .grid {
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* Mostrar 5 elementos por fila */
+    gap: 20px; /* Espacio entre los elementos del grid */
+  }
+`;
+
+const SpinnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

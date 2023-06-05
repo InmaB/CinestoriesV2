@@ -1,6 +1,25 @@
 const { json } = require("express");
 const User = require("../models/UserModel");
 
+
+//CREAR USUARIO
+
+// Crear un usuario en Firebase y en MongoDB
+module.exports.crearUsuario = async (req, res) => {
+  const { email, password} = req.body;
+
+  try {
+    // Crear el usuario en MongoDB
+    const user = new User({ email, password });
+    await user.save();
+
+    res.status(200).json({ message: "Usuario creado correctamente." });
+  } catch (error) {
+    res.status(500).json({ message: "Error al crear el usuario.", error });
+  }
+};
+
+
 // AÑADIR FAVORITAS Y PENDIENTES
 module.exports.aniadirFavoritas = async (req, res) => {
   try {
@@ -184,7 +203,6 @@ module.exports.getUserByEmail = async (req, res) => {
 };
 
 
-
 module.exports.changeProfileImage = async (req, res) => {
   const { email, newProfileImage } = req.body;
 
@@ -192,7 +210,7 @@ module.exports.changeProfileImage = async (req, res) => {
     // Actualizar el profile_img del usuario
     const user = await User.findOneAndUpdate(
       { email },
-      { profile_img: newProfileImage },
+      { $push: { profile_img: newProfileImage } },
       { new: true }
     );
 
@@ -210,6 +228,8 @@ module.exports.changeProfileImage = async (req, res) => {
       error
     });
   }
-};
+}
+
+
 
 

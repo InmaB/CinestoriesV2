@@ -1,7 +1,7 @@
-const { aniadirFavoritas, aniadirPendientes, getFavoritas,  eliminarFavorita, changeUserName, changeProfileImage,
-    getUserByEmail,
-    getPendientes,
-    eliminarPendiente} = require("../controllers/UserController")
+const { aniadirFavoritas, aniadirPendientes, getFavoritas,  eliminarFavorita, changeProfileImage,
+    getPendientes, getUserByEmail, changeUserName,
+    eliminarPendiente,
+    crearUsuario} = require("../controllers/UserController")
 
 const router=require("express").Router()
 
@@ -12,11 +12,11 @@ router.get("/favoritas/:email", getFavoritas)
 router.get("/pendientes/:email", getPendientes)
 router.delete("/eliminarFav", eliminarFavorita)
 router.delete("/eliminarPendiente", eliminarPendiente)
-
-
 router.put("/changeUserName/:email", changeUserName);
-
 router.get("/getUserByEmail/:email", getUserByEmail);
+router.post('/crearUsuario', crearUsuario);
+
+
 
 
 // Ruta para cambiar el profile_img

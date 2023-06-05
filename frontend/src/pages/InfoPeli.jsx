@@ -397,8 +397,6 @@ export default function InfoPeli() {
                 />
               </div>
               <div className="description">
-
-                <h1>{movieData.media_type}</h1>
                 <h1>{movieData.name || movieData.title}</h1>
                 <h4>Título Original - {movieData.original_title || movieData.original_name}</h4>
                 <h2>Valoración:</h2>
@@ -548,7 +546,7 @@ const CardContainer = styled.div`
 
       h1 {
         color: rgb(48, 50, 62);
-        font-size: 3rem;
+        font-size: 4rem;
         padding-top: 15px;
         margin: 0;
       }
@@ -567,7 +565,7 @@ const CardContainer = styled.div`
         color: #727272;
         text-transform: uppercase;
         font-weight: 500;
-        font-size: 12px;
+        font-size: 14px;
       }
 
       p {
@@ -596,9 +594,9 @@ const CardContainer = styled.div`
         li {
           float: left;
           border-radius:1rem;
-          color: #aedaa6;
+          color: #95b88e;
           background-color: white;
-          border: 1px solid #aedaa6;
+          border: 3px dotted #aedaa6;
           padding: 10px;
           margin: 5px;
           margin-right: 1rem;

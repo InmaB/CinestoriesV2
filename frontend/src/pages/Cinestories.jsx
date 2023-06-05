@@ -7,48 +7,48 @@ import CarouselHome from '../components/CarouselYGrid/CarouselHome';
 import CarouselGeneral from '../components/CarouselYGrid/CarouselGeneral';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-
+import RiseLoader from 'react-spinners/RiseLoader';
 
 export default function Cinestories() {
-
+  const [loading, setLoading] = useState(true); // Estado para controlar el estado de carga
   const navegacion = useNavigate();
-
   const movies = useSelector((state) => state.cinestories.movies);
-
   const genres = useSelector((state) => state.cinestories.genres);
-  const genresLoaded = useSelector((state) => state.cinestories.genresLoaded)
-  const moviesByRated = useSelector(state => state.cinestories.moviesByRated);
-  const tvByRated = useSelector(state => state.cinestories.tvByRated)
-  const upcoming = useSelector(state => state.cinestories.upcoming)
-
+  const genresLoaded = useSelector((state) => state.cinestories.genresLoaded);
+  const moviesByRated = useSelector((state) => state.cinestories.moviesByRated);
+  const tvByRated = useSelector((state) => state.cinestories.tvByRated);
+  const upcoming = useSelector((state) => state.cinestories.upcoming);
   const dispatch = useDispatch();
-
 
   useEffect(() => {
     dispatch(getGenres({ type: "movie" }));
-  }, [])
-
-  // useEffect(() => {
-  //   dispatch(getGenres({ type: "tv" }));
-  // }, [])
+  }, []);
 
   useEffect(() => {
-    if (genresLoaded) dispatch(fetchMovies({ type: "all" }))
-  }, [genresLoaded])
-
-
-  useEffect(() => {
-    if (genresLoaded) dispatch(fetchMovieByRated())
-  }, [genresLoaded])
-
-  useEffect(() => {
-    if (genresLoaded) dispatch(fetchTvByRated())
-  }, [genresLoaded])
+    if (genresLoaded) {
+      dispatch(fetchMovies({ type: "all" })).then(() => {
+        setLoading(false); // Marcar la carga como completa cuando los datos se hayan cargado
+      });
+    }
+  }, [genresLoaded]);
 
   useEffect(() => {
-    if (genresLoaded) dispatch(fetchUpcoming())
-  }, [genresLoaded])
+    if (genresLoaded) {
+      dispatch(fetchMovieByRated());
+    }
+  }, [genresLoaded]);
 
+  useEffect(() => {
+    if (genresLoaded) {
+      dispatch(fetchTvByRated());
+    }
+  }, [genresLoaded]);
+
+  useEffect(() => {
+    if (genresLoaded) {
+      dispatch(fetchUpcoming());
+    }
+  }, [genresLoaded]);
 
   return (
     <Contenedor>
@@ -58,11 +58,19 @@ export default function Cinestories() {
       </div>
       <div className="content">
         <div className="contenido">
-
-
-          <CarouselGeneral movies={movies} moviesByRated={moviesByRated} tvByRated={tvByRated} upcoming={upcoming} />
+          {loading ? ( // Mostrar el spinner si la carga está en progreso
+            <SpinnerContainer>
+              <RiseLoader color='lime' />
+            </SpinnerContainer>
+          ) : (
+            <CarouselGeneral
+              movies={movies}
+              moviesByRated={moviesByRated}
+              tvByRated={tvByRated}
+              upcoming={upcoming}
+            />
+          )}
         </div>
-
       </div>
       <Footer></Footer>
     </Contenedor>
@@ -70,19 +78,23 @@ export default function Cinestories() {
 }
 
 const Contenedor = styled.div`
-  background-color: linear-gradient(rgb(48, 50, 62), rgb(30, 31, 42));;
-.content {
-  padding: 1rem 2rem 2rem 3rem;
-}
+  background-color: linear-gradient(rgb(48, 50, 62), rgb(30, 31, 42));
+  .content {
+    padding: 1rem 2rem 2rem 3rem;
+  }
   .portada {
     position: relative;
     margin-bottom: 2rem;
-  /* .contenido {
-    position: absolute;
-    bottom: 5rem;
-    } */
   }
-`
+`;
+
+const SpinnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+
 
 
 // import React, { useEffect } from 'react';

@@ -395,87 +395,13 @@ import { AiFillHome, AiOutlineCheckCircle, AiOutlineClose, AiOutlineMenu } from 
 import { BiCameraMovie, BiExit } from "react-icons/bi";
 import { MdFavorite } from "react-icons/md";
 import { SlScreenDesktop } from "react-icons/sl";
-import { useDispatch } from 'react-redux';
-import { cambiarUsername, getUserByEmail } from '../store/index';
-
-
-
 import { firebaseAuth } from "../utils/firebase-config";
 import UserProfile from './UserProfile';
 
 
 export default function Navbar() {
-  const [showUsernameForm, setShowUsernameForm] = useState(false);
-  const [newUsername, setNewUsername] = useState("");
-
   const navegacion = useNavigate();
-  const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
-  const [showSubMenu, setShowSubMenu] = useState(false);
-  const [username, setUsername] = useState("");
-  const [userId, setUserId] = useState("");
-  const [userEmail, setUserEmail] = useState("");
-
-  useEffect(() => {
-    const userEmail = getAuth().currentUser?.email;
-    if (!userEmail) {
-      navegacion("/login");
-      return;
-    }
-
-    const fetchUsername = async () => {
-      try {
-        const username = await getUserByEmail(userEmail);
-        setUsername(username);
-      } catch (error) {
-        console.error('Error al obtener el nombre de usuario:', error);
-      }
-    };
-
-    fetchUsername();
-  }, [navegacion]);
-
-  const handleUsernameClick = () => {
-    setShowUsernameForm(true);
-  };
-
-  const handleUsernameChange = (e) => {
-    setNewUsername(e.target.value);
-  };
-
-
-  const handleSubmitUsername = () => {
-    dispatch(cambiarUsername({ email: userEmail, newUserName: newUsername }))
-      .then(() => {
-        setUsername(newUsername); // Actualizar el estado con el nuevo nombre de usuario
-        setShowUsernameForm(false); // Ocultar el formulario de edición
-      })
-      .catch((error) => {
-        console.error("Error al cambiar el nombre de usuario:", error);
-      });
-  };
-
-
-  useEffect(() => {
-    const fetchUsername = async () => {
-      try {
-        const email = getAuth().currentUser?.email;
-        if (!email) {
-          navegacion("/login");
-          return;
-        }
-
-        setUserEmail(email); // Almacenar el email en el estado
-        const username = await getUserByEmail(email);
-        setUsername(username);
-      } catch (error) {
-        console.error('Error al obtener el nombre de usuario:', error);
-      }
-    };
-
-    fetchUsername();
-  }, [navegacion]);
-
 
   const links = [
     { ico: AiFillHome, name: "Inicio", link: "/" },
@@ -516,25 +442,9 @@ export default function Navbar() {
         </ul>
         <div className="dcha">
           <UserProfile></UserProfile>
-          {/* BOTON SALIR */}
-          <button
-            className="btn-salir" title='Salir'
-            onClick={() => {
-              alert("saliendo");
-              signOut(firebaseAuth);
-            }}
-          >
-            <BiExit />
-          </button>
+
           <div className="buscador">
-            {showUsernameForm ? (
-              <div>
-                <input type="text" value={newUsername} onChange={handleUsernameChange} />
-                <button onClick={handleSubmitUsername}>Guardar</button>
-              </div>
-            ) : (
-              <h5 onClick={handleUsernameClick}>Username: {username}</h5>
-            )}
+
 
           </div>
         </div>
