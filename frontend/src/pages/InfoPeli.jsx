@@ -279,13 +279,13 @@ export default function InfoPeli() {
   const { idPelicula } = useParams();
   const location = useLocation();
   const movieData = location.state;
-  const navegacion = useNavigate();
-  const dispatch = useDispatch();
+  const navegacion = useNavigate()
+  const dispatch = useDispatch()
 
 
 
   const isMounted = useRef(false);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [isInFavorites, setIsInFavorites] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
   const [message, setMessage] = useState('');
@@ -302,7 +302,7 @@ export default function InfoPeli() {
     onAuthStateChanged(firebaseAuth, (Usuario) => {
       if (isMounted.current) {
         if (Usuario) setEmail(Usuario.email);
-        else navegacion('/login');
+        else navegacion("/login");
       }
     });
   }, []);
@@ -336,7 +336,7 @@ export default function InfoPeli() {
         setMessage('Añadida a favoritas correctamente');
       }
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
   };
 
@@ -362,9 +362,9 @@ export default function InfoPeli() {
         setMessage('Añadida a pendientes correctamente');
       }
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
-  };
+  }
 
 
 
@@ -501,7 +501,7 @@ export default function InfoPeli() {
         <BsFillArrowLeftSquareFill title='atras' />
       </BackButton>
       <Footer></Footer>
-    </Contenedor>
+    </Contenedor >
   );
 }
 

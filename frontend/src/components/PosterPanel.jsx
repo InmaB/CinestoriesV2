@@ -1,18 +1,30 @@
-
 import styled from 'styled-components';
-import { URL_TMBD, KEY_API, IMG_API } from '../../utils/tmbd-config';
+<<<<<<<< HEAD:frontend/src/components/PosterPanel.jsx
+import { URL_TMBD, KEY_API, IMG_API } from '../utils/tmbd-config';
 import { useEffect, useState } from 'react';
+import PosterNotFound from '../assets/posterNotFound.jpg'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchMovies, fetchPelis, getGenres } from '../store';
+========
+import { URL_TMBD, KEY_API, IMG_API } from '../../utils/tmbd-config';
+import { useEffect } from 'react';
 import PosterNotFound from '../../assets/posterNotFound.jpg'
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMovies, fetchPelis, getGenres } from '../../store';
+import { getGenres } from '../../store';
+>>>>>>>> 55277403d20e4d25f72ed70bcb2a5c14009a7203:frontend/src/components/Carousel/PosterGeneral.jsx
 
-export default function PosterTopRated({ movieData, index }) {
+
+
+export default function PosterGeneral({ movieData }) {
   const movies = useSelector((state) => state.cinestories.movies);
   const genres = useSelector((state) => state.cinestories.genres);
   const genresLoaded = useSelector((state) => state.cinestories.genresLoaded);
 
+  console.log(movieData)
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -27,14 +39,18 @@ export default function PosterTopRated({ movieData, index }) {
   return (
     <CajaPoster>
       {/* `${IMG_API}${movieData.poster_path}` */}
+<<<<<<<< HEAD:frontend/src/components/PosterPanel.jsx
       <ImagenPoster src={`https://image.tmdb.org/t/p/w500/` + movieData.poster_path ? IMG_API + movieData.poster_path : PosterNotFound} alt="Poster22" onClick={handleClick} />
+========
+      <ImagenPoster
+        src={movieData.poster_path ? `https://image.tmdb.org/t/p/w500/${IMG_API}${movieData.poster_path}` : PosterNotFound}
+        alt="Poster"
+        onClick={handleClick}
+      />
+>>>>>>>> 55277403d20e4d25f72ed70bcb2a5c14009a7203:frontend/src/components/Carousel/PosterGeneral.jsx
       <TextOverlay>
         <Text>{movieData.name || movieData.title}</Text>
       </TextOverlay>
-      <div className="transparente">
-        <Posicion><h2>Ranking:</h2></Posicion>
-        <NumberOverlay className='hit-the-floor'>{index + 1}</NumberOverlay>
-      </div>
     </CajaPoster>
   );
 }
@@ -51,6 +67,7 @@ const TextOverlay = styled.div`
   padding: 5px;
   opacity: 0;
   transition: opacity 0.3s ease;
+
 `;
 
 const CajaPoster = styled.div`
@@ -62,17 +79,6 @@ const CajaPoster = styled.div`
     opacity: 1;
   }
 
-  .transparente {
-    width: 100%;
-    height: 90px;
-    position: absolute;
-    bottom: 1rem;
-    right: 0px;
-    background: none;
-    border: none;
-    background-color: rgba(255, 255, 255, 0.7);
-    padding: 1rem;
-  }
 
   @media (max-width: 768px) {
     flex-direction: row;
@@ -90,8 +96,9 @@ const ImagenPoster = styled.img`
   transition: transform 0.3s ease;
 
   &:hover {
-    border: 3px solid lime;
+    border: 2px solid lime;
   }
+
 
   @media (max-width: 768px) {
     width: 100%;
@@ -99,21 +106,3 @@ const ImagenPoster = styled.img`
 `;
 
 const Text = styled.div``;
-
-const Posicion = styled.div`
-    h2 {
-        position: absolute;
-  bottom: 1rem;
-  left: 1rem;
-  -webkit-text-stroke: 1px black;
-text-shadow: black 0.2em 0.1em 0.2em;
-font-weight:bold;
-    }
-`
-
-
-const NumberOverlay = styled.div`
-  position: absolute;
-  bottom: 0.5rem;
-  right: 1rem;
-`;

@@ -17,7 +17,7 @@ export default function CarouselGeneral({ movies, moviesByRated, tvByRated, upco
         <Contenedor>
             <h1 className='titulo'>Lo más trending</h1>
             <Swiper
-                slidesPerView={5}
+                slidesPerView={6}
                 centeredSlides={false}
                 spaceBetween={15}
                 pagination={{

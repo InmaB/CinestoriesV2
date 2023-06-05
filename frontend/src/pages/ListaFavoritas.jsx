@@ -12,24 +12,19 @@ import RiseLoader from 'react-spinners/RiseLoader';
 
 export default function ListaFavoritas() {
     const navegacion = useNavigate();
-    const dispatch = useDispatch();
+
     const movies = useSelector((state) => state.cinestories.movies);
     const [email, setEmail] = useState(undefined);
     const [loading, setLoading] = useState(true); // Estado para controlar el estado de carga
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(firebaseAuth, (Usuario) => {
-            if (Usuario) {
-                setEmail(Usuario.email);
-            } else {
-                navegacion('/login');
-            }
-        });
 
-        return () => {
-            unsubscribe();
-        };
-    }, []);
+    onAuthStateChanged(firebaseAuth, (Usuario) => {
+
+        if (Usuario) setEmail(Usuario.email)
+        else navegacion("/login")
+    });
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (email) {
