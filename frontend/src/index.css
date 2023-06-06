@@ -65,9 +65,7 @@ body::-webkit-scrollbar-thumb:hover {
 .titulo {
   position: relative;
   color: white;
-  /* font-size: 1rem; */
   font-weight: bold;
-  /* text-transform: uppercase; */
   letter-spacing: 1px;
   padding-left: 50px;
   margin-bottom: 10px;
@@ -86,9 +84,7 @@ body::-webkit-scrollbar-thumb:hover {
 .titulo2 {
   position: relative;
   color: white;
-  /* font-size: 1rem; */
   font-weight: bold;
-  /* text-transform: uppercase; */
   letter-spacing: 1px;
   padding-left: 50px;
   margin-bottom: 10px;
@@ -199,78 +195,3 @@ color: rgb(255, 255, 93);
   text-align: center;
   margin-bottom: 5px;
 }
-
-/* ------------------------ DROPMENU */
-/*
-.dropdown-menu {
-  position: relative;
-  perspective: 200px;
-}
-
-.dropdown-menu button {
-  display: flex;
-  align-items: center;
-  align-content: center;
-  gap: 15px;
-  padding: 0 16px;
-  width: 230px;
-  height: 72px;
-  color: #fefefe;
-  background: transparent;
-  border-radius: 8px;
-  border: 0;
-  cursor: pointer;
-  font-size: 16px;
-  font-family: "Cambria";
-}
-
-.dropdown-menu > button {
-  position: relative;
-  z-index: 2;
-  background: #00000073;
-  transition: 0.3s;
-}
-
-.main-menu {
-  position: absolute;
-  overflow: hidden;
-  z-index: 1;
-  width: 100%;
-  height: 386px;
-  opacity: 0;
-  transform-origin: 100% 0%;
-  scale: 0;
-  visibility: hidden;
-  border-radius: 8px;
-  background: #00000073;
-  transition: 0.4s;
-}
-
-.dropdown-menu.open .main-menu {
-  scale: 1;
-  right: 0;
-  top: 0;
-  opacity: 1;
-  visibility: visible;
-}
-
-.main-menu button {
-  border: 0;
-  width: 100%;
-  height: 55px;
-  border-radius: 0;
-}
-
-.main-menu button:hover {
-  background: #00000042;
-}
-
-.chevron {
-  margin-left: auto;
-  transition: 0.4s;
-}
-
-.dropdown-menu.open .chevron {
-  rotate: 180deg;
-}
- */

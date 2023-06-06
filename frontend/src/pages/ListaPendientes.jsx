@@ -11,13 +11,17 @@ import Footer from '../components/Footer';
 import RiseLoader from 'react-spinners/RiseLoader';
 
 export default function ListaPendientes() {
-    const navegacion = useNavigate();
 
+    // Se declara funciones propias de react
+    const navegacion = useNavigate();
     const dispatch = useDispatch();
+
+    // Se utiliza useState para declarar múltiples variables de estado
     const movies = useSelector((state) => state.cinestories.movies);
     const [email, setEmail] = useState(undefined);
     const [loading, setLoading] = useState(true); // Estado para controlar el estado de carga
 
+    // Verifica si hay un usuario autenticado
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(firebaseAuth, (Usuario) => {
             if (Usuario) {
@@ -32,6 +36,7 @@ export default function ListaPendientes() {
         };
     }, []);
 
+    // Realiza una llamada a la función getUserPendientes(email) comprobando si existe el email
     useEffect(() => {
         if (email) {
             dispatch(getUserPendientes(email)).then(() => {
@@ -52,6 +57,7 @@ export default function ListaPendientes() {
                         </SpinnerContainer>
                     ) : movies && movies.length > 0 ? (
                         <div className="grid flex">
+                            {/* Se mapea las peliculas mostrándolas por el componente PosterListas  */}
                             {movies.map((pendiente) => (
                                 <PosterListas key={pendiente.movieId} movieData={pendiente} />
                             ))}
@@ -66,6 +72,7 @@ export default function ListaPendientes() {
     );
 }
 
+// Estilos
 const Contenedor = styled.div``;
 const Contenido = styled.div`
   padding: 3rem 2rem 3rem 3rem;

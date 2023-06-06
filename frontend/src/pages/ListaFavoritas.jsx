@@ -11,25 +11,29 @@ import Footer from '../components/Footer';
 import RiseLoader from 'react-spinners/RiseLoader';
 
 export default function ListaFavoritas() {
-    const navegacion = useNavigate();
 
+    // Se declara funciones propias de react
+    const navegacion = useNavigate();
+    const dispatch = useDispatch();
+
+    // Se utiliza useState para declarar múltiples variables de estado
     const movies = useSelector((state) => state.cinestories.movies);
     const [email, setEmail] = useState(undefined);
     const [loading, setLoading] = useState(true); // Estado para controlar el estado de carga
 
-
+    // Verifica si hay un usuario autenticado
     onAuthStateChanged(firebaseAuth, (Usuario) => {
-
         if (Usuario) setEmail(Usuario.email)
         else navegacion("/login")
     });
 
-    const dispatch = useDispatch();
-
+    // Realiza una llamada a la función getUserFavoritas(email) comprobando si existe el email
     useEffect(() => {
+        // Verifica si el email existe
         if (email) {
+            // Llama a la función para obtener las películas favoritas del usuario, en store/index.js
             dispatch(getUserFavoritas(email)).then(() => {
-                setLoading(false); // Marcar la carga como completa cuando los datos se hayan cargado
+                setLoading(false); // Marca la carga como completa cuando los datos se hayan cargado
             });
         }
     }, [email]);
@@ -46,6 +50,7 @@ export default function ListaFavoritas() {
                         </SpinnerContainer>
                     ) : movies && movies.length > 0 ? (
                         <div className="grid flex">
+                            {/* Se mapea las peliculas mostrándolas por el componente PosterListas  */}
                             {movies.map((fav) => (
                                 <PosterListas key={fav.movieId} movieData={fav} />
                             ))}
@@ -60,6 +65,7 @@ export default function ListaFavoritas() {
     );
 }
 
+// Estilos
 const Contenedor = styled.div``;
 const Contenido = styled.div`
   padding: 3rem 2rem 3rem 3rem;

@@ -30,8 +30,10 @@ export default function Navbar() {
   });
 
   const toggleMenu = () => {
+    console.log('Toggle menu');
     setIsOpen(!isOpen);
   };
+
 
   return (
     <Nav isOpen={isOpen}>
@@ -54,6 +56,7 @@ export default function Navbar() {
             </li>
           ))}
         </ul>
+
         <div className="dcha">
           <UserProfile></UserProfile>
           <div className="buscador">
@@ -100,8 +103,33 @@ const Nav = styled.nav`
     display: flex;
     align-items: center;
 
-     @media (max-width: 767px) {
-       display: none;
+    @media (max-width: 767px) {
+      display: block;
+      position: absolute;
+      top: 4.5rem;
+      left: 0;
+      width: 100%;
+      background-color: #1a1d29;
+      padding: 1rem;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.2s ease-in;
+
+      &.open {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      ul {
+        li {
+          margin-bottom: 0.5rem; // Reduce el espacio entre los elementos de la lista
+        }
+
+        a {
+          display: block; // Muestra los enlaces en forma de lista vertical
+          padding: 0.5rem 0; // Añade espaciado vertical a los enlaces
+        }
+      }
      }
 
     li {
@@ -145,5 +173,4 @@ left: 0;
 }
 
 `;
-
 

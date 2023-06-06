@@ -78,14 +78,17 @@ const UserProfile = () => {
         }
     }, []);
 
+    // Muestra el formulario para editar del nombre de usuario cuando se hace clic en él
     const handleUsernameClick = () => {
         setShowUsernameForm(true);
     };
 
+    // Actualiza el estado newUsername cuando cambia el valor
     const handleUsernameChange = (e) => {
         setNewUsername(e.target.value);
     };
 
+    // Cambia el nombre de usuario en el backend y actualiza el estado local con el nuevo nombre de usuario
     const handleSubmitUsername = () => {
         dispatch(cambiarUsername({ email: userEmail, newUserName: newUsername }))
             .then(() => {
@@ -97,10 +100,12 @@ const UserProfile = () => {
             });
     };
 
+    // Muestra/oculta el submenú de avatares
     const handleImageClick = () => {
         setShowSubMenu(!showSubMenu);
     };
 
+    //  Para cambiar el avatar seleccionado y actualizar la imagen de perfil
     const handleAvatarChange = (avatar) => {
         setSelectedAvatar(avatar);
         const newProfileImage = avatar.src;
@@ -109,6 +114,7 @@ const UserProfile = () => {
         // Guardar el valor de selectedImage en el almacenamiento local
         localStorage.setItem('selectedImage', newProfileImage);
 
+        // Llama a la función en store/index.js
         dispatch(
             cambiarUserImagen({ email: userEmail, newProfileImage })
         )
@@ -120,6 +126,7 @@ const UserProfile = () => {
             });
     };
 
+    // Para realizar la acción de cierre de sesión utilizando la función
     const handleSignOut = () => {
         signOut(getAuth())
             .then(() => {
@@ -131,6 +138,7 @@ const UserProfile = () => {
             });
     };
 
+    // Matriz con las imágenes de los avatares
     const avatars = [
         { src: avatar1, alt: "Avatar 1" },
         { src: avatar2, alt: "Avatar 2" },
@@ -142,18 +150,24 @@ const UserProfile = () => {
 
     return (
         <UserProfileContainer>
+            {/* Muestra/oculta el menú desplegable */}
             <ProfileToggle onClick={() => setIsOpen(!isOpen)}>
                 <p>Hola {username}</p>
-                <ProfileImage src={selectedImage} alt="User Avatar" />
+                <ProfileImage src={selectedImage} alt="Avatar" />
             </ProfileToggle>
+            {/* Si está abierto se abre el menú y hace distintas acciones */}
             {isOpen && (
                 <ProfileMenu>
                     <MenuItem onClick={handleImageClick}>
-                        Cambiar el avatar
+                        Cambiar avatar
                     </MenuItem>
                     <MenuItem onClick={handleUsernameClick}>
-                        Cambiar el username
+                        Cambiar username
                     </MenuItem>
+                    <MenuItem onClick={handleSignOut}>
+                        Salir
+                    </MenuItem>
+                    {/* Se abre el submenú si se pulsa a handleImageClick para mostrar los avatares  */}
                     {showSubMenu && (
                         <SubMenu>
                             {avatars.map((avatar, index) => (
@@ -166,10 +180,7 @@ const UserProfile = () => {
                             ))}
                         </SubMenu>
                     )}
-
-                    <MenuItem onClick={handleSignOut}>
-                        Salir
-                    </MenuItem>
+                    {/* Se abre el submenú si se pulsa a handleUsernameClick para editar el username  */}
                     {showUsernameForm && (
                         <SubMenu>
                             <UsernameInput
@@ -186,8 +197,7 @@ const UserProfile = () => {
     );
 };
 
-
-
+// Estilos
 const AvatarOption = styled.img`
   width: 50px;
   height: 50px;
@@ -247,22 +257,6 @@ const UsernameInput = styled.input`
 
 const SaveButton = styled.button`
   padding: 5px 10px;
-`;
-
-const ImageOption = styled.img`
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-  margin-right: 5px;
-  cursor: pointer;
-
-  &:last-child {
-    margin-right: 0;
-  }
-
-  &:hover {
-    border: 2px solid #1a1d29;
-  }
 `;
 
 export default UserProfile;

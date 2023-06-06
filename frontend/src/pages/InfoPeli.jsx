@@ -6,9 +6,9 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { firebaseAuth } from '../utils/firebase-config';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { getGenres, getUserFavoritas, getUserPendientes } from '../store';
+import { getGenres } from '../store';
 import PosterNotFound from '../assets/posterNotFound.jpg';
-import { URL_TMBD, KEY_API, IMG_API } from '../utils/tmbd-config';
+import { IMG_API } from '../utils/tmbd-config';
 import Footer from '../components/Footer';
 import { BiHappyHeartEyes } from 'react-icons/bi';
 import { BsCardChecklist } from 'react-icons/bs';
@@ -16,21 +16,24 @@ import { BsFillArrowLeftSquareFill } from 'react-icons/bs'
 
 
 export default function InfoPeli() {
+
+  // Se declara funciones propias de react
+  const navegacion = useNavigate()
+  const dispatch = useDispatch()
+
+  // Se utiliza useState para declarar múltiples variables de estado
   const genres = useSelector((state) => state.cinestories.genres);
   const { idPelicula } = useParams();
   const location = useLocation();
   const movieData = location.state;
-  const navegacion = useNavigate()
-  const dispatch = useDispatch()
-
-
-
   const isMounted = useRef(false);
   const [email, setEmail] = useState("");
   const [isInFavorites, setIsInFavorites] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
   const [message, setMessage] = useState('');
 
+
+  // Efecto que asegura que el componente solo realice operaciones cuando está montado y evita errores relacionados con el estado o llamadas asincrónicas después de que el componente se haya desmontado. Se utiliza para el próximo useEffect "onAuthStateChanged"
   useEffect(() => {
     isMounted.current = true;
 
@@ -39,6 +42,8 @@ export default function InfoPeli() {
     };
   }, []);
 
+
+  // Verifica el estado de autenticación del usuario
   useEffect(() => {
     onAuthStateChanged(firebaseAuth, (Usuario) => {
       if (isMounted.current) {
@@ -49,68 +54,22 @@ export default function InfoPeli() {
   }, []);
 
 
-
+  // Obtiene los géneros al montar el componente
   useEffect(() => {
     dispatch(getGenres());
   }, []);
 
-  // const aniadirListaFav = async () => {
-  //   try {
-  //     const { data: { movies: pendientes } } = await axios.get(`http://localhost:5000/api/user/pendientes/${email}`);
-  //     const { data: { movies: favoritas } } = await axios.get(`http://localhost:5000/api/user/favoritas/${email}`);
-  //     const isInPendientes = pendientes && pendientes.some((movie) => movie.id === movieData.id);
-  //     const isInFavoritas = favoritas && favoritas.some((movie) => movie.id === movieData.id);
-
-  //     console.log(favoritas.length > 0 ? true : false)
-  //     console.log(email)
-  //     console.log(movieData)
-
-  //     if (favoritas) {
-  //       console.log("he entrado aqui :)")
-  //       await axios.post('http://localhost:5000/api/user/aniadirFav', {
-  //         email,
-  //         data: movieData
-
-
-  //       });
-  //       setIsInFavorites(true);
-  //       setShowMessage(true);
-  //       setMessage('Añadida a favoritas correctamente');
-  //     }
-
-  //     else if (isInPendientes) {
-  //       console.log("he entrado aqui isPendientes")
-  //       setShowMessage(true);
-  //       setMessage('La película ya está en la lista de pendientes');
-
-  //     } else if (isInFavoritas) {
-  //       console.log("he entrado aqui isinFavoritas")
-  //       setShowMessage(true);
-  //       setMessage('La película ya está en la lista de favoritas');
-
-
-  //       // } else if (favoritas.length > 0) {
-  //       //   await axios.post('http://localhost:5000/api/user/aniadirFav', {
-  //       //     email,
-  //       //     data: movieData,
-  //       //   });
-  //       // setIsInFavorites(true);
-  //       // setShowMessage(true);
-  //       // setMessage('Añadida a favoritas correctamente');
-  //     }
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // };
-
-
+  // Función para añadir la película a la lista de favoritos
   const aniadirListaFav = async () => {
     try {
+      // Obtiene las películas de favoritos y pendientes del usuario desde la API
       const { data: { movies: pendientes } } = await axios.get(`http://localhost:5000/api/user/pendientes/${email}`);
       const { data: { movies: favoritas } } = await axios.get(`http://localhost:5000/api/user/favoritas/${email}`);
+      // Comprueba si la película ya está en la lista de pendientes o favoritos
       const isInPendientes = pendientes.some((movie) => movie.id === movieData.id);
       const isInFavoritas = favoritas.some((movie) => movie.id === movieData.id);
 
+      // Si la película ya está en la lista de favoritos o pendientes, muestra un mensaje
       if (isInPendientes) {
         setShowMessage(true);
         setMessage('La película ya está en la lista de pendientes');
@@ -118,6 +77,7 @@ export default function InfoPeli() {
         setShowMessage(true);
         setMessage('La película ya está en la lista de favoritas');
       } else {
+        // Si la película no está en ninguna lista, la añade
         await axios.post('http://localhost:5000/api/user/aniadirFav', {
           email,
           data: movieData,
@@ -131,13 +91,16 @@ export default function InfoPeli() {
     }
   };
 
+  // Función para añadir la película a la lista de pendientes
   const aniadirListaPendientes = async () => {
     try {
       const { data: { movies: pendientes } } = await axios.get(`http://localhost:5000/api/user/pendientes/${email}`);
       const { data: { movies: favoritas } } = await axios.get(`http://localhost:5000/api/user/favoritas/${email}`);
+      // Comprueba si la película ya está en la lista de pendientes o favoritos
       const isInPendientes = pendientes.some((movie) => movie.id === movieData.id);
       const isInFavoritas = favoritas.some((movie) => movie.id === movieData.id);
 
+      // Si la película ya está en la lista de favoritos o pendientes, muestra un mensaje
       if (isInFavoritas) {
         setShowMessage(true);
         setMessage('La película ya está en la lista de favoritas');
@@ -145,6 +108,7 @@ export default function InfoPeli() {
         setShowMessage(true);
         setMessage('La película ya está en la lista de pendientes');
       } else {
+        // Si la película no está en ninguna lista, la añade
         await axios.post('http://localhost:5000/api/user/aniadirPendientes', {
           email,
           data: movieData,
@@ -156,18 +120,16 @@ export default function InfoPeli() {
       console.log(err)
     }
   }
-
-
-
+  // Va hacía la pag anterior
   const navigateBack = () => {
     navegacion(-1);
   };
 
+  // Función que va a encontrar el id de los géneros de las películas. movieGenreNames es un array de nombres de géneros obtenidos a partir de movieData.genre_ids utilizando el array de objetos genres
   const movieGenreNames = movieData.genre_ids && movieData.genre_ids.map((genreId) => {
     const genre = genres.find((genre) => genre.id === genreId);
     return genre ? genre.name : '';
   });
-
 
   return (
     <Contenedor>
@@ -188,6 +150,7 @@ export default function InfoPeli() {
                 />
               </div>
               <div className="description">
+                {/* Se muestra el titulo, titulo original, valoración, año, sinopsis si es película, serie de tv o programa */}
                 <h1>{movieData.name || movieData.title}</h1>
                 <h4>Título Original - {movieData.original_title || movieData.original_name}</h4>
                 <h2>Valoración:</h2>
@@ -196,55 +159,11 @@ export default function InfoPeli() {
                 <p>{movieData.release_date && movieData.release_date.split('-')[0] || movieData.first_air_date && movieData.first_air_date.split("-")[0]}</p>
                 <h2>Sinopsis</h2>
                 <p>{movieData.overview}</p>
-
-                {/* <h2>Género:</h2>
-                <div className="genre-container">
-                  {movieData && movieData.genres && movieData.genres.length > 0 ? (
-                    <ul className="genre-list">
-                      {movieData.genres.map((genre, index) => (
-                        <li key={index}>{genre}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p>No se encontraron géneros</p>
-                  )}
-
-                  {movieGenreNames && movieGenreNames.length > 0 ? (
-                    <ul className="genre-list">
-                      {movieGenreNames.map((genre, index) => (
-                        <li key={index}>{genre}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p>No se encontraron géneros</p>
-                  )}
-                </div> */}
-
-                {/* <h2>Género:</h2>
-                <div className="genre-container">
-                  {movieData && movieData.genres && movieData.genres.length > 0 ? (
-                    <ul className="genre-list">
-                      {movieData.genres.map((genre, index) => (
-                        <li key={index}>{genre}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p>No se encontraron géneros</p>
-                  )}
-
-                  {movieGenreNames && movieGenreNames.length > 0 ? (
-                    <ul className="genre-list">
-                      {movieGenreNames.map((genre, index) => (
-                        <li key={index}>{genre}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p>No se encontraron géneros</p>
-                  )}
-                </div> */}
-
                 <h2>Género:</h2>
                 <div className="genre-container">
+                  {/* Se verifica si movieData existe, si tiene la propiedad genres y si su longitud es mayor que 0, si cumple: muestra en una lista.
+Se realiza lo mismo con movieGenreNames. Si ninguna de las condiciones anteriores se cumple: "No se encontraron géneros". */}
+
                   {movieData && movieData.genres && movieData.genres.length > 0 && (
                     <ul className="genre-list">
                       {movieData.genres.map((genre, index) => (
@@ -266,8 +185,7 @@ export default function InfoPeli() {
                   )}
                 </div>
 
-
-
+                {/* Botones para añadir las películas a las listas */}
                 <div className="button-container">
                   <button className="my-button" onClick={() => {
                     aniadirListaFav();
@@ -280,7 +198,7 @@ export default function InfoPeli() {
                     <BsCardChecklist className='icon' />Añadir a pendientes
                   </button>
                 </div>
-
+                {/* Aparece los mensajes correspondientes a la funcion descrita anteriormente, según si existe la película en alguna lista o se ha añadido correctamente */}
                 {showMessage && <p>{message}</p>}
               </div>
             </div>
@@ -288,6 +206,7 @@ export default function InfoPeli() {
         )}
 
       </Contenido>
+      {/* Boton que va hacia la pag anterior */}
       <BackButton onClick={navigateBack}>
         <BsFillArrowLeftSquareFill title='atras' />
       </BackButton>
@@ -296,8 +215,8 @@ export default function InfoPeli() {
   );
 }
 
+// Estilos
 const Contenedor = styled.div``;
-
 
 const Contenido = styled.div`
   margin-top: 3rem;
