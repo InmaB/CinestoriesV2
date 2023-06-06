@@ -6,7 +6,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { firebaseAuth } from '../utils/firebase-config';
 import Navbar from '../components/Navbar';
 import styled from 'styled-components';
-import PosterListas from '../components/CarouselYGrid/PosterListaFav';
+import PosterListas from '../components/CarouselYGrid/PosterListas';
 import Footer from '../components/Footer';
 import RiseLoader from 'react-spinners/RiseLoader';
 
