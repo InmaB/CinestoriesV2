@@ -4,12 +4,11 @@ import styled from "styled-components";
 import { AiFillCloseCircle } from 'react-icons/ai'
 import RiseLoader from 'react-spinners/RiseLoader';
 
-
+// Estilos
 const ModalOverlay = styled.div`
   position: fixed;
   margin: auto;
   top: 0;
-  /* left: 0; */
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
@@ -43,17 +42,19 @@ const SpinnerContainer = styled.div`
   align-items: center;
 `;
 
-
+// Se le pasa varios props como argumentos
 const Modal = ({ open, onClose, loading, children }) => {
     if (!open) {
         return null;
     }
 
+    // Se utiliza ReactDOM.createPortal para renderizar el contenido del modal en un portal. Documentación de Modal para react"
     return ReactDOM.createPortal(
         <ModalOverlay>
             <ModalContent>
+                {/* Icono para cerrar */}
                 <AiFillCloseCircle className="close-icon" onClick={onClose} />
-
+                {/* Si loading es true se muestra el spinner, si loading es false, se muestra el contenido proporcionado como children */}
                 {loading ? (
                     <SpinnerContainer>
                         <RiseLoader color="lime" />

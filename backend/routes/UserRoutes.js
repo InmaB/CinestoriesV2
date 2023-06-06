@@ -1,12 +1,15 @@
-const { aniadirFavoritas, aniadirPendientes, getFavoritas,  eliminarFavorita, changeProfileImage,
+const {   getFavoritas,  eliminarFavorita, changeProfileImage,
     getPendientes, getUserByEmail, changeUserName,
     eliminarPendiente,
-    crearUsuario} = require("../controllers/UserController")
+    crearUsuario,
+    aniadirFavorita,
+    aniadirPendiente,
+     } = require("../controllers/UserController")
 
 const router=require("express").Router()
 
-router.post("/aniadirFav", aniadirFavoritas)
-router.post("/aniadirPendientes", aniadirPendientes)
+router.post("/aniadirFav", aniadirFavorita)
+router.post("/aniadirPendientes", aniadirPendiente)
 router.get("/favoritas/:email", getFavoritas)
 router.get("/pendientes/:email", getPendientes)
 router.delete("/eliminarFav", eliminarFavorita)

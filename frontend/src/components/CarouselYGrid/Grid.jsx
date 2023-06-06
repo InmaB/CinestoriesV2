@@ -6,6 +6,7 @@ export default function Grid({ movies, visibleMovies }) {
 
   return (
     <Contenedor>
+      {/* Se realiza un mapeo sobre el arreglo de películas movies utilizando el método slice para obtener solo las primeras "visibleMovies" definidas en las páginas "Pelis" y "SeriesyTv". Se muestran las películas mediante el componente PosterGeneral */}
       <div className="grid flex">
         {movies.slice(0, visibleMovies).map((movie, index) => {
 
@@ -16,7 +17,7 @@ export default function Grid({ movies, visibleMovies }) {
     </Contenedor>
   )
 }
-
+// Estilos
 const Contenedor = styled.div`
 .grid {
   margin-top:2rem;

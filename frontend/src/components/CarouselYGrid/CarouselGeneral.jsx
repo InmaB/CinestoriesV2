@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components';
 import { Swiper, SwiperSlide } from "swiper/react";
 import 'swiper/swiper-bundle.min.css';
@@ -11,11 +11,11 @@ export default function CarouselGeneral({ movies, moviesByRated, tvByRated, upco
 
     SwiperCore.use([Pagination, Navigation]);
 
-    const [swiperRef, setSwiperRef] = useState(null);
-
     return (
         <Contenedor>
             <h1 className='titulo'>Lo más trending</h1>
+            {/* Código dado por la librería Swiper, aunque está personalizado  */}
+
             <Swiper
                 slidesPerView={5}
                 centeredSlides={false}
@@ -26,6 +26,7 @@ export default function CarouselGeneral({ movies, moviesByRated, tvByRated, upco
                 navigation={true}
                 className="mySwiper"
             >
+                {/* Se realiza una verificación para asegurarse de que películas "movies" tenga datos. Luego, se utiliza slice(0, 20) para obtener solo las primeras 20 películas y se realiza un mapeo sobre ellas. En los siguientes "swiper" se realiza lo mismo, pero con distintos arreglos: upcoming, moviesByRated y tvByRated que trae las peliculas corresponsientes a: peliculas próximas, por mejor votación y series de mayor votación */}
                 {movies && movies.slice(0, 20).map((movie, index) => (
                     <SwiperSlide key={movie.id}>
                         <PosterGeneral movieData={movie} index={index} />
@@ -94,7 +95,7 @@ export default function CarouselGeneral({ movies, moviesByRated, tvByRated, upco
     );
 }
 
-
+// Estilos
 const Contenedor = styled.div`
 
 .swiper-pagination-progressbar {

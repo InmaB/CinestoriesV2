@@ -9,15 +9,12 @@ function Footer() {
         <footer>
             <div className="footer-background">
                 <div className="footer-logo">
-
                     <a href="./">
                         <Logo src={logo} alt="Filmlane logo" />
                     </a>
                     <p>Tu página web de películas, series y programas de TV </p>
                 </div>
-
                 <div className="divisor"></div>
-
                 <ul className="social-list">
                     <li>
                         <a href="#" className="social-link">
@@ -35,8 +32,6 @@ function Footer() {
                         </a>
                     </li>
                 </ul>
-
-
             </div>
             <div className="footer-bottom">
                 <p className='credits'> &copy; 2023. Creado por Inma Balbuena. Contacto: email@email.com</p>
@@ -45,6 +40,7 @@ function Footer() {
     );
 }
 
+// Estilos
 const Logo = styled.img`
 width: 20%;
 `

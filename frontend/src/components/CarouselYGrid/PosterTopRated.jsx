@@ -6,39 +6,42 @@ import PosterNotFound from '../../assets/posterNotFound.jpg'
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMovies, fetchPelis, getGenres } from '../../store';
+import { getGenres } from '../../store';
 
 export default function PosterTopRated({ movieData, index }) {
-  const movies = useSelector((state) => state.cinestories.movies);
-  const genres = useSelector((state) => state.cinestories.genres);
-  const genresLoaded = useSelector((state) => state.cinestories.genresLoaded);
 
+  // Se declara funciones propias de react
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // useEffect se ejecuta una vez, al montar el componente, para enviar getGenres() utilizando dispatch para obtener los géneros de películas
   useEffect(() => {
     dispatch(getGenres());
   }, []);
 
+  // Maneja que cuando se le de al poster, va a la página de información de la película
   const handleClick = () => {
     navigate('/infoPeli', { state: movieData });
   };
 
   return (
     <CajaPoster>
-      {/* `${IMG_API}${movieData.poster_path}` */}
-      <ImagenPoster src={`https://image.tmdb.org/t/p/w500/` + movieData.poster_path ? IMG_API + movieData.poster_path : PosterNotFound} alt="Poster22" onClick={handleClick} />
+      {/* Muestra la imagen del póster si está disponible, si no, muestra un póster predeterminado */}
+      <ImagenPoster src={`https://image.tmdb.org/t/p/w500/` + movieData.poster_path ? IMG_API + movieData.poster_path : PosterNotFound} alt="Poster" onClick={handleClick} />
       <TextOverlay>
+        {/* Muestra el título de la película o serie */}
         <Text>{movieData.name || movieData.title}</Text>
       </TextOverlay>
       <div className="transparente">
         <Posicion><h2>Ranking:</h2></Posicion>
+        {/* Para que se muestre el nº del ranking */}
         <NumberOverlay className='hit-the-floor'>{index + 1}</NumberOverlay>
       </div>
     </CajaPoster>
   );
 }
 
+// Estilos
 const TextOverlay = styled.div`
   position: absolute;
   top: 50%;
