@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Login from './pages/Login';
 import Registro from './pages/Registro';
 import Cinestories from './pages/Cinestories';
-import Reproductor from './pages/Reproductor';
 import Pelis from './pages/Pelis';
 import SeriesyTv from './pages/SeriesyTv';
 import InfoPeli from './pages/InfoPeli';
@@ -19,20 +18,12 @@ export default function App() {
         <Route exact path='/login' element={<Login />}></Route>
         <Route exact path='/registro' element={<Registro />}></Route>
         <Route exact path='/' element={<Cinestories />}></Route>
-        <Route
-          exact
-          path="/reproductor/:idPelicula"
-          element={<Reproductor />}
-        ></Route>
         <Route exact path='/peliculas' element={<Pelis />}></Route>
         <Route exact path='/seriestv' element={<SeriesyTv />}></Route>
         <Route exact path='/listaFavoritas' element={<ListaFavoritas />}></Route>
         <Route exact path='/listaPendientes' element={<ListaPendientes />}></Route>
         <Route exact path='/infoPeli' element={<InfoPeli />}></Route>
-
-
       </Routes>
-
     </BrowserRouter>
 
   );

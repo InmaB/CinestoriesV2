@@ -10,13 +10,16 @@ import { firebaseAuth } from '../../utils/firebase-config';
 import { AiFillDelete } from 'react-icons/ai';
 import { removeMovieFromLiked, removeMovieFromToWatch } from '../../store/index';
 
+// Se le pasa como props: moviedata
 export default function PosterListas({ movieData }) {
+
+  // Se declara funciones propias de react
   const navegacion = useNavigate();
   const dispatch = useDispatch();
-  const [isHover, setHover] = useState(false);
 
   const [email, setEmail] = useState(undefined);
 
+  // Verifica si hay un usuario autenticado al montar el componente
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(firebaseAuth, (Usuario) => {
       if (Usuario) setEmail(Usuario.email);
@@ -28,6 +31,7 @@ export default function PosterListas({ movieData }) {
     };
   }, []);
 
+  // Maneja la eliminación de la película si es para la lista de favoritos(removeMovieFromLiked) o para las pendientes(removeMovieFromToWatch)
   const handleDelete = async () => {
     try {
       await dispatch(removeMovieFromToWatch({ email: email, movieId: movieData.id }));
@@ -39,23 +43,25 @@ export default function PosterListas({ movieData }) {
     }
   };
 
-
+  // Maneja que cuando se le de al poster, va a la página de información de la película
   const handleClick = () => {
     navegacion('/infoPeli', { state: movieData });
   };
 
   return (
     <CajaPoster>
-
+      {/* Muestra la imagen del póster si está disponible, si no, muestra un póster predeterminado */}
       <ImagenPoster
         src={movieData.poster_path ? `https://image.tmdb.org/t/p/w500/${IMG_API}${movieData.poster_path}` : PosterNotFound}
-        alt="Poster22"
+        alt="Poster"
         onClick={handleClick}
       />
 
+      {/* Muestra el título de la película o serie */}
       <TextOverlay>
         <Text>{movieData.name || movieData.title}</Text>
       </TextOverlay>
+      {/* Botón que llama a handleDelete para eliminar la película*/}
       <button className="btn-eliminar" title='Eliminar' onClick={handleDelete}>
         <AiFillDelete />
       </button>
@@ -63,6 +69,7 @@ export default function PosterListas({ movieData }) {
   );
 }
 
+// Estilos
 const TextOverlay = styled.div`
   position: absolute;
   top: 50%;

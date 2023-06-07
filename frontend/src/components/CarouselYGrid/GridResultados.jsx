@@ -2,27 +2,29 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import PosterResultados from '../CarouselYGrid/PosterResultados';
 
+// Se le pasa como props searchResults que representa los resultados de búsqueda.
 export default function GridResultados({ searchResults }) {
   const itemsPerPage = 16;
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Calculate the starting and ending index of the current page
+  // Calcula el índice de los elementos a mostrar en la página actual
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
-  // Get the movies to display on the current page
+  // Mostrará el número de pelis en la página actual
   const moviesToDisplay = searchResults.slice(startIndex, endIndex);
 
-  // Function to handle page change
+  // Función para manejar el cambio de pag
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
-  // Calculate the total number of pages
+  // Calcula el nª total de pág dividiendo la longitud de los resultados de búsqueda por el número de elementos por página y redondeando hacia arriba
   const totalPages = Math.ceil(searchResults.length / itemsPerPage);
 
   return (
     <Contenedor>
+      {/* Se mapea moviesToDisplay y se muestra en el componente PosterResultados */}
       <div className="grid flex">
         {moviesToDisplay.map((movie, index) => (
           <div key={movie.id}>
@@ -32,6 +34,7 @@ export default function GridResultados({ searchResults }) {
       </div>
 
       <Pagination>
+        {/* Se crea un arreglo con la longitud igual al número total de páginas, y se realiza un mapeo para generar los botones de las pags */}
         {Array.from({ length: totalPages }, (_, index) => (
           <PageButton
             key={index + 1}
@@ -46,6 +49,7 @@ export default function GridResultados({ searchResults }) {
   );
 }
 
+// Estilos
 const Contenedor = styled.div`
   .grid {
     margin-top: 2rem;

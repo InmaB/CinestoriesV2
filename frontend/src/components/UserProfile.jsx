@@ -1,188 +1,3 @@
-// import React, { useState, useEffect } from 'react';
-// import { useDispatch } from 'react-redux';
-// import { cambiarUserImagen, cambiarUsername, getUserByEmail } from '../store/index';
-// import avatar1 from '../assets/avatar1.jpg'
-// import avatar2 from '../assets/avatar2.jpg'
-// import avatar3 from '../assets/avatar3.jpg'
-// import styled from 'styled-components';
-// import { getAuth } from 'firebase/auth';
-// import { useNavigate } from 'react-router-dom';
-
-// const UserProfile = () => {
-
-//     const dispatch = useDispatch();
-//     const [isOpen, setIsOpen] = useState(false);
-//     const [showSubMenu, setShowSubMenu] = useState(false);
-//     const [username, setUsername] = useState("");
-//     const [userId, setUserId] = useState("");
-//     const [userEmail, setUserEmail] = useState("");
-//     const navegacion = useNavigate();
-//     const [images, setImages] = useState([
-//         { src: avatar1, alt: "Homer" },
-//         { src: avatar2, alt: "Micky" },
-//         // Agrega los otros objetos de imagen aquí...
-//     ]);
-
-//     const toggleMenu = () => {
-//         setIsOpen(!isOpen);
-//     };
-
-//     const toggleSubMenu = () => {
-//         setShowSubMenu(!showSubMenu);
-//     };
-
-//     const handleUsernameClick = () => {
-//         toggleSubMenu();
-//     };
-
-//     const handleImageClick = async (imageId) => {
-//         try {
-//             // Implementa la lógica para mostrar un formulario o cuadro de diálogo para cambiar la imagen
-//             // Cuando el usuario seleccione una nueva imagen, actualiza el array de imágenes
-
-//             const newProfileImage = "newImage.jpg"; // Reemplaza "newImage.jpg" con el valor seleccionado por el usuario
-
-//             // Realiza la solicitud para cambiar la imagen de perfil del usuario
-//             await dispatch(cambiarUserImagen({ email: userEmail, newProfileImage }));
-
-//             // Actualiza el array de imágenes en el estado
-//             const newImages = images.map((image) => {
-//                 if (image.id === imageId) {
-//                     return { ...image, src: newProfileImage };
-//                 }
-//                 return image;
-//             });
-
-//             setImages(newImages);
-//         } catch (error) {
-//             console.error('Error al cambiar la imagen:', error);
-//         }
-//     };
-
-//     const handleUsernameChange = (e) => {
-//         setUsername(e.target.value);
-//     };
-
-//     const handleSubmitUsername = () => {
-//         dispatch(cambiarUsername({ email: userEmail, newUserName: username }))
-//             .then(() => {
-//                 // Actualizar el estado con el nuevo nombre de usuario
-//                 setUsername(username);
-//                 // Ocultar el formulario de edición
-//                 toggleSubMenu();
-//             })
-//             .catch((error) => {
-//                 console.error("Error al cambiar el nombre de usuario:", error);
-//             });
-//     };
-
-//     useEffect(() => {
-//         const fetchUsername = async () => {
-//             try {
-//                 const email = getAuth().currentUser?.email;
-//                 if (!email) {
-//                     navegacion("/login");
-//                     return;
-//                 }
-
-//                 setUserEmail(email); // Almacenar el email en el estado
-//                 const username = await getUserByEmail(email);
-//                 setUsername(username);
-//             } catch (error) {
-//                 console.error('Error al obtener el nombre de usuario:', error);
-//             }
-//         };
-
-//         fetchUsername();
-//     }, [navegacion]);
-
-//     return (
-//         <UserProfileContainer>
-//             <ProfileToggle onClick={toggleMenu}>
-//                 <ProfileImage src={avatar1} alt="User Avatar" />
-//             </ProfileToggle>
-//             {isOpen && (
-//                 <ProfileMenu>
-//                     <MenuItem onClick={handleImageClick}>
-//                         Cambiar la imagen
-//                     </MenuItem>
-//                     <MenuItem onClick={handleUsernameClick}>
-//                         Cambiar el username
-//                     </MenuItem>
-//                     <MenuItem onClick={handleUsernameClick}>
-//                         Salir
-//                     </MenuItem>
-//                     {showSubMenu && (
-//                         <SubMenu>
-//                             <UsernameInput
-//                                 type="text"
-//                                 value={username}
-//                                 onChange={handleUsernameChange}
-//                             />
-//                             <SaveButton onClick={handleSubmitUsername}>Guardar</SaveButton>
-//                         </SubMenu>
-//                     )}
-//                 </ProfileMenu>
-//             )}
-//         </UserProfileContainer>
-//     );
-// };
-
-// {/* <button
-// className="btn-salir" title='Salir'
-// onClick={() => {
-//   alert("saliendo");
-//   signOut(firebaseAuth);
-// }}
-// >
-// <BiExit /> */}
-// const UserProfileContainer = styled.div`
-//   position: relative;
-// `;
-
-// const ProfileToggle = styled.div`
-//   cursor: pointer;
-// `;
-
-// const ProfileImage = styled.img`
-//   height: 40px;
-//   width: 40px;
-//   border-radius: 50%;
-// `;
-
-// const ProfileMenu = styled.div`
-//   position: absolute;
-//   top: 100%;
-//   right: 0;
-//   background-color: #1a1d29;
-//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-//   z-index: 1;
-// `;
-
-// const MenuItem = styled.div`
-//   padding: 10px 20px;
-//   cursor: pointer;
-
-//   &:hover {
-//     background-color: #f0f0f0;
-//   }
-// `;
-
-// const SubMenu = styled.div`
-//   padding: 10px;
-// `;
-
-// const UsernameInput = styled.input`
-//   margin-bottom: 10px;
-// `;
-
-// const SaveButton = styled.button`
-//   padding: 5px 10px;
-// `;
-
-// export default UserProfile;
-
-
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { cambiarUserImagen, cambiarUsername, getUserByEmail } from '../store/index';
@@ -192,8 +7,13 @@ import { useNavigate } from 'react-router-dom';
 import avatar1 from '../assets/avatar1.jpg';
 import avatar2 from '../assets/avatar2.jpg';
 import avatar3 from '../assets/avatar3.jpg';
+import avatar4 from '../assets/avatar4.jpg';
+import avatar5 from '../assets/avatar5.jpg';
+import avatar6 from '../assets/avatar6.jpg';
 
 const UserProfile = () => {
+
+    // Se utiliza useState para declarar múltiples variables de estado
     const [showUsernameForm, setShowUsernameForm] = useState(false);
     const [newUsername, setNewUsername] = useState("");
     const [isOpen, setIsOpen] = useState(false);
@@ -203,9 +23,11 @@ const UserProfile = () => {
     const [selectedAvatar, setSelectedAvatar] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
 
+    // Se declara funciones propias de react
     const navegacion = useNavigate();
     const dispatch = useDispatch();
 
+    //Verifica si hay un correo electrónico de usuario actualmente autenticado
     useEffect(() => {
         const userEmail = getAuth().currentUser?.email;
         if (!userEmail) {
@@ -213,6 +35,7 @@ const UserProfile = () => {
             return;
         }
 
+        // Obtiene el nombre de usuario a través del correo electrónico
         const fetchUsername = async () => {
             try {
                 const username = await getUserByEmail(userEmail);
@@ -225,6 +48,7 @@ const UserProfile = () => {
         fetchUsername();
     }, [navegacion]);
 
+    // Obtener el nombre de usuario y email del usuario actual
     useEffect(() => {
         const fetchUsername = async () => {
             try {
@@ -234,7 +58,7 @@ const UserProfile = () => {
                     return;
                 }
 
-                setUserEmail(email); // Almacenar el email en el estado
+                setUserEmail(email); // Almacena el email en el estado
                 const username = await getUserByEmail(email);
                 setUsername(username);
                 console.log("cambiado el username")
@@ -254,14 +78,17 @@ const UserProfile = () => {
         }
     }, []);
 
+    // Muestra el formulario para editar del nombre de usuario cuando se hace clic en él
     const handleUsernameClick = () => {
         setShowUsernameForm(true);
     };
 
+    // Actualiza el estado newUsername cuando cambia el valor
     const handleUsernameChange = (e) => {
         setNewUsername(e.target.value);
     };
 
+    // Cambia el nombre de usuario en el backend y actualiza el estado local con el nuevo nombre de usuario
     const handleSubmitUsername = () => {
         dispatch(cambiarUsername({ email: userEmail, newUserName: newUsername }))
             .then(() => {
@@ -273,10 +100,12 @@ const UserProfile = () => {
             });
     };
 
+    // Muestra/oculta el submenú de avatares
     const handleImageClick = () => {
         setShowSubMenu(!showSubMenu);
     };
 
+    //  Para cambiar el avatar seleccionado y actualizar la imagen de perfil
     const handleAvatarChange = (avatar) => {
         setSelectedAvatar(avatar);
         const newProfileImage = avatar.src;
@@ -285,6 +114,7 @@ const UserProfile = () => {
         // Guardar el valor de selectedImage en el almacenamiento local
         localStorage.setItem('selectedImage', newProfileImage);
 
+        // Llama a la función en store/index.js
         dispatch(
             cambiarUserImagen({ email: userEmail, newProfileImage })
         )
@@ -296,6 +126,7 @@ const UserProfile = () => {
             });
     };
 
+    // Para realizar la acción de cierre de sesión utilizando la función
     const handleSignOut = () => {
         signOut(getAuth())
             .then(() => {
@@ -307,26 +138,36 @@ const UserProfile = () => {
             });
     };
 
+    // Matriz con las imágenes de los avatares
     const avatars = [
         { src: avatar1, alt: "Avatar 1" },
         { src: avatar2, alt: "Avatar 2" },
         { src: avatar3, alt: "Avatar 3" },
+        { src: avatar4, alt: "Avatar 4" },
+        { src: avatar5, alt: "Avatar 5" },
+        { src: avatar6, alt: "Avatar 6" },
     ];
 
     return (
         <UserProfileContainer>
+            {/* Muestra/oculta el menú desplegable */}
             <ProfileToggle onClick={() => setIsOpen(!isOpen)}>
                 <p>Hola {username}</p>
-                <ProfileImage src={selectedImage} alt="User Avatar" />
+                <ProfileImage src={selectedImage} alt="Avatar" />
             </ProfileToggle>
+            {/* Si está abierto se abre el menú y hace distintas acciones */}
             {isOpen && (
                 <ProfileMenu>
                     <MenuItem onClick={handleImageClick}>
-                        Cambiar el avatar
+                        Cambiar avatar
                     </MenuItem>
                     <MenuItem onClick={handleUsernameClick}>
-                        Cambiar el username
+                        Cambiar username
                     </MenuItem>
+                    <MenuItem onClick={handleSignOut}>
+                        Salir
+                    </MenuItem>
+                    {/* Se abre el submenú si se pulsa a handleImageClick para mostrar los avatares  */}
                     {showSubMenu && (
                         <SubMenu>
                             {avatars.map((avatar, index) => (
@@ -339,10 +180,7 @@ const UserProfile = () => {
                             ))}
                         </SubMenu>
                     )}
-
-                    <MenuItem onClick={handleSignOut}>
-                        Salir
-                    </MenuItem>
+                    {/* Se abre el submenú si se pulsa a handleUsernameClick para editar el username  */}
                     {showUsernameForm && (
                         <SubMenu>
                             <UsernameInput
@@ -359,8 +197,7 @@ const UserProfile = () => {
     );
 };
 
-
-
+// Estilos
 const AvatarOption = styled.img`
   width: 50px;
   height: 50px;
@@ -420,22 +257,6 @@ const UsernameInput = styled.input`
 
 const SaveButton = styled.button`
   padding: 5px 10px;
-`;
-
-const ImageOption = styled.img`
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-  margin-right: 5px;
-  cursor: pointer;
-
-  &:last-child {
-    margin-right: 0;
-  }
-
-  &:hover {
-    border: 2px solid #1a1d29;
-  }
 `;
 
 export default UserProfile;

@@ -1,201 +1,78 @@
-// import React, { useEffect, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { getGenres, searchMovies } from "../store";
-// import Modal from "./Modal";
-// import styled from "styled-components";
-// import { useNavigate } from "react-router-dom";
-// import GridResultados from '../components/CarouselYGrid/GridResultados';
-// import RiseLoader from 'react-spinners/RiseLoader';
-
-// const Buscador = () => {
-//     const dispatch = useDispatch();
-//     const [searchQuery, setSearchQuery] = useState("");
-//     const searchResults = useSelector((state) => state.cinestories.resultados);
-//     const [type, setType] = useState("movie");
-//     const [modalOpen, setModalOpen] = useState(false);
-//     const [loading, setLoading] = useState(true);
-//     const [isLoading, setIsLoading] = useState(false);
-
-//     const navigate = useNavigate();
-
-//     useEffect(() => {
-//         dispatch(getGenres());
-//     }, []);
-
-//     const handleClick = (movie) => {
-//         navigate('/infoPeli', { state: movie });
-//     };
-
-//     useEffect(() => {
-//         setTimeout(() => {
-//             setLoading(false);
-//         }, 2000);
-//     }, []);
-
-//     const handleSearch = () => {
-//         if (searchQuery) {
-//             dispatch(searchMovies({ searchQuery, type }));
-//             setModalOpen(true);
-//         }
-//     };
-
-//     const closeModal = () => {
-//         setModalOpen(false);
-//     };
-
-//     return (
-//         <Contenedor>
-//             <input
-//                 type="text"
-//                 placeholder="Buscador"
-//                 value={searchQuery}
-//                 onChange={(e) => setSearchQuery(e.target.value)}
-//             />
-//             <select value={type} onChange={(e) => setType(e.target.value)}>
-//                 <option value="movie">Películas</option>
-//                 <option value="tv">Series de TV</option>
-//             </select>
-//             <button onClick={handleSearch}>Buscar</button>
-
-//             <Modal open={modalOpen} onClose={closeModal} loading={isLoading}>
-//                 <div className="modal-contenido">
-//                     {loading ? ( // Mostrar el spinner mientras se realiza la búsqueda
-//                         <SpinnerContainer>
-//                             <RiseLoader color='lime' />
-//                         </SpinnerContainer>
-//                     ) : searchResults.length === 0 ? (
-//                         <p>No se encontraron resultados</p>
-//                     ) : (
-//                         <>
-//                             <GridResultados searchResults={searchResults} />
-//                         </>
-//                     )}
-//                 </div>
-//             </Modal>
-//         </Contenedor>
-//     );
-// };
-
-// export default Buscador;
-
-// const Contenedor = styled.div`
-//   display: flex;
-//   /* flex-direction: column; */
-//   align-items: center;
-//   justify-content: center;
-// margin-bottom: 2rem;
-
-// h1 {
-// margin-right: 5px;
-// }
-//   input {
-//     padding: 4px;
-//     margin-right: 5px;
-//     background-color: #1a1d29;
-//     color: whitesmoke;
-//     /* border-radius: 10px; */
-//     border: 2px solid whitesmoke;
-//     ::placeholder { color: rgb(128, 134, 167)}
-//   }
-//   select {
-//     padding: 5px;
-//     margin-right: 5px;
-//     background-color: #1a1d29;
-//     /* border-radius: 10px; */
-//     border: 2px solid whitesmoke;
-//     color: whitesmoke;
-
-//   }
-//   button {
-//     padding: 5px;
-//     background-color: #1a1d29;
-//     /* border-radius: 10px; */
-//     border: 2px solid whitesmoke;
-//     color: whitesmoke;
-//   }
-// `;
-
-// const SpinnerContainer = styled.div`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// `;
-
-
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getGenres, searchMovies, createArrayFromRawData } from "../store";
+import { getGenres, searchMovies } from "../store";
 import Modal from "./Modal";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import GridResultados from "../components/CarouselYGrid/GridResultados";
+import GridResultados from "./CarouselYGrid/GridResultados";
 import RiseLoader from "react-spinners/RiseLoader";
 
-const Buscador = () => {
+const Buscador = (props) => {
+
+    // Se declara funciones propias de react
     const dispatch = useDispatch();
+
+    // Se utiliza useState para declarar múltiples variables de estado
     const [searchQuery, setSearchQuery] = useState("");
     const searchResults = useSelector((state) => state.cinestories.resultados);
-    const [type, setType] = useState("movie");
     const [modalOpen, setModalOpen] = useState(false);
     const [loading, setLoading] = useState(true);
-    const genres = useSelector((state) => state.cinestories.genres);
 
-    const navigate = useNavigate();
-
+    // useEffect se ejecuta una vez, al montar el componente, para enviar getGenres() utilizando dispatch para obtener los géneros de películas
     useEffect(() => {
         dispatch(getGenres());
     }, []);
 
-    const handleClick = (movie) => {
-        navigate("/infoPeli", { state: movie });
-    };
-
+    // useEffect para establecer el estado que simula un tiempo de carga de 2 seg y muestra el spinner
     useEffect(() => {
         setTimeout(() => {
             setLoading(false);
         }, 2000);
     }, []);
 
+    // Maneja la búsqueda
     const handleSearch = () => {
         if (searchQuery) {
             setModalOpen(true);
-            setLoading(true); // Establecer isLoading a true cuando se inicia la búsqueda
-            dispatch(searchMovies({ searchQuery, type }))
+            // Establece isLoading a true cuando se inicia la búsqueda
+            setLoading(true);
+            // se le pasa las props de type
+            dispatch(searchMovies({ searchQuery, type: props.type }))
                 .then((response) => {
-                    // La búsqueda se completó, actualiza el estado de loading
+                    // Al completar la búsqueda se actualiza el estado de loading
                     setLoading(false);
                 })
                 .catch((error) => {
-                    // Manejar el error en caso de que ocurra
-                    setLoading(false); // Si se produce un error, asegúrate de establecer loading en false
+                    // Si se produce un error, se actualiza a false
+                    setLoading(false);
                     console.error(error);
                 });
         }
     };
 
-
+    // Para el cierre del modal
     const closeModal = () => {
         setModalOpen(false);
     };
 
     return (
         <Contenedor>
+            {/* Formulario  */}
             <input
                 type="text"
                 placeholder="Buscador"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <select value={type} onChange={(e) => setType(e.target.value)}>
-                <option value="movie">Películas</option>
-                <option value="tv">Series de TV</option>
-            </select>
             <button onClick={handleSearch}>Buscar</button>
 
+            {/* Modal con distintas props: open (abierto o cerrado), onClose (cerrará el Modal) y loading (si se está cargando el contendo dentro del Modal) */}
             <Modal open={modalOpen} onClose={closeModal} loading={loading}>
                 <div className="modal-contenido">
+                    {/* Si loading es true, muestra el Spinner. Si loading es false y la longitud de searchResults es 0, se muestra "No se encontraron resultados". Si loading es false y la longitud de searchResults no es 0, se muestra el componente GridResultados con los resultados de la búsqueda. */}
+
                     {loading ? (
                         <SpinnerContainer>
+                            {/* Spinner  */}
                             <RiseLoader color="lime" />
                         </SpinnerContainer>
                     ) : searchResults.length === 0 ? (
@@ -203,9 +80,6 @@ const Buscador = () => {
                     ) : (
                         <>
                             <GridResultados searchResults={searchResults} />
-
-
-
                         </>
                     )}
                 </div>
@@ -214,13 +88,16 @@ const Buscador = () => {
     );
 };
 
+// Estilos
 export default Buscador;
 
 const Contenedor = styled.div`
+
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 2rem;
+  margin-top: 1rem;
 
   h1 {
     margin-right: 5px;

@@ -49,7 +49,6 @@ export default function CarouselHome() {
                 <SwiperSlide>
                     <img src={imagen3} alt="imagen1" />
                 </SwiperSlide>
-                {/* <SwiperSlide>Slide 4</SwiperSlide> */}
 
                 <div className="autoplay-progress" slot="container-end">
                     <svg viewBox="0 0 48 48" ref={progressCircle}>
@@ -62,6 +61,7 @@ export default function CarouselHome() {
     );
 };
 
+// Estilos
 const Contenedor = styled.div`
 // Configurado de la librería Swiper
   .swiper {

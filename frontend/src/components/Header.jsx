@@ -2,11 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
+// Se pasa props como argumento
 export default function Header(props) {
+
+  // Se declara funciones propias de react
   const navegacion = useNavigate();
 
   return (
     <Contenedor className='flex-flow  j-center a-center'>
+      {/* Banner  */}
       <div className="content">
         <div className="slider-wrapper">
           Razones para registrarte
@@ -18,6 +22,7 @@ export default function Header(props) {
         </div>
       </div>
 
+      {/* Button llama a la función navegacion. Si props.login es verdadero, se establece la ruta "/login", si no, "/registro". El texto dentro del botón también se determina, si props.login es verdadero, el texto es "Loggearse", si no, es "Registrarse". */}
       <button onClick={() => navegacion(props.login ? "/login" : "/registro")}>
         {props.login ? "Loggearse" : "Registrarse"}
       </button>
@@ -25,6 +30,8 @@ export default function Header(props) {
   );
 }
 
+
+// Estilos
 const Contenedor = styled.div`
   padding: 2rem 4rem;
 

@@ -1,263 +1,3 @@
-
-// import React, { useEffect, useRef, useState } from 'react';
-// import { useLocation, useNavigate, useParams } from 'react-router-dom';
-// import styled from 'styled-components';
-// import Navbar from '../components/Navbar';
-// import { onAuthStateChanged } from 'firebase/auth';
-// import { firebaseAuth } from '../utils/firebase-config';
-// import axios from 'axios';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { getUserFavoritas, removeMovieFromLiked } from '../store';
-// import PosterNotFound from '../assets/posterNotFound.jpg';
-// import { URL_TMBD, KEY_API, IMG_API } from '../utils/tmbd-config';
-// import Footer from '../components/Footer';
-// import { BiHappyHeartEyes } from 'react-icons/bi';
-
-
-// export default function InfoPeli() {
-
-//   const { idPelicula } = useParams();
-//   const location = useLocation();
-//   const movieData = location.state;
-//   const navegacion = useNavigate();
-//   const dispatch = useDispatch();
-
-
-
-//   const isMounted = useRef(false);
-//   const [email, setEmail] = useState('');
-//   const [isInFavorites, setIsInFavorites] = useState(false);
-//   const [showMessage, setShowMessage] = useState(false);
-
-//   useEffect(() => {
-//     isMounted.current = true;
-
-//     return () => {
-//       isMounted.current = false;
-//     };
-//   }, []);
-
-//   useEffect(() => {
-//     onAuthStateChanged(firebaseAuth, (Usuario) => {
-//       if (isMounted.current) {
-//         if (Usuario) setEmail(Usuario.email);
-//         else navegacion('/login');
-//       }
-//     });
-//   }, []);
-
-//   useEffect(() => {
-//     if (email && movieData) { // Add movieData check
-//       dispatch(getUserFavoritas(email)).then((favoritas) => {
-//         const found = Array.isArray(favoritas) && favoritas.some((pelicula) => pelicula.id === movieData.id);
-//         setIsInFavorites(found);
-//       });
-//     }
-//   }, [email, dispatch, movieData]);
-
-
-//   const aniadirListaFav = async () => {
-//     try {
-//       await axios.post('http://localhost:5000/api/user/aniadirFav', {
-//         email,
-//         data: movieData,
-//       });
-//       setIsInFavorites(true);
-//       setShowMessage(true); // Mostrar el mensaje después de añadir a favoritos
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };
-
-//   const handleComentario = (comment) => {
-//     // Lógica para procesar el comentario enviado
-//     console.log('Comentario enviado:', comment);
-//   };
-
-//   console.log(movieData);
-
-
-//   return (
-//     <Contenedor>
-//       <Navbar />
-//       <Contenido>
-//         {movieData && (
-//           <div className="card">
-//             <div className="photo">
-//               <img
-//                 src={
-//                   movieData.poster_path
-//                     ? `https://image.tmdb.org/t/p/w500/${IMG_API}${movieData.poster_path}`
-//                     : PosterNotFound
-//                 }
-//                 alt="Poster"
-//               />
-//             </div>
-//           </div>
-//         )}
-
-//         {movieData && (
-//           <div className="description">
-//             <h1>{movieData.name || movieData.title}</h1>
-//             <h4>Título Original - {movieData.original_title || movieData.original_name}</h4>
-//             <h2>Valoración:</h2>
-//             <p>{movieData.vote_average}</p>
-//             <h2>Año:</h2>
-//             <p>{movieData.release_date && movieData.release_date.split('-')[0]}</p>
-//             <h2>Sinopsis</h2>
-//             <p>{movieData.overview}</p>
-//             <h2>Género: </h2>
-//             {/* <ul>
-//               {movieData.genres.map((genre, index) => (
-//                 <li key={index}>{genre}</li>
-//               ))}
-//             </ul> */}
-//             <br /><br /> <br />
-//             <button className='my-button' onClick={() => {
-//               aniadirListaFav();
-//               setShowMessage(true); // Mostrar el mensaje cuando se haga clic en el botón de añadir a favoritos
-//             }} title="Añadir a favoritos">
-//               <BiHappyHeartEyes className="icon-pull-right" />Añadir a Favoritas
-//             </button>
-//             <button>Wishlist</button>
-//           </div>
-//         )}
-//       </Contenido>
-//       <Footer></Footer>
-//     </Contenedor>
-//   );
-// }
-
-// const Contenedor = styled.div`
-// `
-
-// // const Contenido = styled.div`
-// //   /* padding: 30rem 2rem 3rem 3rem; */
-// //   margin-top: 25rem;
-
-// // .card {
-
-// //     /* width: 650px; */
-// //     width: 80%;
-// //      /* height: 500px; */
-// //     position: absolute;
-// //     background: white;
-// //     margin: 0 auto;
-// //     /* top: 55%; */
-// //     left: 50%;
-// //     transform: translate(-50%, -50%);
-// //     box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
-// //     transition: all 0.3s;
-
-// //     &:hover {
-// //       box-shadow: 0 8px 17px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
-// //     }
-
-// //     .photo {
-// //       padding: 30px;
-// //       width: 45%;
-// //       text-align: center;
-// //       float: left;
-// //       img {
-// //         max-width: 90%;
-// //       }
-
-// //     }
-// //     .my-button {
-// //    width: 200px;
-// //    padding: 15px;
-// //    margin: 0 0 10px 0;
-// //    text-align: left;
-// //    display: block;
-// // }
-
-
-// // .icon-pull-right {
-// //     float: right;
-// //     font-size: 3rem;
-// // }
-
-// //     .description {
-// //        padding: 30px;
-// //        float: left;
-// //        width: 55%;
-// //        border-left: 2px solid #efefef;
-// //        h1 {
-// //          color: #515151;
-// //          font-size:3rem;
-// //          padding-top: 15px;
-// //          margin: 0;
-// //        }
-// //        ul {
-// //   list-style-type: none;
-// // }
-
-// // li {
-// //   float: left;
-// //   background-color: #aedaa6;
-// //   padding: 10px;
-// //   margin: 5px;
-// // }
-
-// //        h2 {
-// //         font-size: 1rem;
-// //         color: #515151;
-// //         margin: 0;
-// //         padding-top:15px;
-// //         text-transform: uppercase;
-// //         font-weight: 500;
-// //        }
-
-// //        h4 {
-// //          margin: 0;
-// //          color: #727272;
-// //          text-transform: uppercase;
-// //          font-weight: 500;
-// //          font-size: 12px
-// //        }
-
-// //        p {
-// //          font-size: 1rem;
-// //          line-height: 20px;
-// //          color: #727272;
-// //          /* padding: 20px 0; */
-// //          margin: 0;
-// //          text-align:justify;
-// //       }
-
-// //        button {
-// //          outline: 0;
-// //          border: 0;
-// //          background: none;
-// //          border: 1px solid #d9d9d9;
-// //          padding: 8px 0px;
-// //          margin-bottom: 30px;
-// //          color: #515151;
-// //          text-transform: uppercase;
-// //          width: 125px;
-// //          font-family: inherit;
-// //          margin-right: 5px;
-// //          transition: all 0.3s ease;
-// //          font-weight: 500;
-
-// //          &:hover {
-
-// //            // background: darken(white, 2%);
-// //            border: 1px solid #aedaa6;
-// //            color: #aedaa6;
-// //            cursor: pointer;
-
-// //          }
-
-// //        }
-
-// //     }
-
-// //   }
-
-// // `
-
-
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -266,30 +6,34 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { firebaseAuth } from '../utils/firebase-config';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { getGenres, getUserFavoritas, getUserPendientes } from '../store';
+import { getGenres } from '../store';
 import PosterNotFound from '../assets/posterNotFound.jpg';
-import { URL_TMBD, KEY_API, IMG_API } from '../utils/tmbd-config';
+import { IMG_API } from '../utils/tmbd-config';
 import Footer from '../components/Footer';
 import { BiHappyHeartEyes } from 'react-icons/bi';
 import { BsCardChecklist } from 'react-icons/bs';
 import { BsFillArrowLeftSquareFill } from 'react-icons/bs'
 
+
 export default function InfoPeli() {
+
+  // Se declara funciones propias de react
+  const navegacion = useNavigate()
+  const dispatch = useDispatch()
+
+  // Se utiliza useState para declarar múltiples variables de estado
   const genres = useSelector((state) => state.cinestories.genres);
   const { idPelicula } = useParams();
   const location = useLocation();
   const movieData = location.state;
-  const navegacion = useNavigate()
-  const dispatch = useDispatch()
-
-
-
   const isMounted = useRef(false);
   const [email, setEmail] = useState("");
   const [isInFavorites, setIsInFavorites] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
   const [message, setMessage] = useState('');
 
+
+  // Efecto que asegura que el componente solo realice operaciones cuando está montado y evita errores relacionados con el estado o llamadas asincrónicas después de que el componente se haya desmontado. Se utiliza para el próximo useEffect "onAuthStateChanged"
   useEffect(() => {
     isMounted.current = true;
 
@@ -298,6 +42,8 @@ export default function InfoPeli() {
     };
   }, []);
 
+
+  // Verifica el estado de autenticación del usuario
   useEffect(() => {
     onAuthStateChanged(firebaseAuth, (Usuario) => {
       if (isMounted.current) {
@@ -308,18 +54,22 @@ export default function InfoPeli() {
   }, []);
 
 
-
+  // Obtiene los géneros al montar el componente
   useEffect(() => {
     dispatch(getGenres());
   }, []);
 
+  // Función para añadir la película a la lista de favoritos
   const aniadirListaFav = async () => {
     try {
+      // Obtiene las películas de favoritos y pendientes del usuario desde la API
       const { data: { movies: pendientes } } = await axios.get(`http://localhost:5000/api/user/pendientes/${email}`);
       const { data: { movies: favoritas } } = await axios.get(`http://localhost:5000/api/user/favoritas/${email}`);
+      // Comprueba si la película ya está en la lista de pendientes o favoritos
       const isInPendientes = pendientes.some((movie) => movie.id === movieData.id);
       const isInFavoritas = favoritas.some((movie) => movie.id === movieData.id);
 
+      // Si la película ya está en la lista de favoritos o pendientes, muestra un mensaje
       if (isInPendientes) {
         setShowMessage(true);
         setMessage('La película ya está en la lista de pendientes');
@@ -327,6 +77,7 @@ export default function InfoPeli() {
         setShowMessage(true);
         setMessage('La película ya está en la lista de favoritas');
       } else {
+        // Si la película no está en ninguna lista, la añade
         await axios.post('http://localhost:5000/api/user/aniadirFav', {
           email,
           data: movieData,
@@ -340,13 +91,16 @@ export default function InfoPeli() {
     }
   };
 
+  // Función para añadir la película a la lista de pendientes
   const aniadirListaPendientes = async () => {
     try {
       const { data: { movies: pendientes } } = await axios.get(`http://localhost:5000/api/user/pendientes/${email}`);
       const { data: { movies: favoritas } } = await axios.get(`http://localhost:5000/api/user/favoritas/${email}`);
+      // Comprueba si la película ya está en la lista de pendientes o favoritos
       const isInPendientes = pendientes.some((movie) => movie.id === movieData.id);
       const isInFavoritas = favoritas.some((movie) => movie.id === movieData.id);
 
+      // Si la película ya está en la lista de favoritos o pendientes, muestra un mensaje
       if (isInFavoritas) {
         setShowMessage(true);
         setMessage('La película ya está en la lista de favoritas');
@@ -354,6 +108,7 @@ export default function InfoPeli() {
         setShowMessage(true);
         setMessage('La película ya está en la lista de pendientes');
       } else {
+        // Si la película no está en ninguna lista, la añade
         await axios.post('http://localhost:5000/api/user/aniadirPendientes', {
           email,
           data: movieData,
@@ -365,18 +120,16 @@ export default function InfoPeli() {
       console.log(err)
     }
   }
-
-
-
+  // Va hacía la pag anterior
   const navigateBack = () => {
     navegacion(-1);
   };
 
+  // Función que va a encontrar el id de los géneros de las películas. movieGenreNames es un array de nombres de géneros obtenidos a partir de movieData.genre_ids utilizando el array de objetos genres
   const movieGenreNames = movieData.genre_ids && movieData.genre_ids.map((genreId) => {
     const genre = genres.find((genre) => genre.id === genreId);
     return genre ? genre.name : '';
   });
-
 
   return (
     <Contenedor>
@@ -397,6 +150,7 @@ export default function InfoPeli() {
                 />
               </div>
               <div className="description">
+                {/* Se muestra el titulo, titulo original, valoración, año, sinopsis si es película, serie de tv o programa */}
                 <h1>{movieData.name || movieData.title}</h1>
                 <h4>Título Original - {movieData.original_title || movieData.original_name}</h4>
                 <h2>Valoración:</h2>
@@ -405,55 +159,10 @@ export default function InfoPeli() {
                 <p>{movieData.release_date && movieData.release_date.split('-')[0] || movieData.first_air_date && movieData.first_air_date.split("-")[0]}</p>
                 <h2>Sinopsis</h2>
                 <p>{movieData.overview}</p>
-
-                {/* <h2>Género:</h2>
-                <div className="genre-container">
-                  {movieData && movieData.genres && movieData.genres.length > 0 ? (
-                    <ul className="genre-list">
-                      {movieData.genres.map((genre, index) => (
-                        <li key={index}>{genre}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p>No se encontraron géneros</p>
-                  )}
-
-                  {movieGenreNames && movieGenreNames.length > 0 ? (
-                    <ul className="genre-list">
-                      {movieGenreNames.map((genre, index) => (
-                        <li key={index}>{genre}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p>No se encontraron géneros</p>
-                  )}
-                </div> */}
-
-                {/* <h2>Género:</h2>
-                <div className="genre-container">
-                  {movieData && movieData.genres && movieData.genres.length > 0 ? (
-                    <ul className="genre-list">
-                      {movieData.genres.map((genre, index) => (
-                        <li key={index}>{genre}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p>No se encontraron géneros</p>
-                  )}
-
-                  {movieGenreNames && movieGenreNames.length > 0 ? (
-                    <ul className="genre-list">
-                      {movieGenreNames.map((genre, index) => (
-                        <li key={index}>{genre}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p>No se encontraron géneros</p>
-                  )}
-                </div> */}
-
                 <h2>Género:</h2>
                 <div className="genre-container">
+                  {/* Se verifica si movieData existe, si tiene la propiedad genres y si su longitud es mayor que 0, si cumple: muestra en una lista.
+Se realiza lo mismo con movieGenreNames. Si ninguna de las condiciones anteriores se cumple: "No se encontraron géneros". */}
                   {movieData && movieData.genres && movieData.genres.length > 0 && (
                     <ul className="genre-list">
                       {movieData.genres.map((genre, index) => (
@@ -462,6 +171,7 @@ export default function InfoPeli() {
                     </ul>
                   )}
 
+                  {/* Se recorre con movieGenreNames para los SearchResults  */}
                   {movieGenreNames && movieGenreNames.length > 0 && (
                     <ul className="genre-list">
                       {movieGenreNames.map((genre, index) => (
@@ -475,8 +185,7 @@ export default function InfoPeli() {
                   )}
                 </div>
 
-
-
+                {/* Botones para añadir las películas a las listas */}
                 <div className="button-container">
                   <button className="my-button" onClick={() => {
                     aniadirListaFav();
@@ -489,7 +198,7 @@ export default function InfoPeli() {
                     <BsCardChecklist className='icon' />Añadir a pendientes
                   </button>
                 </div>
-
+                {/* Aparece los mensajes correspondientes a la funcion descrita anteriormente, según si existe la película en alguna lista o se ha añadido correctamente */}
                 {showMessage && <p>{message}</p>}
               </div>
             </div>
@@ -497,6 +206,7 @@ export default function InfoPeli() {
         )}
 
       </Contenido>
+      {/* Boton que va hacia la pag anterior */}
       <BackButton onClick={navigateBack}>
         <BsFillArrowLeftSquareFill title='atras' />
       </BackButton>
@@ -505,8 +215,8 @@ export default function InfoPeli() {
   );
 }
 
+// Estilos
 const Contenedor = styled.div``;
-
 
 const Contenido = styled.div`
   margin-top: 3rem;

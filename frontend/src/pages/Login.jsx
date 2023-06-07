@@ -7,13 +7,17 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 
 export default function Login() {
+  // Se declara funciones propias de react
   const navegacion = useNavigate();
+
+  // Se utiliza useState para declarar múltiples variables de estado
   const [valoresFormulario, setvaloresFormulario] = useState({
     email: '',
     password: '',
   });
   const [mensajeError, setMensajeError] = useState('');
 
+  // Funcion de sesión
   const sesion = async () => {
     try {
       const { email, password } = valoresFormulario;
@@ -24,6 +28,7 @@ export default function Login() {
     }
   }
 
+  // Verifica si hay un usuario autenticado al cargar el componente
   onAuthStateChanged(firebaseAuth, (Usuario) => {
     if (Usuario) navegacion('/');
   });
@@ -37,6 +42,7 @@ export default function Login() {
           <div className="logo flex a-center">
             <img src={logo} alt="Logo" />
           </div>
+          {/* Formulario  */}
           <div className="form">
             <div className="title">
               <h3>Iniciar sesión</h3>
@@ -66,6 +72,7 @@ export default function Login() {
                   })
                 }
               />
+              {/* Muestra el mensaje de error  */}
               {mensajeError && <p className="error">{mensajeError}</p>}
               <button onClick={sesion}>Iniciar sesión</button>
             </div>
@@ -76,6 +83,7 @@ export default function Login() {
   );
 }
 
+// Estilos
 const Contenedor = styled.div`
   display: flex;
   justify-content: center;
@@ -88,7 +96,7 @@ const Contenedor = styled.div`
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 100%; /* Ancho máximo del formulario */
+    max-width: 100%;
 
     .logo {
       img {

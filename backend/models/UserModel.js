@@ -1,22 +1,3 @@
-// const mongoose=require ("mongoose")
-
-// const userScheme = new mongoose.Schema({
-//     email: {
-//         type:String,
-//         required:true,
-//         unique:true,
-//         max:50
-//     },
-
-//     favoritas: Array,
-//     pendientes:Array,
-//     comentarios:Array,
-
-// });
-
-// module.exports =mongoose.model("users", userScheme)
-
-
 const mongoose = require("mongoose");
 
 const userScheme = new mongoose.Schema({
@@ -38,7 +19,7 @@ const userScheme = new mongoose.Schema({
   profile_img: {
     profile_img: {
       type: [String],
-      default: [0], // Puedes establecer un valor predeterminado si es necesario
+      default: [0], // lo inicializo en la posición 0
     },
   },
 
