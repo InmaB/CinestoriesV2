@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getGenres, searchMovies } from "../store";
 import Modal from "./Modal";
 import styled from "styled-components";
-import GridResultados from "../components/CarouselYGrid/GridResultados";
+import GridResultados from "./CarouselYGrid/GridResultados";
 import RiseLoader from "react-spinners/RiseLoader";
 
-const Buscador = () => {
+const Buscador = (props) => {
 
     // Se declara funciones propias de react
     const dispatch = useDispatch();
@@ -14,7 +14,6 @@ const Buscador = () => {
     // Se utiliza useState para declarar múltiples variables de estado
     const [searchQuery, setSearchQuery] = useState("");
     const searchResults = useSelector((state) => state.cinestories.resultados);
-    const [type, setType] = useState("movie");
     const [modalOpen, setModalOpen] = useState(false);
     const [loading, setLoading] = useState(true);
 
@@ -30,12 +29,14 @@ const Buscador = () => {
         }, 2000);
     }, []);
 
+    // Maneja la búsqueda
     const handleSearch = () => {
         if (searchQuery) {
             setModalOpen(true);
             // Establece isLoading a true cuando se inicia la búsqueda
             setLoading(true);
-            dispatch(searchMovies({ searchQuery, type }))
+            // se le pasa las props de type
+            dispatch(searchMovies({ searchQuery, type: props.type }))
                 .then((response) => {
                     // Al completar la búsqueda se actualiza el estado de loading
                     setLoading(false);
@@ -62,10 +63,6 @@ const Buscador = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <select value={type} onChange={(e) => setType(e.target.value)}>
-                <option value="movie">Películas</option>
-                <option value="tv">Series de TV</option>
-            </select>
             <button onClick={handleSearch}>Buscar</button>
 
             {/* Modal con distintas props: open (abierto o cerrado), onClose (cerrará el Modal) y loading (si se está cargando el contendo dentro del Modal) */}
@@ -91,14 +88,16 @@ const Buscador = () => {
     );
 };
 
+// Estilos
 export default Buscador;
 
-// Estilos
 const Contenedor = styled.div`
+
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 2rem;
+  margin-top: 1rem;
 
   h1 {
     margin-right: 5px;

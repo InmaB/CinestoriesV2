@@ -63,7 +63,7 @@ export default function ListaPendientes() {
                             ))}
                         </div>
                     ) : (
-                        <h1>No hay pendientes</h1>
+                        <h2>No hay pendientes</h2>
                     )}
                 </div>
             </Contenido>

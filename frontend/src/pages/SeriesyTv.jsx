@@ -5,8 +5,8 @@ import Navbar from '../components/Navbar';
 import styled from 'styled-components';
 import Grid from '../components/CarouselYGrid/Grid';
 import Footer from '../components/Footer';
-import Buscador from '../components/Buscador';
 import RiseLoader from 'react-spinners/RiseLoader';
+import Buscador from '../components/Buscador';
 
 export default function SeriesyTv() {
 
@@ -79,7 +79,9 @@ export default function SeriesyTv() {
       <Contenido>
         <h1 className='titulo'>Series & TV</h1>
         <div className="buscador">
-          <Buscador />
+          <h2>Busca la serie o programa de TV</h2>
+          {/* Se le pasa las props type:tv */}
+          <Buscador type="tv" />
         </div>
 
         <div className='flex-flow j-center'>
@@ -171,6 +173,10 @@ const Contenido = styled.div`
   .cargar:hover {
     background-color: lime;
     color: rgb(48, 50, 62);
+  }
+
+  .buscador {
+    text-align: center;
   }
 `;
 

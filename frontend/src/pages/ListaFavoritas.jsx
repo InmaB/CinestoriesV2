@@ -56,7 +56,7 @@ export default function ListaFavoritas() {
                             ))}
                         </div>
                     ) : (
-                        <h1>No hay favoritos</h1>
+                        <h2>No hay favoritos</h2>
                     )}
                 </div>
             </Contenido>

@@ -79,7 +79,9 @@ export default function Pelis() {
       <Contenido>
         <h1 className='titulo'>Películas</h1>
         <div className="buscador">
-          <Buscador />
+          <h2>Busca la peli</h2>
+          {/* Se le pasa las props type:movie */}
+          <Buscador type="movie" />
         </div>
 
         <div className='flex-flow j-center'>
@@ -171,6 +173,10 @@ const Contenido = styled.div`
   .cargar:hover {
     background-color: lime;
     color: rgb(48, 50, 62);
+  }
+
+  .buscador {
+    text-align: center;
   }
 `;
 
