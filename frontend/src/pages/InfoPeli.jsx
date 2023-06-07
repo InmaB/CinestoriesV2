@@ -163,7 +163,6 @@ export default function InfoPeli() {
                 <div className="genre-container">
                   {/* Se verifica si movieData existe, si tiene la propiedad genres y si su longitud es mayor que 0, si cumple: muestra en una lista.
 Se realiza lo mismo con movieGenreNames. Si ninguna de las condiciones anteriores se cumple: "No se encontraron géneros". */}
-
                   {movieData && movieData.genres && movieData.genres.length > 0 && (
                     <ul className="genre-list">
                       {movieData.genres.map((genre, index) => (
@@ -172,6 +171,7 @@ Se realiza lo mismo con movieGenreNames. Si ninguna de las condiciones anteriore
                     </ul>
                   )}
 
+                  {/* Se recorre con movieGenreNames para los SearchResults  */}
                   {movieGenreNames && movieGenreNames.length > 0 && (
                     <ul className="genre-list">
                       {movieGenreNames.map((genre, index) => (
